@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mar Food — Central de Análises</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+  :root {
+    --navy: #0a1628;
+    --navy-mid: #112240;
+    --navy-light: #1d3461;
+    --teal: #00b4a0;
+    --teal-dim: #00b4a020;
+    --teal-glow: #00b4a040;
+    --gold: #e8c870;
+    --gold-dim: #e8c87020;
+    --text: #e8edf5;
+    --text-muted: #7a8fa8;
+    --text-dim: #3d5068;
+    --border: #1d3461;
+    --card-bg: #0f1e35;
+    --card-hover: #132540;
+    --red: #ff6b7a;
+    --green: #4ecdc4;
+    --orange: #ffb347;
+    --font-display: 'DM Serif Display', Georgia, serif;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--navy);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% 10%, #00b4a008 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 80%, #1d346120 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── LAYOUT ─────────────────────────────── */
+  .shell { display: flex; min-height: 100vh; position: relative; z-index: 1; }
+
+  /* ── SIDEBAR ────────────────────────────── */
+  .sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    background: var(--card-bg);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+
+  .sidebar-brand {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .brand-mark {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--teal), #00e5cc);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    margin-bottom: 10px;
+    box-shadow: 0 0 20px var(--teal-glow);
+  }
+
+  .brand-name {
+    font-family: var(--font-display);
+    font-size: 20px;
+    color: var(--text);
+    letter-spacing: -0.3px;
+  }
+
+  .brand-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-top: 2px;
+  }
+
+  .sidebar-nav { padding: 16px 12px; flex: 1; }
+
+  .nav-group-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-dim);
+    padding: 0 12px;
+    margin: 16px 0 6px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: 8px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 13.5px;
+    font-weight: 400;
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+
+  .nav-item:hover { background: var(--teal-dim); color: var(--teal); }
+  .nav-item.active { background: var(--teal-dim); color: var(--teal); font-weight: 500; }
+
+  .nav-icon { font-size: 15px; width: 18px; text-align: center; }
+
+  .sidebar-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  /* ── MAIN ───────────────────────────────── */
+  .main { flex: 1; overflow-x: hidden; }
+
+  /* ── TOPBAR ─────────────────────────────── */
+  .topbar {
+    padding: 20px 32px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--card-bg);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .topbar-title { font-family: var(--font-display); font-size: 22px; }
+  .topbar-title span { color: var(--teal); font-style: italic; }
+
+  .topbar-meta { font-size: 12px; color: var(--text-muted); }
+
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 99px;
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  .badge-teal { background: var(--teal-dim); color: var(--teal); border: 1px solid var(--teal-glow); }
+  .badge-gold { background: var(--gold-dim); color: var(--gold); }
+  .badge-red { background: #ff6b7a18; color: var(--red); }
+
+  /* ── CONTENT ────────────────────────────── */
+  .content { padding: 28px 32px; }
+
+  /* ── SECTIONS ───────────────────────────── */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* ── KPI GRID ───────────────────────────── */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .kpi-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .kpi-card:hover { border-color: var(--teal); transform: translateY(-2px); }
+
+  .kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--teal), transparent);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .kpi-card:hover::before { opacity: 1; }
+
+  .kpi-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .kpi-value {
+    font-family: var(--font-display);
+    font-size: 28px;
+    color: var(--text);
+    line-height: 1.1;
+    margin-bottom: 6px;
+  }
+
+  .kpi-delta {
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .delta-up { color: var(--green); }
+  .delta-down { color: var(--red); }
+  .delta-icon { font-size: 10px; }
+
+  /* ── CHART CARDS ────────────────────────── */
+  .chart-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .chart-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px;
+    transition: border-color 0.2s;
+  }
+
+  .chart-card:hover { border-color: var(--border); }
+  .chart-card.wide { grid-column: 1 / -1; }
+
+  .chart-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .chart-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 3px;
+  }
+
+  .chart-subtitle { font-size: 12px; color: var(--text-muted); }
+
+  .chart-wrap { position: relative; height: 220px; }
+
+  /* ── TABLE ──────────────────────────────── */
+  .data-table-wrap {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 28px;
+  }
+
+  .table-header {
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .table-title { font-size: 14px; font-weight: 500; }
+
+  table { width: 100%; border-collapse: collapse; }
+
+  thead th {
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    padding: 10px 22px;
+    border-bottom: 1px solid var(--border);
+    background: #0a1628;
+  }
+
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--card-hover); }
+
+  tbody td {
+    padding: 12px 22px;
+    font-size: 13.5px;
+    color: var(--text);
+  }
+
+  td.muted { color: var(--text-muted); }
+
+  .progress-bar {
+    height: 4px;
+    background: var(--border);
+    border-radius: 99px;
+    overflow: hidden;
+    width: 80px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--teal), #00e5cc);
+    border-radius: 99px;
+  }
+
+  /* ── REPORT ─────────────────────────────── */
+  .report-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+
+  .report-date {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--teal);
+    margin-bottom: 10px;
+  }
+
+  .report-title {
+    font-family: var(--font-display);
+    font-size: 22px;
+    margin-bottom: 14px;
+    color: var(--text);
+  }
+
+  .report-body {
+    color: var(--text-muted);
+    line-height: 1.8;
+    font-size: 14px;
+  }
+
+  .report-body p { margin-bottom: 12px; }
+
+  .report-body strong { color: var(--text); font-weight: 500; }
+
+  .report-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 20px 0;
+  }
+
+  .highlight-box {
+    background: var(--teal-dim);
+    border: 1px solid var(--teal-glow);
+    border-left: 3px solid var(--teal);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 16px 0;
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  /* ── SECTION HEADER ─────────────────────── */
+  .section-header {
+    margin-bottom: 22px;
+  }
+
+  .section-header h2 {
+    font-family: var(--font-display);
+    font-size: 26px;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .section-header p {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  /* ── RESPONSIVE ─────────────────────────── */
+  @media (max-width: 900px) {
+    .sidebar { display: none; }
+    .chart-grid { grid-template-columns: 1fr; }
+    .content { padding: 20px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-mark">🐟</div>
+      <div class="brand-name">Mar Food</div>
+      <div class="brand-sub">Central de Análises</div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-group-label">Visão Geral</div>
+      <a class="nav-item active" onclick="showSection('dashboard')">
+        <span class="nav-icon">◈</span> Dashboard
+      </a>
+
+      <div class="nav-group-label">Dados</div>
+      <a class="nav-item" onclick="showSection('vendas')">
+        <span class="nav-icon">📈</span> Gráficos de Vendas
+      </a>
+      <a class="nav-item" onclick="showSection('estoque')">
+        <span class="nav-icon">📦</span> Estoque
+      </a>
+
+      <div class="nav-group-label">Relatórios</div>
+      <a class="nav-item" onclick="showSection('relatorios')">
+        <span class="nav-icon">📄</span> Relatórios Textuais
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      Atualizado em<br>
+      <span id="updateDate"></span>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div>
+        <div class="topbar-title">Central de <span>Análises</span></div>
+      </div>
+      <div class="topbar-meta" id="topbarMeta"></div>
+    </header>
+
+    <!-- CONTENT -->
+    <div class="content">
+
+      <!-- ── DASHBOARD ── -->
+      <section class="section active" id="section-dashboard">
+        <div class="section-header">
+          <h2>Dashboard</h2>
+          <p>Visão consolidada dos principais indicadores</p>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">Faturamento do Mês</div>
+            <div class="kpi-value">R$ 84.200</div>
+            <div class="kpi-delta delta-up"><span class="delta-icon">▲</span> +12,4% vs mês anterior</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Pedidos Realizados</div>
+            <div class="kpi-value">1.247</div>
+            <div class="kpi-delta delta-up"><span class="delta-icon">▲</span> +8,1% vs mês anterior</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Ticket Médio</div>
+            <div class="kpi-value">R$ 67,52</div>
+            <div class="kpi-delta delta-up"><span class="delta-icon">▲</span> +3,9% vs mês anterior</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Itens em Estoque</div>
+            <div class="kpi-value">3.840</div>
+            <div class="kpi-delta delta-down"><span class="delta-icon">▼</span> −5,2% vs semana passada</div>
+          </div>
+        </div>
+
+        <div class="chart-grid">
+          <div class="chart-card wide">
+            <div class="chart-header">
+              <div>
+                <div class="chart-title">Faturamento Mensal</div>
+                <div class="chart-subtitle">Últimos 12 meses · em R$</div>
+              </div>
+              <span class="badge badge-teal">2024–2025</span>
+            </div>
+            <div class="chart-wrap">
+              <canvas id="chartFaturamento"></canvas>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <div class="chart-header">
+              <div>
+                <div class="chart-title">Vendas por Categoria</div>
+                <div class="chart-subtitle">Participação no período</div>
+              </div>
+            </div>
+            <div class="chart-wrap">
+              <canvas id="chartCategoria"></canvas>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <div class="chart-header">
+              <div>
+                <div class="chart-title">Pedidos por Dia da Semana</div>
+                <div class="chart-subtitle">Média acumulada</div>
+              </div>
+            </div>
+            <div class="chart-wrap">
+              <canvas id="chartDiaSemana"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── VENDAS ── -->
+      <section class="section" id="section-vendas">
+        <div class="section-header">
+          <h2>Gráficos de Vendas</h2>
+          <p>Análise detalhada de desempenho comercial</p>
+        </div>
+
+        <div class="chart-grid">
+          <div class="chart-card wide">
+            <div class="chart-header">
+              <div>
+                <div class="chart-title">Evolução de Vendas — Comparativo Anual</div>
+                <div class="chart-subtitle">2024 vs 2025 por mês</div>
+              </div>
+            </div>
+            <div class="chart-wrap" style="height:260px;">
+              <canvas id="chartComparativo"></canvas>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <div class="chart-header">
+              <div>
+                <div class="chart-title">Top 5 Produtos</div>
+                <div class="chart-subtitle">Por volume de vendas</div>
+              </div>
+            </div>
+            <div class="chart-wrap">
+              <canvas id="chartTopProd"></canvas>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <div class="chart-header">
+              <div>
+                <div class="chart-title">Margem por Categoria</div>
+                <div class="chart-subtitle">Percentual de margem bruta</div>
+              </div>
+            </div>
+            <div class="chart-wrap">
+              <canvas id="chartMargem"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── ESTOQUE ── -->
+      <section class="section" id="section-estoque">
+        <div class="section-header">
+          <h2>Estoque & Inventário</h2>
+          <p>Posição atual do estoque por categoria</p>
+        </div>
+
+        <div class="data-table-wrap">
+          <div class="table-header">
+            <span class="table-title">Posição de Estoque por Produto</span>
+            <span class="badge badge-gold">Atualizado hoje</span>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Produto</th>
+                <th>Categoria</th>
+                <th>Qtd. em Estoque</th>
+                <th>Estoque Mínimo</th>
+                <th>Status</th>
+                <th>Cobertura</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Salmão Fresco (kg)</td>
+                <td class="muted">Peixe</td>
+                <td>342</td>
+                <td>100</td>
+                <td><span class="badge badge-teal">Normal</span></td>
+                <td>
+                  <div class="progress-bar"><div class="progress-fill" style="width:85%"></div></div>
+                </td>
+              </tr>
+              <tr>
+                <td>Camarão VG (kg)</td>
+                <td class="muted">Crustáceo</td>
+                <td>88</td>
+                <td>80</td>
+                <td><span class="badge badge-gold">Atenção</span></td>
+                <td>
+                  <div class="progress-bar"><div class="progress-fill" style="width:22%;background:var(--gold)"></div></div>
+                </td>
+              </tr>
+              <tr>
+                <td>Tilápia Filé (kg)</td>
+                <td class="muted">Peixe</td>
+                <td>512</td>
+                <td>150</td>
+                <td><span class="badge badge-teal">Normal</span></td>
+                <td>
+                  <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+                </td>
+              </tr>
+              <tr>
+                <td>Polvo Inteiro (kg)</td>
+                <td class="muted">Molusco</td>
+                <td>34</td>
+                <td>50</td>
+                <td><span class="badge badge-red">Crítico</span></td>
+                <td>
+                  <div class="progress-bar"><div class="progress-fill" style="width:12%;background:var(--red)"></div></div>
+                </td>
+              </tr>
+              <tr>
+                <td>Bacalhau Seco (kg)</td>
+                <td class="muted">Peixe</td>
+                <td>275</td>
+                <td>120</td>
+                <td><span class="badge badge-teal">Normal</span></td>
+                <td>
+                  <div class="progress-bar"><div class="progress-fill" style="width:70%"></div></div>
+                </td>
+              </tr>
+              <tr>
+                <td>Lula Limpa (kg)</td>
+                <td class="muted">Molusco</td>
+                <td>160</td>
+                <td>60</td>
+                <td><span class="badge badge-teal">Normal</span></td>
+                <td>
+                  <div class="progress-bar"><div class="progress-fill" style="width:78%"></div></div>
+                </td>
+              </tr>
+              <tr>
+                <td>Ostra (dz)</td>
+                <td class="muted">Molusco</td>
+                <td>48</td>
+                <td>60</td>
+                <td><span class="badge badge-red">Crítico</span></td>
+                <td>
+                  <div class="progress-bar"><div class="progress-fill" style="width:8%;background:var(--red)"></div></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="chart-grid">
+          <div class="chart-card wide">
+            <div class="chart-header">
+              <div>
+                <div class="chart-title">Giro de Estoque por Categoria</div>
+                <div class="chart-subtitle">Vezes ao mês · média acumulada</div>
+              </div>
+            </div>
+            <div class="chart-wrap">
+              <canvas id="chartGiro"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── RELATÓRIOS ── -->
+      <section class="section" id="section-relatorios">
+        <div class="section-header">
+          <h2>Relatórios Textuais</h2>
+          <p>Análises narrativas e sínteses gerenciais</p>
+        </div>
+
+        <div class="report-card">
+          <div class="report-date">Março 2025 — Relatório Mensal</div>
+          <div class="report-title">Desempenho Comercial — 1º Trimestre</div>
+          <div class="report-body">
+            <p>O primeiro trimestre de 2025 apresentou crescimento consistente em todas as categorias de produto, com destaque para o segmento de peixes frescos, que registrou aumento de <strong>18,3%</strong> em volume em relação ao mesmo período de 2024.</p>
+
+            <div class="highlight-box">
+              📌 Destaque: Salmão Fresco liderou as vendas pelo 3º mês consecutivo, representando 28% do faturamento total de peixes no período.
+            </div>
+
+            <p>O ticket médio se manteve em crescimento, impulsionado pela reformulação do mix de produtos premium introduzida em fevereiro. A categoria de moluscos, no entanto, apresentou queda de <strong>6,1%</strong>, associada à sazonalidade e à ruptura pontual de estoque de ostras no início de março.</p>
+
+            <div class="report-divider"></div>
+
+            <p><strong>Pontos de atenção para o próximo período:</strong></p>
+            <p>1. Reforçar posição de estoque de camarão e ostra antes da alta temporada de abril.<br>
+            2. Avaliar expansão da linha de produtos defumados, que apresenta margem 12 p.p. superior à média.<br>
+            3. Rever frequência de pedidos de polvo — ruptura ocorreu 3 vezes em março.</p>
+          </div>
+        </div>
+
+        <div class="report-card">
+          <div class="report-date">Fevereiro 2025 — Análise de Margem</div>
+          <div class="report-title">Margens por Categoria de Produto</div>
+          <div class="report-body">
+            <p>A análise de margens brutas do mês de fevereiro revelou dispersão significativa entre categorias. Produtos defumados e beneficiados continuam com as maiores margens do portfólio, enquanto produtos frescos in natura operam com margens mais apertadas, mas com alto volume.</p>
+
+            <div class="highlight-box">
+              📌 Recomendação: aumentar participação de defumados no mix de vendas pode elevar a margem bruta total em aproximadamente 3 pontos percentuais.
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// Date
+const now = new Date();
+const opts = { day: '2-digit', month: 'long', year: 'numeric' };
+document.getElementById('updateDate').textContent = now.toLocaleDateString('pt-BR', opts);
+document.getElementById('topbarMeta').textContent = now.toLocaleDateString('pt-BR', opts);
+
+// Navigation
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('section-' + id).classList.add('active');
+  event.currentTarget.classList.add('active');
+  setTimeout(() => initCharts(id), 50);
+}
+
+// Chart defaults
+const gridColor = 'rgba(29,52,97,0.6)';
+const tickColor = '#7a8fa8';
+const font = { family: 'DM Sans, system-ui, sans-serif', size: 11 };
+const teal = '#00b4a0';
+const gold = '#e8c870';
+const red = '#ff6b7a';
+const blue = '#4e9af1';
+const muted = '#3d5068';
+
+function chartDefaults(type) {
+  return {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: type === 'line' || type === 'bar' ? {
+      x: { grid: { color: gridColor }, ticks: { color: tickColor, font } },
+      y: { grid: { color: gridColor }, ticks: { color: tickColor, font } }
+    } : {}
+  };
+}
+
+let initialized = {};
+
+function initCharts(section) {
+  if (initialized[section]) return;
+  initialized[section] = true;
+
+  if (section === 'dashboard') {
+    const meses = ['Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez','Jan','Fev','Mar'];
+    new Chart(document.getElementById('chartFaturamento'), {
+      type: 'line',
+      data: {
+        labels: meses,
+        datasets: [{
+          data: [62000,65400,58900,70200,72100,68500,75300,80100,77400,79200,81600,84200],
+          borderColor: teal,
+          backgroundColor: 'rgba(0,180,160,0.08)',
+          fill: true, tension: 0.4, pointRadius: 3, pointBackgroundColor: teal
+        }]
+      },
+      options: chartDefaults('line')
+    });
+
+    new Chart(document.getElementById('chartCategoria'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Peixes','Crustáceos','Moluscos','Defumados','Outros'],
+        datasets: [{
+          data: [42, 24, 15, 13, 6],
+          backgroundColor: [teal, gold, blue, '#a78bfa', muted],
+          borderWidth: 0,
+          hoverOffset: 6
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: true, position: 'bottom', labels: { color: tickColor, font, padding: 12, boxWidth: 10 } }
+        }
+      }
+    });
+
+    new Chart(document.getElementById('chartDiaSemana'), {
+      type: 'bar',
+      data: {
+        labels: ['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],
+        datasets: [{
+          data: [148, 162, 155, 178, 210, 241, 95],
+          backgroundColor: [muted,muted,muted,muted,gold,teal,muted],
+          borderRadius: 5
+        }]
+      },
+      options: chartDefaults('bar')
+    });
+  }
+
+  if (section === 'vendas') {
+    const meses = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+    new Chart(document.getElementById('chartComparativo'), {
+      type: 'line',
+      data: {
+        labels: meses,
+        datasets: [
+          { label: '2024', data: [58000,61000,63500,62000,65400,58900,70200,72100,68500,75300,80100,77400], borderColor: muted, backgroundColor: 'transparent', tension: 0.4, pointRadius: 2, borderDash: [4,3] },
+          { label: '2025', data: [79200,81600,84200,null,null,null,null,null,null,null,null,null], borderColor: teal, backgroundColor: 'rgba(0,180,160,0.06)', fill: true, tension: 0.4, pointRadius: 3, pointBackgroundColor: teal }
+        ]
+      },
+      options: {
+        ...chartDefaults('line'),
+        plugins: { legend: { display: true, labels: { color: tickColor, font, boxWidth: 12 } } }
+      }
+    });
+
+    new Chart(document.getElementById('chartTopProd'), {
+      type: 'bar',
+      data: {
+        labels: ['Salmão Fresco','Tilápia Filé','Camarão VG','Bacalhau','Lula'],
+        datasets: [{ data: [23600,18400,14200,11800,9300], backgroundColor: teal, borderRadius: 5 }]
+      },
+      options: { ...chartDefaults('bar'), indexAxis: 'y' }
+    });
+
+    new Chart(document.getElementById('chartMargem'), {
+      type: 'bar',
+      data: {
+        labels: ['Defumados','Moluscos','Crustáceos','Peixes','Outros'],
+        datasets: [{ data: [41, 34, 28, 23, 18], backgroundColor: [teal,blue,gold,muted,muted], borderRadius: 5 }]
+      },
+      options: chartDefaults('bar')
+    });
+  }
+
+  if (section === 'estoque') {
+    new Chart(document.getElementById('chartGiro'), {
+      type: 'bar',
+      data: {
+        labels: ['Peixes Frescos','Crustáceos','Moluscos','Defumados','Conservas'],
+        datasets: [{ data: [8.2, 6.5, 4.1, 2.3, 1.8], backgroundColor: [teal,teal,gold,muted,muted], borderRadius: 5 }]
+      },
+      options: chartDefaults('bar')
+    });
+  }
+}
+
+// Init dashboard on load
+setTimeout(() => initCharts('dashboard'), 100);
+</script>
+</body>
+</html>
