@@ -1,401 +1,822 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Mar Food — Central de Análises</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mar Food — Pilares de Gestão</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <style>
-  :root {
-    --navy: #0a1628;
-    --navy-mid: #112240;
-    --navy-light: #1d3461;
-    --teal: #00b4a0;
-    --teal-dim: #00b4a020;
-    --teal-glow: #00b4a040;
-    --gold: #e8c870;
-    --gold-dim: #e8c87020;
-    --text: #e8edf5;
-    --text-muted: #7a8fa8;
-    --text-dim: #3d5068;
-    --border: #1d3461;
-    --card-bg: #0f1e35;
-    --card-hover: #132540;
-    --red: #ff6b7a;
-    --green: #4ecdc4;
-    --orange: #ffb347;
-    --font-display: 'DM Serif Display', Georgia, serif;
-    --font-body: 'DM Sans', system-ui, sans-serif;
-  }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  body { background: var(--navy); color: var(--text); font-family: var(--font-body); font-size: 15px; line-height: 1.6; min-height: 100vh; overflow-x: hidden; }
-  body::before { content: ''; position: fixed; inset: 0; background: radial-gradient(ellipse 80% 50% at 20% 10%, #00b4a008 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 80% 80%, #1d346120 0%, transparent 60%); pointer-events: none; z-index: 0; }
-  .shell { display: flex; min-height: 100vh; position: relative; z-index: 1; }
-  .sidebar { width: 220px; flex-shrink: 0; background: var(--card-bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
-  .sidebar-brand { padding: 28px 24px 20px; border-bottom: 1px solid var(--border); }
-  .brand-mark { width: 36px; height: 36px; background: linear-gradient(135deg, var(--teal), #00e5cc); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-bottom: 10px; box-shadow: 0 0 20px var(--teal-glow); }
-  .brand-name { font-family: var(--font-display); font-size: 20px; color: var(--text); }
-  .brand-sub { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; margin-top: 2px; }
-  .sidebar-nav { padding: 16px 12px; flex: 1; }
-  .nav-group-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-dim); padding: 0 12px; margin: 16px 0 6px; }
-  .nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px; color: var(--text-muted); text-decoration: none; font-size: 13.5px; cursor: pointer; transition: all 0.15s; }
-  .nav-item:hover { background: var(--teal-dim); color: var(--teal); }
-  .nav-item.active { background: var(--teal-dim); color: var(--teal); font-weight: 500; }
-  .nav-icon { font-size: 15px; width: 18px; text-align: center; }
-  .sidebar-footer { padding: 16px 24px; border-top: 1px solid var(--border); font-size: 11px; color: var(--text-dim); }
-  .main { flex: 1; overflow-x: hidden; }
-  .topbar { padding: 20px 32px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: var(--card-bg); position: sticky; top: 0; z-index: 10; }
-  .topbar-title { font-family: var(--font-display); font-size: 22px; }
-  .topbar-title span { color: var(--teal); font-style: italic; }
-  .topbar-meta { font-size: 12px; color: var(--text-muted); }
-  .badge { display: inline-block; padding: 3px 10px; border-radius: 99px; font-size: 11px; font-weight: 500; }
-  .badge-teal { background: var(--teal-dim); color: var(--teal); border: 1px solid var(--teal-glow); }
-  .badge-gold { background: var(--gold-dim); color: var(--gold); }
-  .badge-red { background: #ff6b7a18; color: var(--red); }
-  .content { padding: 28px 32px; }
-  .section { display: none; }
-  .section.active { display: block; }
-  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 28px; }
-  .kpi-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px; padding: 20px; position: relative; overflow: hidden; transition: border-color 0.2s, transform 0.2s; }
-  .kpi-card:hover { border-color: var(--teal); transform: translateY(-2px); }
-  .kpi-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--teal), transparent); opacity: 0; transition: opacity 0.2s; }
-  .kpi-card:hover::before { opacity: 1; }
-  .kpi-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 8px; }
-  .kpi-value { font-family: var(--font-display); font-size: 26px; color: var(--text); line-height: 1.1; margin-bottom: 4px; }
-  .kpi-sub { font-size: 12px; color: var(--text-muted); }
-  .chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px; }
-  .chart-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px; padding: 22px; }
-  .chart-card.wide { grid-column: 1 / -1; }
-  .chart-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px; }
-  .chart-title { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
-  .chart-subtitle { font-size: 12px; color: var(--text-muted); }
-  .chart-wrap { position: relative; height: 220px; }
-  .data-table-wrap { background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin-bottom: 28px; }
-  .table-header { padding: 18px 22px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
-  .table-title { font-size: 14px; font-weight: 500; }
-  table { width: 100%; border-collapse: collapse; }
-  thead th { text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); padding: 10px 22px; border-bottom: 1px solid var(--border); background: #0a1628; }
-  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
-  tbody tr:last-child { border-bottom: none; }
-  tbody tr:hover { background: var(--card-hover); }
-  tbody td { padding: 12px 22px; font-size: 13.5px; color: var(--text); }
-  td.muted { color: var(--text-muted); }
-  .bar-mini { height: 4px; background: var(--border); border-radius: 99px; overflow: hidden; width: 80px; }
-  .bar-fill { height: 100%; background: linear-gradient(90deg, var(--teal), #00e5cc); border-radius: 99px; }
-  .section-header { margin-bottom: 22px; }
-  .section-header h2 { font-family: var(--font-display); font-size: 26px; color: var(--text); margin-bottom: 4px; }
-  .section-header p { font-size: 13px; color: var(--text-muted); }
-  .report-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px; padding: 28px 32px; margin-bottom: 20px; }
-  .report-date { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: var(--teal); margin-bottom: 10px; }
-  .report-title { font-family: var(--font-display); font-size: 22px; margin-bottom: 14px; }
-  .report-body { color: var(--text-muted); line-height: 1.8; font-size: 14px; }
-  .report-body p { margin-bottom: 12px; }
-  .report-body strong { color: var(--text); font-weight: 500; }
-  .highlight-box { background: var(--teal-dim); border: 1px solid var(--teal-glow); border-left: 3px solid var(--teal); border-radius: 8px; padding: 14px 18px; margin: 16px 0; font-size: 14px; color: var(--text); line-height: 1.6; }
-  @media (max-width: 900px) { .sidebar { display: none; } .chart-grid { grid-template-columns: 1fr; } .content { padding: 20px 16px; } }
+/* ── CORES EXATAS DO EXEMPLO ── */
+:root {
+  --bg:#0d0f14; --bg2:#13161e; --bg3:#1a1e2a; --border:#252a38;
+  --green:#00e5a0; --blue:#38b6ff; --orange:#ff6b35; --yellow:#f5c518;
+  --red:#ff4d6d; --purple:#b48eff; --pink:#ff6eb4;
+  --text:#e8eaf0; --muted:#6b7280; --card:#161922;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:13px;overflow-x:hidden}
+
+/* ── HEADER ── */
+.header{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.header-left{display:flex;align-items:center;gap:24px}
+.header-title{font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#fff}
+.header-title span{color:var(--green)}
+.tabs{display:flex;gap:3px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:3px}
+.tab-btn{padding:5px 14px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;color:var(--muted);letter-spacing:.4px;border:none;background:none;font-family:'DM Sans',sans-serif}
+.tab-btn.active{background:var(--bg2);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.4)}
+.tab-btn.active.fat{color:var(--green)} .tab-btn.active.mb{color:var(--yellow)} .tab-btn.active.mn{color:var(--blue)} .tab-btn.active.giro{color:var(--green)} .tab-btn.active.rupt{color:var(--red)} .tab-btn.active.metas{color:var(--purple)}
+.header-right{display:flex;align-items:center;gap:20px}
+.header-date{font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;color:var(--text);letter-spacing:.5px}
+.period-toggle{display:flex;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:3px;gap:3px}
+.period-btn{padding:5px 12px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;border:none;background:none;color:var(--muted);font-family:'DM Sans',sans-serif;transition:all .2s}
+.period-btn.active{background:var(--bg2);color:var(--green);box-shadow:0 1px 4px rgba(0,0,0,.4)}
+.live-badge{display:flex;align-items:center;gap:6px;background:rgba(0,229,160,.12);border:1px solid rgba(0,229,160,.35);border-radius:20px;padding:5px 14px;font-size:11px;font-weight:600;color:var(--green);letter-spacing:1px;text-transform:uppercase}
+.live-dot{width:7px;height:7px;background:var(--green);border-radius:50%;animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.4)}}
+
+/* ── LAYOUT ── */
+.layout{display:grid;grid-template-columns:1fr;height:calc(100vh - 57px);overflow:hidden}
+
+/* ── SIDEBAR ── */
+.sidebar{background:var(--bg2);border-right:1px solid var(--border);padding:16px 14px;overflow-y:auto;display:flex;flex-direction:column;gap:20px}
+.filter-group label{display:block;font-size:9px;letter-spacing:1.8px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;font-weight:600}
+.filter-group select{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:7px 10px;border-radius:6px;font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;outline:none;appearance:none}
+.tag-group{display:flex;flex-wrap:wrap;gap:5px}
+.tag{padding:4px 11px;border-radius:20px;border:1px solid var(--border);font-size:11px;cursor:pointer;transition:all .2s;background:var(--bg3);color:var(--muted)}
+.tag.active{background:rgba(0,229,160,.15);border-color:var(--green);color:var(--green);font-weight:600}
+.section-label{font-size:9px;letter-spacing:1.8px;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:10px}
+.vendedor-item{display:flex;align-items:flex-start;gap:9px;margin-bottom:12px}
+.rank{font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700;width:18px;line-height:1}
+.rank.r1{color:var(--yellow)} .rank.r2{color:#c0c0c0} .rank.r3{color:#cd7f32} .rank.r4,.rank.r5{color:var(--muted)}
+.vendedor-info{flex:1;min-width:0}
+.vendedor-name{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vendedor-pct{font-size:11px;color:var(--muted);margin-bottom:3px}
+.vbar{height:3px;border-radius:2px;background:var(--border);margin-top:3px}
+.vbar-fill{height:100%;border-radius:2px}
+
+/* ── MAIN ── */
+.main{overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:14px}
+.section{display:none}
+.section.active{display:flex;flex-direction:column;gap:14px}
+
+/* ── KPI ROW ── */
+.kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.kpi-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 18px;position:relative;overflow:hidden;transition:border-color .2s;cursor:pointer}
+.kpi-card:hover{border-color:#333a4f}
+.kpi-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px}
+.kpi-card.c-green::after{background:var(--green)} .kpi-card.c-yellow::after{background:var(--yellow)} .kpi-card.c-blue::after{background:var(--blue)} .kpi-card.c-orange::after{background:var(--orange)} .kpi-card.c-red::after{background:var(--red)}
+.kpi-label{font-size:9px;letter-spacing:1.8px;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:6px}
+.kpi-value{font-family:'Rajdhani',sans-serif;font-size:30px;font-weight:700;line-height:1;margin-bottom:6px}
+.kpi-card.c-green .kpi-value{color:var(--green)} .kpi-card.c-yellow .kpi-value{color:var(--yellow)} .kpi-card.c-blue .kpi-value{color:var(--blue)} .kpi-card.c-orange .kpi-value{color:var(--orange)} .kpi-card.c-red .kpi-value{color:var(--red)}
+.kpi-sub{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);flex-wrap:wrap}
+.badge{display:inline-flex;align-items:center;gap:2px;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700}
+.badge.up{background:rgba(0,229,160,.15);color:var(--green)} .badge.down{background:rgba(255,77,109,.15);color:var(--red)} .badge.neutral{background:rgba(56,182,255,.15);color:var(--blue)} .badge.warn{background:rgba(245,197,24,.15);color:var(--yellow)}
+.kpi-icon{position:absolute;top:12px;right:14px;font-size:20px;opacity:.2}
+.kpi-pct-bar{height:2px;background:var(--border);border-radius:99px;margin-top:8px;overflow:hidden}
+.kpi-pct-fill{height:100%;border-radius:99px;transition:width .6s}
+
+/* ── CHARTS ROW ── */
+.charts-row{display:grid;grid-template-columns:300px 1fr;gap:12px}
+.chart-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px 20px}
+.chart-card.wide{grid-column:1/-1}
+/* CRÍTICO: chart-wrap com altura fixa — evita Chart.js crescer infinitamente */
+.chart-wrap{position:relative;overflow:hidden}
+.chart-wrap canvas{position:absolute!important;top:0;left:0;width:100%!important;height:100%!important}
+.chart-title{font-size:9px;letter-spacing:1.8px;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:14px}
+.chart-legend{display:flex;gap:14px;margin-top:10px}
+.leg-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--muted)}
+.leg-line{width:14px;height:2px;border-radius:1px}
+
+/* ── GAUGE ── */
+.gauge-wrap{display:flex;flex-direction:column;align-items:center}
+.gauge-svg{width:200px;height:120px;overflow:visible}
+.gauge-pct{font-family:'Rajdhani',sans-serif;font-size:36px;font-weight:700;color:var(--blue);text-align:center;margin-top:-8px}
+.gauge-sub{font-size:11px;color:var(--muted);text-align:center;margin-bottom:14px}
+.canal-bar{margin-bottom:10px}
+.canal-header{display:flex;justify-content:space-between;margin-bottom:4px;font-size:11px}
+.cbar{height:6px;border-radius:3px;background:var(--border)}
+.cbar-fill{height:100%;border-radius:3px}
+
+/* ── TABLE ── */
+.table-card{background:var(--bg2);border:1px solid var(--border);border-top:2px solid #1e3a5f;border-radius:10px;overflow:hidden}
+.table-header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--border)}
+.table-header-title{font-size:9px;letter-spacing:1.8px;text-transform:uppercase;color:var(--muted);font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{text-align:left;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);font-weight:600;padding:8px 20px;border-bottom:1px solid var(--border);background:rgba(0,0,0,.2)}
+tbody tr{border-bottom:1px solid rgba(37,42,56,.5);transition:background .15s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:rgba(255,255,255,.02)}
+tbody td{padding:13px 20px;vertical-align:middle}
+.loja-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px}
+.status-pill{display:inline-block;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.5px}
+.status-pill.acima{background:rgba(0,229,160,.15);color:var(--green)}
+.status-pill.prazo{background:rgba(56,182,255,.15);color:var(--blue)}
+.status-pill.risco{background:rgba(255,107,53,.15);color:var(--orange)}
+.status-pill.abaixo{background:rgba(255,77,109,.15);color:var(--red)}
+.tend{display:flex;align-items:flex-end;gap:2px}
+.tend span{width:4px;border-radius:2px 2px 0 0}
+.tend.up span{background:var(--green)} .tend.down span{background:var(--red)} .tend.flat span{background:var(--blue)}
+
+/* ── PLACEHOLDER ── */
+.placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px;text-align:center;background:var(--card);border:1px solid var(--border);border-radius:10px}
+.placeholder .icon{font-size:40px;margin-bottom:12px;opacity:.6}
+.placeholder h3{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;letter-spacing:.5px;margin-bottom:6px}
+.placeholder p{font-size:12px;color:var(--muted);max-width:380px;line-height:1.6}
+.info-pill{display:inline-flex;flex-direction:column;padding:12px 18px;background:rgba(0,229,160,.1);border:1px solid rgba(0,229,160,.3);border-radius:8px;margin-top:16px;text-align:left}
+.info-pill span{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:var(--green);margin-bottom:3px}
+.info-pill strong{font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;color:var(--text)}
+.info-pill small{font-size:10px;color:var(--muted);margin-top:1px}
+
+/* ── METAS ── */
+.metas-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.meta-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px}
+.meta-card-title{font-size:9px;letter-spacing:1.8px;text-transform:uppercase;font-weight:600;margin-bottom:12px}
+.meta-months{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.meta-field label{display:block;font-size:9px;color:var(--muted);margin-bottom:2px;text-transform:uppercase;letter-spacing:.5px}
+.meta-field input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:5px 8px;font-size:11px;color:var(--text);font-family:'DM Sans',sans-serif;transition:border-color .15s;outline:none}
+.meta-field input:focus{border-color:var(--green)}
+.meta-hint{font-size:11px;color:var(--muted);padding-top:4px}
+
+.anim-in{animation:fadeUp .4s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+@media(max-width:1100px){.layout{grid-template-columns:1fr}.sidebar{display:none}.kpi-row{grid-template-columns:repeat(3,1fr)}.charts-row{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<div class="shell">
-  <aside class="sidebar">
-    <div class="sidebar-brand">
-      <div class="brand-mark">🐟</div>
-      <div class="brand-name">Mar Food</div>
-      <div class="brand-sub">Central de Análises</div>
-    </div>
-    <nav class="sidebar-nav">
-      <div class="nav-group-label">Visão Geral</div>
-      <a class="nav-item active" onclick="showSection('dashboard', this)"><span class="nav-icon">◈</span> Dashboard</a>
-      <div class="nav-group-label">Dados</div>
-      <a class="nav-item" onclick="showSection('vendas', this)"><span class="nav-icon">📈</span> Vendas por Hora</a>
-      <a class="nav-item" onclick="showSection('departamentos', this)"><span class="nav-icon">📦</span> Departamentos</a>
-      <a class="nav-item" onclick="showSection('clientes', this)"><span class="nav-icon">👥</span> Top Clientes</a>
-      <div class="nav-group-label">Relatórios</div>
-      <a class="nav-item" onclick="showSection('relatorio', this)"><span class="nav-icon">📄</span> Relatório do Dia</a>
-    </nav>
-    <div class="sidebar-footer">Referência: <strong style="color:var(--text-muted)">17/03/2026</strong></div>
-  </aside>
 
+<!-- HEADER -->
+<header class="header">
+  <div class="header-left">
+    <div class="header-title">PILARES DE <span>GESTÃO</span> — MAR FOOD</div>
+    <div class="tabs">
+      <button class="tab-btn active fat"    onclick="showSection('overview',this)">Geral</button>
+      <button class="tab-btn fat"           onclick="showSection('faturamento',this)">Faturamento</button>
+      <button class="tab-btn mb"            onclick="showSection('margem-bruta',this)">Margem Bruta</button>
+      <button class="tab-btn mn"            onclick="showSection('margem-nominal',this)">Margem Nominal</button>
+      <button class="tab-btn giro"          onclick="showSection('giro',this)">Giro</button>
+      <button class="tab-btn rupt"          onclick="showSection('ruptura',this)">Ruptura</button>
+      <button class="tab-btn metas"         onclick="showSection('metas',this)">Metas</button>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="header-date" id="header-date"></div>
+    <div class="period-toggle">
+      <button class="period-btn active" onclick="setPeriod('mes',this)">Mês Vigente</button>
+      <button class="period-btn"        onclick="setPeriod('ytd',this)">Acumulado Ano</button>
+    </div>
+    <div class="live-badge" id="update-badge"><div class="live-dot"></div><span id="update-label">ÚLTIMA ATUALIZAÇÃO</span></div>
+  </div>
+</header>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- MAIN -->
   <div class="main">
-    <header class="topbar">
-      <div class="topbar-title">Central de <span>Análises</span></div>
-      <div class="topbar-meta">Dados de vendas · 17/03/2026</div>
-    </header>
 
-    <div class="content">
+    <!-- ── OVERVIEW ── -->
+    <div class="section active anim-in" id="section-overview">
 
-      <!-- DASHBOARD -->
-      <section class="section active" id="section-dashboard">
-        <div class="section-header">
-          <h2>Dashboard</h2>
-          <p>Resultados consolidados do dia 17/03/2026</p>
+      <div class="kpi-row">
+        <div class="kpi-card c-green" onclick="showSection('faturamento',null)">
+          <div class="kpi-icon">💰</div>
+          <div class="kpi-label">Faturamento</div>
+          <div class="kpi-value" data-kpi="fat-val">R$ 6,25M</div>
+          <div class="kpi-sub">Meta: <strong id="kpi-fat-meta" style="color:var(--text)">—</strong><span class="badge neutral" id="kpi-fat-delta" style="display:none"></span></div>
+          <div class="kpi-pct-bar"><div class="kpi-pct-fill" id="kpi-fat-bar" style="width:0%;background:var(--green)"></div></div>
         </div>
-        <div class="kpi-grid">
-          <div class="kpi-card">
-            <div class="kpi-label">Faturamento do Dia</div>
-            <div class="kpi-value">R$ 28,7M</div>
-            <div class="kpi-sub">64.853 itens vendidos</div>
+        <div class="kpi-card c-yellow" onclick="showSection('margem-bruta',null)">
+          <div class="kpi-icon">📊</div>
+          <div class="kpi-label">Margem Bruta</div>
+          <div class="kpi-value" data-kpi="mb-val">14,5%</div>
+          <div class="kpi-sub">Meta: <strong id="kpi-mb-meta" style="color:var(--text)">—</strong><span class="badge neutral" id="kpi-mb-delta" style="display:none"></span></div>
+          <div class="kpi-pct-bar"><div class="kpi-pct-fill" id="kpi-mb-bar" style="width:0%;background:var(--yellow)"></div></div>
+        </div>
+        <div class="kpi-card c-blue" onclick="showSection('margem-nominal',null)">
+          <div class="kpi-icon">📉</div>
+          <div class="kpi-label">Margem Nominal</div>
+          <div class="kpi-value" data-kpi="mn-val">R$ 907K</div>
+          <div class="kpi-sub">Meta: <strong id="kpi-mn-meta" style="color:var(--text)">—</strong><span class="badge neutral" id="kpi-mn-delta" style="display:none"></span></div>
+          <div class="kpi-pct-bar"><div class="kpi-pct-fill" id="kpi-mn-bar" style="width:0%;background:var(--blue)"></div></div>
+        </div>
+        <div class="kpi-card c-orange" onclick="showSection('giro',null)">
+          <div class="kpi-icon">🔄</div>
+          <div class="kpi-label">Giro de Estoque</div>
+          <div class="kpi-value" style="font-size:20px;padding-top:6px;color:var(--muted)">—</div>
+          <div class="kpi-sub" style="color:var(--muted)">Aguarda inventário</div>
+          <div class="kpi-pct-bar"><div class="kpi-pct-fill" style="width:0%;background:var(--orange)"></div></div>
+        </div>
+        <div class="kpi-card c-red" onclick="showSection('ruptura',null)">
+          <div class="kpi-icon">⚠️</div>
+          <div class="kpi-label">Ruptura</div>
+          <div class="kpi-value" style="font-size:20px;padding-top:6px;color:var(--muted)">—</div>
+          <div class="kpi-sub" style="color:var(--muted)">Aguarda inventário</div>
+          <div class="kpi-pct-bar"><div class="kpi-pct-fill" style="width:0%;background:var(--red)"></div></div>
+        </div>
+      </div>
+
+      <div class="charts-row" style="grid-template-columns:260px 1fr;gap:12px">
+        <div class="chart-card">
+          <div class="chart-title">% Atingimento & Mix</div>
+          <div class="gauge-wrap">
+            <svg class="gauge-svg" viewBox="0 0 200 120">
+              <path d="M20,100 A80,80 0 0,1 180,100" fill="none" stroke="#252a38" stroke-width="14" stroke-linecap="round"/>
+              <path id="gaugeFill" d="M20,100 A80,80 0 0,1 180,100" fill="none" stroke="#38b6ff" stroke-width="14" stroke-linecap="round"
+                stroke-dasharray="0 251" style="transition:stroke-dasharray .8s ease"/>
+              <circle id="gaugeNeedle" cx="100" cy="100" r="5" fill="#38b6ff" style="transition:all .8s ease"/>
+            </svg>
+            <div class="gauge-pct" id="gauge-pct">—</div>
+            <div class="gauge-sub">atingimento faturamento</div>
           </div>
-          <div class="kpi-card">
-            <div class="kpi-label">Lucro Bruto</div>
-            <div class="kpi-value">R$ 4,6M</div>
-            <div class="kpi-sub">Margem de 16,0%</div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-label">Notas Emitidas</div>
-            <div class="kpi-value">27.484</div>
-            <div class="kpi-sub">Ticket médio R$ 1.026</div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-label">Custo Total</div>
-            <div class="kpi-value">R$ 24,1M</div>
-            <div class="kpi-sub">84,0% do faturamento</div>
-          </div>
+          <div style="margin-top:4px" id="gauge-bars"></div>
         </div>
 
-        <div class="chart-grid">
-          <div class="chart-card wide">
-            <div class="chart-header">
-              <div>
-                <div class="chart-title">Faturamento por Hora</div>
-                <div class="chart-subtitle">Distribuição das vendas ao longo do dia</div>
-              </div>
-              <span class="badge badge-teal">17/03/2026</span>
-            </div>
-            <div class="chart-wrap"><canvas id="chartHora"></canvas></div>
+        <div class="chart-card">
+          <div class="chart-title">Faturamento Acumulado vs Meta — Evolução Diária</div>
+          <div style="display:flex;gap:4px;margin-bottom:10px">
+            <button class="tab-btn active fat" style="font-size:10px;padding:3px 10px" onclick="switchMesChart('mar',this)">Mar/26</button>
+            <button class="tab-btn" style="font-size:10px;padding:3px 10px" onclick="switchMesChart('fev',this)">Fev/26</button>
+            <button class="tab-btn" style="font-size:10px;padding:3px 10px" onclick="switchMesChart('jan',this)">Jan/26</button>
           </div>
-          <div class="chart-card">
-            <div class="chart-header">
-              <div>
-                <div class="chart-title">Vendas por Segmentação</div>
-                <div class="chart-subtitle">Participação no faturamento</div>
-              </div>
-            </div>
-            <div class="chart-wrap"><canvas id="chartSeg"></canvas></div>
-          </div>
-          <div class="chart-card">
-            <div class="chart-header">
-              <div>
-                <div class="chart-title">Vendas por Região</div>
-                <div class="chart-subtitle">Distribuição geográfica</div>
-              </div>
-            </div>
-            <div class="chart-wrap"><canvas id="chartRegiao"></canvas></div>
+          <div class="chart-wrap" style="height:140px"><canvas id="lineChart"></canvas></div>
+          <div class="chart-legend">
+            <div class="leg-item"><div class="leg-line" style="background:var(--green)"></div>Acumulado Real</div>
+            <div class="leg-item"><div class="leg-line" style="background:var(--yellow);opacity:.7"></div>Meta Proporcional</div>
+            <div class="leg-item"><div class="leg-line" style="background:var(--blue);opacity:.6"></div>Projeção</div>
           </div>
         </div>
-      </section>
+      </div>
 
-      <!-- VENDAS POR HORA -->
-      <section class="section" id="section-vendas">
-        <div class="section-header">
-          <h2>Vendas por Hora</h2>
-          <p>Curva de faturamento ao longo do dia</p>
+      <div class="table-card">
+        <div class="table-header">
+          <span class="table-header-title" id="table-title">Faturamento por Departamento — Março 2026 (parcial)</span>
         </div>
-        <div class="chart-grid">
-          <div class="chart-card wide">
-            <div class="chart-header">
-              <div>
-                <div class="chart-title">Faturamento por Hora do Dia</div>
-                <div class="chart-subtitle">Pico às 17h — R$ 6,4M</div>
-              </div>
-            </div>
-            <div class="chart-wrap" style="height:300px"><canvas id="chartHora2"></canvas></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- DEPARTAMENTOS -->
-      <section class="section" id="section-departamentos">
-        <div class="section-header">
-          <h2>Departamentos</h2>
-          <p>Faturamento e top produtos por categoria</p>
-        </div>
-        <div class="chart-grid">
-          <div class="chart-card">
-            <div class="chart-header">
-              <div>
-                <div class="chart-title">Faturamento por Departamento</div>
-                <div class="chart-subtitle">Top 8 categorias</div>
-              </div>
-            </div>
-            <div class="chart-wrap"><canvas id="chartDepto"></canvas></div>
-          </div>
-          <div class="chart-card">
-            <div class="chart-header">
-              <div>
-                <div class="chart-title">Top 8 Produtos</div>
-                <div class="chart-subtitle">Por faturamento total</div>
-              </div>
-            </div>
-            <div class="chart-wrap"><canvas id="chartProd"></canvas></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- CLIENTES -->
-      <section class="section" id="section-clientes">
-        <div class="section-header">
-          <h2>Top Clientes</h2>
-          <p>Maiores compradores do dia</p>
-        </div>
-        <div class="data-table-wrap">
-          <div class="table-header">
-            <span class="table-title">Top 10 Clientes por Faturamento</span>
-            <span class="badge badge-gold">17/03/2026</span>
-          </div>
-          <table>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Cliente</th>
-                <th>Faturamento</th>
-                <th>Participação</th>
-                <th>Volume</th>
-              </tr>
-            </thead>
-            <tbody id="tabelaClientes"></tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- RELATÓRIO -->
-      <section class="section" id="section-relatorio">
-        <div class="section-header">
-          <h2>Relatório do Dia</h2>
-          <p>Síntese gerencial — 17/03/2026</p>
-        </div>
-        <div class="report-card">
-          <div class="report-date">17 de Março de 2026 — Relatório Diário</div>
-          <div class="report-title">Desempenho de Vendas — Resultado do Dia</div>
-          <div class="report-body">
-            <p>O dia 17/03/2026 registrou faturamento total de <strong>R$ 28,7 milhões</strong>, com lucro bruto de <strong>R$ 4,6 milhões</strong> e margem de <strong>16,0%</strong>. Foram emitidas <strong>27.484 notas</strong> com ticket médio de <strong>R$ 1.026</strong>.</p>
-            <div class="highlight-box">📌 Destaque: Frutas Congeladas liderou com R$ 12,0M (41,7% do faturamento total), puxado pelo Açaí Tradicional que sozinho somou R$ 10,7M entre suas variações.</div>
-            <p><strong>Distribuição por segmento:</strong> Food respondeu por R$ 12,4M (43,1%), seguido de Varejo com R$ 9,2M (32,0%) e Açaiteria com R$ 7,2M (24,9%).</p>
-            <p><strong>Performance regional:</strong> Sul foi a região de maior faturamento (R$ 9,0M), seguida de Grande POA (R$ 7,5M) e Vale Sinos (R$ 4,5M).</p>
-            <p><strong>Curva de vendas:</strong> o pico ocorreu às 17h com R$ 6,4M, representando 22,4% de todo o faturamento do dia. O volume começa a crescer a partir das 8h e se mantém alto entre 14h e 18h.</p>
-            <div class="highlight-box">📌 Maior cliente: L Rodrigues da Silva Acaiteria — R$ 1,07M no dia, representando 3,7% do faturamento total.</div>
-            <p><strong>Pontos de atenção:</strong></p>
-            <p>1. Alta concentração em Frutas Congeladas (41,7%) — avaliar diversificação de portfólio.<br>
-               2. Pico de vendas concentrado no final do dia (14h–18h) — oportunidade de redistribuição de pedidos.<br>
-               3. Margem de 16,0% — monitorar custo de aquisição das principais categorias.</p>
-          </div>
-        </div>
-      </section>
-
+        <table>
+          <thead>
+            <tr>
+              <th>Departamento</th>
+              <th>Faturamento Real</th>
+              <th>Meta Fat.</th>
+              <th>% Ating.</th>
+              <th>% Total</th>
+              <th>Margem Real</th>
+              <th>Meta Margem</th>
+              <th>Δ Margem</th>
+              <th>Lucro</th>
+              <th>Projeção Fechamento</th>
+            </tr>
+          </thead>
+          <tbody id="main-table-body"></tbody>
+        </table>
+      </div>
     </div>
+
+    <!-- ── FATURAMENTO ── -->
+    <div class="section anim-in" id="section-faturamento">
+      <div class="kpi-row" style="grid-template-columns:repeat(4,1fr)">
+        <div class="kpi-card c-green"><div class="kpi-label">Total Mar (parcial até dia 17)</div><div class="kpi-value">R$ 6,25M</div><div class="kpi-sub">Meta: <strong id="fat2-meta" style="color:var(--text)">—</strong></div><div class="kpi-pct-bar"><div class="kpi-pct-fill" id="fat2-bar" style="width:0%;background:var(--green)"></div></div></div>
+        <div class="kpi-card c-blue"><div class="kpi-label">Jan + Fev + Mar Acumulado</div><div class="kpi-value">R$ 28,7M</div><div class="kpi-sub">Jan R$11,9M · Fev R$10,6M · Mar R$6,2M</div></div>
+        <div class="kpi-card c-yellow"><div class="kpi-label">Melhor Mês</div><div class="kpi-value" style="font-size:16px;padding-top:6px">Janeiro</div><div class="kpi-sub">R$11,9M · maior do trimestre</div></div>
+        <div class="kpi-card c-orange"><div class="kpi-label">Top Região</div><div class="kpi-value" style="font-size:22px;padding-top:4px">SUL</div><div class="kpi-sub">31,4% do faturamento</div></div>
+      </div>
+      <div class="chart-card wide">
+        <div class="chart-title">Faturamento vs Meta — Mensal 2026</div>
+        <div class="chart-wrap" style="height:220px"><canvas id="chartFatMes"></canvas></div>
+      </div>
+      <div class="charts-row" style="grid-template-columns:1fr 1fr">
+        <div class="chart-card"><div class="chart-title">Por Departamento</div><div class="chart-wrap" style="height:180px"><canvas id="chartFatDepto"></canvas></div></div>
+        <div class="chart-card"><div class="chart-title">Por Região</div><div class="chart-wrap" style="height:180px"><canvas id="chartFatReg"></canvas></div></div>
+      </div>
+    </div>
+
+    <!-- ── MARGEM BRUTA ── -->
+    <div class="section anim-in" id="section-margem-bruta">
+      <div class="kpi-row" style="grid-template-columns:repeat(4,1fr)">
+        <div class="kpi-card c-yellow"><div class="kpi-label">Margem Bruta — Mar</div><div class="kpi-value">14,5%</div><div class="kpi-sub">Meta: <strong id="mb2-meta" style="color:var(--text)">—</strong></div><div class="kpi-pct-bar"><div class="kpi-pct-fill" id="mb2-bar" style="width:0%;background:var(--yellow)"></div></div></div>
+        <div class="kpi-card c-green"><div class="kpi-label">Lucro Bruto Mar</div><div class="kpi-value">R$ 907K</div><div class="kpi-sub">sobre R$ 6,25M faturado</div></div>
+        <div class="kpi-card c-blue"><div class="kpi-label">Melhor Mês</div><div class="kpi-value" style="font-size:16px;padding-top:6px">Fevereiro</div><div class="kpi-sub"><span class="badge up">▲ 16,5%</span></div></div>
+        <div class="kpi-card c-red"><div class="kpi-label">Menor Margem</div><div class="kpi-value" style="font-size:16px;padding-top:6px">Março</div><div class="kpi-sub"><span class="badge down">▼ 14,5%</span></div></div>
+      </div>
+      <div class="chart-card wide">
+        <div class="chart-title">Margem Bruta % vs Meta — Mensal 2026</div>
+        <div class="chart-wrap" style="height:220px"><canvas id="chartMBMes"></canvas></div>
+      </div>
+      <div class="charts-row" style="grid-template-columns:1fr 1fr">
+        <div class="chart-card"><div class="chart-title">Margem por Departamento (%)</div><div class="chart-wrap" style="height:180px"><canvas id="chartMBDepto"></canvas></div></div>
+        <div class="chart-card"><div class="chart-title">Margem por Segmentação (%)</div><div class="chart-wrap" style="height:180px"><canvas id="chartMBSeg"></canvas></div></div>
+      </div>
+    </div>
+
+    <!-- ── MARGEM NOMINAL ── -->
+    <div class="section anim-in" id="section-margem-nominal">
+      <div class="kpi-row" style="grid-template-columns:repeat(3,1fr)">
+        <div class="kpi-card c-blue"><div class="kpi-label">Lucro Nominal — Mar</div><div class="kpi-value">R$ 907K</div><div class="kpi-sub">Meta: <strong id="mn2-meta" style="color:var(--text)">—</strong></div><div class="kpi-pct-bar"><div class="kpi-pct-fill" id="mn2-bar" style="width:0%;background:var(--blue)"></div></div></div>
+        <div class="kpi-card c-orange"><div class="kpi-label">Lucro Acumulado YTD</div><div class="kpi-value">R$ 4,58M</div><div class="kpi-sub">Jan R$1,94M · Fev R$1,74M · Mar R$907K</div></div>
+        <div class="kpi-card c-yellow"><div class="kpi-label">Melhor Mês</div><div class="kpi-value" style="font-size:18px;padding-top:4px">Janeiro</div><div class="kpi-sub">R$ 1,94M de lucro bruto</div></div>
+      </div>
+      <div class="chart-card wide">
+        <div class="chart-title">Margem Nominal R$ vs Meta — Mensal 2026</div>
+        <div class="chart-wrap" style="height:220px"><canvas id="chartMNMes"></canvas></div>
+      </div>
+      <div class="charts-row" style="grid-template-columns:1fr 1fr">
+        <div class="chart-card"><div class="chart-title">Lucro por Segmentação (R$)</div><div class="chart-wrap" style="height:180px"><canvas id="chartMNSeg"></canvas></div></div>
+        <div class="chart-card"><div class="chart-title">Lucro por Departamento (R$)</div><div class="chart-wrap" style="height:180px"><canvas id="chartMNDepto"></canvas></div></div>
+      </div>
+    </div>
+
+    <!-- ── GIRO ── -->
+    <div class="section anim-in" id="section-giro">
+      <div class="placeholder">
+        <div class="icon">🔄</div>
+        <h3>DADOS DE INVENTÁRIO NECESSÁRIOS</h3>
+        <p>Para calcular o Giro de Estoque, carregue a planilha de inventário.<br>Fórmula: <strong style="color:var(--text)">Custo das Vendas ÷ Estoque Médio</strong></p>
+        <div class="info-pill">
+          <span>Custo de vendas disponível</span>
+          <strong>R$ 24,1M</strong>
+          <small>Pronto para cálculo quando inventário for carregado</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── RUPTURA ── -->
+    <div class="section anim-in" id="section-ruptura">
+      <div class="placeholder">
+        <div class="icon">⚠️</div>
+        <h3>DADOS DE INVENTÁRIO NECESSÁRIOS</h3>
+        <p>Para calcular a Ruptura, carregue a planilha de inventário.<br>Fórmula: <strong style="color:var(--text)">SKUs em zero ÷ Total SKUs ativos × 100</strong></p>
+      </div>
+    </div>
+
+    <!-- ── METAS ── -->
+    <div class="section anim-in" id="section-metas">
+      <div class="metas-grid" id="metas-container"></div>
+      <div class="meta-hint">✅ Metas salvas automaticamente no navegador · exibidas nos KPIs e gráficos como linha tracejada amarela</div>
+    </div>
+
   </div>
 </div>
 
 <script>
-const D = {
-  horas: ["00h","01h","05h","06h","07h","08h","09h","10h","11h","12h","13h","14h","15h","16h","17h","18h","19h","20h","21h","22h","23h"],
-  valsHora: [11567.58,17834.11,2410.84,49230.08,216969.06,657518.94,1242721.62,1881372.78,1924182.85,1335501.72,1725070.04,2877963.0,3765598.67,4710966.77,6423362.09,1519426.77,143227.01,56281.76,37349.33,59556.08,46704.03],
-  deptoLabels: ["FRUTAS CONGELADAS","VEGETAIS","FRANGOS","BOVINOS","LATICINIOS","PESCADOS","MERCEARIA","DOCES"],
-  deptoVals: [11984176.12,4828670.23,2921991.97,2479043.66,1445103.09,1282503.77,1153352.52,803124.18],
-  regLabels: ["SUL","GRANDE POA","VALE SINOS","SERRA","LITORAL"],
-  regVals: [9014413.32,7475505.75,4490668.22,4161898.58,3523822.63],
-  prodLabels: ["ACAI TRAD 5KG POLPANORTE","ACAI TRAD 5L ORIGEM","ACAI TRAD CX 10KG POLP","BATATA 7MM 2,25KG LAMB","OLEO ALGODAO ELOGIATA","BATATA 9MM 2,5KG LAMB","FILE PEITO CANCAO","FILE PANGA NINEFISH"],
-  prodVals: [5121739.98,3078351.31,1891972.6,1621688.29,857574.79,840258.8,713336.0,669484.0],
-  segLabels: ["FOOD","VAREJO","AÇAITERIA"],
-  segVals: [12371836.03,9182126.38,7150852.72],
-  topCli: [
-    ["L RODRIGUES DA SILVA ACAITERIA",1072887.7],
-    ["AM DISTRIBUIDORA DE CONGELADOS LTDA",559057.82],
-    ["HIMALAIA COMÉRCIO DE PRODUTOS",300087.24],
-    ["JULIO CESAR RIBEIRO CARNEIRO",242361.36],
-    ["LUIS EUGENIO CARGNELUTTI",207179.3],
-    ["SPLENDA PARUS REFEICOES S.A",189529.89],
-    ["MARCELO SCHULZ DA SILVA",184527.0],
-    ["MARCIO DANILO ELERT & CIA LTDA",154599.17],
-    ["ALLAN COMERCIO DE ALIMENTOS",147557.07],
-    ["EVA V F AQUINO ME",139197.05]
-  ]
+
+const now=new Date();
+document.getElementById('header-date').textContent=now.toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'short',year:'numeric'}).toUpperCase();
+
+// ── DADOS ─────────────────────────────────────────────────────────────────
+const MESES=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+const MESES_ID=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+const PILARES=['fat','mb','mn','giro','rupt'];
+const PILARES_LABEL={fat:'Faturamento (R$ mi)',mb:'Margem Bruta (%)',mn:'Margem Nominal (R$ mil)',giro:'Giro de Estoque (x)',rupt:'Ruptura (% máx.)'};
+const PILARES_COLOR={fat:'var(--green)',mb:'var(--yellow)',mn:'var(--blue)',giro:'var(--orange)',rupt:'var(--red)'};
+
+const D={
+  // ── DADOS REAIS DA PLANILHA (Jan–Mar 2026) ──────────────────
+  fat_real: [11.90, 10.55, 6.25, 0,0,0,0,0,0,0,0,0],
+  mb_real:  [16.3,  16.5,  14.5, 0,0,0,0,0,0,0,0,0],
+  mn_real:  [1938733, 1736906, 907447, 0,0,0,0,0,0,0,0,0],
+  // Meta total de faturamento por mês em R$ milhões (para gráfico)
+  fat_meta_chart: [15.27,14.38,13.47,12.33,12.25,11.12,12.67,13.27,15.30,17.14,18.37,18.25],
+
+  // Acumulado diário MARÇO (parcial até dia 17)
+  horas:   ['02','03','04','05','06','07','09','10','11','12','13','14','16','17'],
+  valsAcum:[488322,1119691,1686607,2484850,2874840,2875934,3472676,3958791,4506080,5140999,5634470,5634970,6247223,6249862],
+
+  // Acumulado diário FEVEREIRO
+  fevDias: ['01','02','03','04','05','06','07','08','09','10','11','12','13','14','16','17','18','19','20','21','22','23','24','25','26','27','28'],
+  fevAcum: [1884,495434,1056596,1670139,2356953,2808209,2811201,2818695,3567188,4218293,4765740,5599746,5992850,5993170,6505270,6818855,7291053,7889660,8270409,8270727,8271092,8780043,9309396,9758298,10251544,10553644,10554671],
+
+  // Acumulado diário JANEIRO
+  janDias: ['01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','26','27','28','29','30','31'],
+  janAcum: [103550,603087,603478,604063,1320045,1929300,2476962,3172207,3867915,3871699,3876124,4617697,5137097,5631878,6274846,6589969,6592710,6593460,7208191,7733060,8290592,8978454,9136949,9137263,9752838,10458737,10934426,11623656,11897956,11900283],
+
+  // Departamentos — MARÇO (valores exatos da planilha, somente VENDA, 14 dias até 17/03)
+  deptoLabels:['FRUTAS CONGELADAS','VEGETAIS','BOVINOS','FRANGOS','LATICINIOS','PESCADOS','MERCEARIA','EMBUTIDOS','DOCES','SORVETES','BEBIDAS','SUINOS','DESCARTAVEIS','CONDIMENTOS'],
+  deptoFat:   [2500742.48,1067916.75,624442.13,608001.03,362870.07,312872.26,260826.60,135859.83,132455.47,106912.25,74009.83,52475.53,8923.12,1554.38],
+  deptoMB:    [13.1,17.1,13.9,16.6,21.2,21.3,15.2,20.8,20.6,32.6,-10.2,22.9,30.4,19.2],
+  deptoLucro: [326985.78,182470.83,86962.54,100698.00,77069.26,66670.27,39620.44,28316.65,27325.01,34849.27,-7533.75,12038.48,2715.68,298.13],
+  deptoCusto: [2173756.70,885445.92,537479.59,507303.03,285800.81,246201.99,221206.16,107543.18,105130.46,72062.98,81543.58,40437.05,6207.44,1256.25],
+  deptoMix:   [40.0,17.1,10.0,9.7,5.8,5.0,4.2,2.2,2.1,1.7,1.2,0.8,0.1,0.0],
+  // Projeção: média dos 14 dias extrapolada para os 14 dias restantes (dia 18 ao 31)
+  deptoProj:  [5001484.96,2135833.50,1248884.26,1216002.06,725740.14,625744.52,521653.20,271719.66,264910.94,213824.50,148019.66,104951.06,17846.24,3108.76],
+  marNDias: 14, marUltimoDia: 17, marDiasNoMes: 31,
+
+  // Metas de FATURAMENTO por departamento por mês (da planilha metas_departamento.xlsx)
+  deptoMetaFat: {
+    'BEBIDAS':           [119685,109175.62,115601.18,104235.27,114174.41,116662.05,125853.89,100471.35,85762.98,161578.87,315222.95,318084.95],
+    'BOVINOS':           [1283441,1110513.49,1145343.27,1168694.14,1382389.96,1297638.16,1280067.68,1249934.18,1411395.83,1592394.91,1719473.09,1750000],
+    'CONDIMENTOS':       [9974,12952.20,16837.86,21889.22,28455.98,36992.78,48090.61,62517.80,81273.13,105026.07,136533.90,140000],
+    'CONSERVAS':         [14961,19449.30,25284.09,32869.32,42730.11,55509.15,72161.89,93810.46,121953.59,157596.67,204875.67,205240],
+    'DESCARTAVEIS':      [29921,24917.43,22945.75,19138.57,17258.93,9690.37,17183.93,13940.26,30552.34,51001.49,48545.92,49520],
+    'DOCES':             [418899,381326.82,304627.48,262290.69,237175.57,166042.94,224628.33,263309.19,405713.40,477238.21,434416.46,434416.46],
+    'EMBUTIDOS':         [349082,289932.44,324960.90,364835.79,387136.10,360451.44,444354.13,329805.91,356323.09,409281.01,293972.65,293972.65],
+    'FRANGOS':           [1994495,2253535.34,2087836.38,2281718.49,2153593.30,2237473.95,2474172.61,2194851.13,2652026.01,2614249.29,2506926.22,2506926.22],
+    'FRUTAS CONGELADAS': [5973953,5452887.26,4743854.47,3566762.04,3593703.69,2447540.11,2992482.28,4182009.25,5012357.74,5929662.00,6687366.78,6573000],
+    'LATICINIOS':        [748034,700406.55,750766.77,776344.80,840007.54,774076.72,991722.05,993871.34,984520.19,1072090.64,955816.73,970816.73],
+    'MERCEARIA':         [748034,688926.84,774687.79,562121.97,555859.26,557171.90,786739.17,842063.77,774840.80,786259.01,879926.97,872320],
+    'PESCADOS':          [498689,478395.23,510329.58,579351.77,444995.55,384070.50,409030.61,340296.83,354574.70,429165.51,446057.78,425632],
+    'SORVETES':          [500000,450000,350000,350000,300000,280000,250000,280000,350000,600000,850000,850000],
+    'SUINOS':            [99738,81248.50,81438.57,70261.06,70791.97,80007.22,84013.32,77127.22,74457.14,121900.39,110429.24,110429.24],
+    'VEGETAIS':          [2483210,2326457.98,2217554.06,2171065.00,2086524.07,2313056.41,2472649.23,2244441.56,2600571.78,2628734.38,2780613.87,2754213]
+  },
+  // Meta total de faturamento por mês (soma de todos os departamentos)
+  fatMetaTotais: [15272116,14380125,13472068,12331578,12254796,11116384,12673150,13268450,15296323,17136178,18370178,18254571],
+  fat_meta_chart: [15.27,14.38,13.47,12.33,12.25,11.12,12.67,13.27,15.30,17.14,18.37,18.25],
+  // Metas de margem por departamento (fixas, todos os meses)
+  deptoMetaMB: {
+    'BEBIDAS': 25, 'BOVINOS': 17, 'CONDIMENTOS': 22, 'CONSERVAS': 20,
+    'DESCARTAVEIS': 25, 'DOCES': 22, 'EMBUTIDOS': 22, 'FRANGOS': 18,
+    'FRUTAS CONGELADAS': 17, 'LATICINIOS': 20, 'MERCEARIA': 18,
+    'PESCADOS': 19, 'SORVETES': 30, 'SUINOS': 21, 'VEGETAIS': 19
+  },
+  deptoLabels_ytd:['FRUTAS CONGELADAS','VEGETAIS','FRANGOS','BOVINOS','LATICINIOS','PESCADOS','MERCEARIA','DOCES'],
+  deptoFat_ytd:   [11984176,4828670,2921992,2479044,1445103,1282504,1153353,803124],
+  deptoMB_ytd:    [13.7,17.2,15.0,14.2,20.9,19.5,15.7,19.5],
+  deptoLucro_ytd: [1638361,829388,438604,352059,302473,250281,181022,156863],
+  deptoMix_ytd:   [41.7,16.8,10.2,8.6,5.0,4.5,4.0,2.8],
+  regVals:  [9014413,7475506,4490668,4161899,3523823],
+
+  // Segmentação (trimestre)
+  segLabels:['FOOD','VAREJO','AÇAITERIA'],
+  segFat:   [12371836,9182126,7150853],
+  segMB:    [18.0,14.4,14.5],
+  segLucro: [2225521,1323606,1033959],
+
+  // KPIs mês vigente (Março parcial até 17/03)
+  fat_mar:   6.25,
+  mb_mar:    14.5,
+  mn_mar:    907447,
+  notas_mar: 5071,
+  ticket_mar:1135.63,
+
+  // KPIs acumulado ano (YTD)
+  fat_ytd: 28.70,
+  mb_ytd:  16.0,
+  mn_ytd:  4583086,
 };
 
-const fmt = v => 'R$ ' + (v >= 1e6 ? (v/1e6).toFixed(1)+'M' : (v/1e3).toFixed(0)+'K');
-const gridColor = 'rgba(29,52,97,0.6)';
-const tickColor = '#7a8fa8';
-const font = { family: 'DM Sans, system-ui, sans-serif', size: 11 };
-const teal = '#00b4a0'; const gold = '#e8c870'; const blue = '#4e9af1'; const muted = '#3d5068';
-
-function baseOpts(horiz) {
-  const s = horiz
-    ? { x: { grid:{color:gridColor}, ticks:{color:tickColor,font,callback:v=>fmt(v)} }, y: { grid:{color:gridColor}, ticks:{color:tickColor,font} } }
-    : { x: { grid:{color:gridColor}, ticks:{color:tickColor,font} }, y: { grid:{color:gridColor}, ticks:{color:tickColor,font,callback:v=>fmt(v)} } };
-  return { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:s };
+// ── METAS ─────────────────────────────────────────────────────────────────
+function buildMetaUI(){
+  const c=document.getElementById('metas-container');
+  c.innerHTML='';
+  PILARES.forEach(p=>{
+    const card=document.createElement('div');
+    card.className='meta-card';
+    card.innerHTML=`<div class="meta-card-title" style="color:${PILARES_COLOR[p]}">${PILARES_LABEL[p]}</div><div class="meta-months" id="meta-grid-${p}"></div>`;
+    c.appendChild(card);
+    const grid=card.querySelector(`#meta-grid-${p}`);
+    MESES.forEach((m,i)=>{
+      const d=document.createElement('div');
+      d.className='meta-field';
+      d.innerHTML=`<label>${m}</label><input type="number" step="${p==='mn'?1:0.1}" id="meta-${p}-${MESES_ID[i]}" placeholder="0" oninput="saveMeta()"/>`;
+      grid.appendChild(d);
+    });
+  });
 }
 
-let inited = {};
-function initCharts(sec) {
-  if (inited[sec]) return;
-  inited[sec] = true;
+function saveMeta(){
+  const data={};
+  PILARES.forEach(p=>{
+    data[p]=MESES_ID.map(m=>{
+      const v=parseFloat(document.getElementById(`meta-${p}-${m}`)?.value);
+      return isNaN(v)?null:v;
+    });
+  });
+  localStorage.setItem('mf_metas_v4',JSON.stringify(data));
+  updateKPIs();
+  // Atualiza gráfico principal com nova meta
+  if(inited['overview']){ inited['overview']=false; initCharts('overview'); }
+}
 
-  if (sec === 'dashboard') {
-    new Chart(document.getElementById('chartHora'), {
-      type:'line',
-      data:{ labels:D.horas, datasets:[{ data:D.valsHora, borderColor:teal, backgroundColor:'rgba(0,180,160,0.08)', fill:true, tension:0.4, pointRadius:3, pointBackgroundColor:teal }] },
-      options: baseOpts(false)
+function loadMeta(){
+  try{
+    const raw=localStorage.getItem('mf_metas_v4');
+    if(!raw)return;
+    const data=JSON.parse(raw);
+    PILARES.forEach(p=>{
+      if(!data[p])return;
+      MESES_ID.forEach((m,i)=>{
+        const el=document.getElementById(`meta-${p}-${m}`);
+        if(el&&data[p][i]!==null)el.value=data[p][i];
+      });
     });
-    new Chart(document.getElementById('chartSeg'), {
-      type:'doughnut',
-      data:{ labels:D.segLabels, datasets:[{ data:D.segVals, backgroundColor:[teal,gold,blue], borderWidth:0, hoverOffset:6 }] },
-      options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{ display:true, position:'bottom', labels:{color:tickColor,font,padding:12,boxWidth:10} } } }
-    });
-    new Chart(document.getElementById('chartRegiao'), {
-      type:'bar',
-      data:{ labels:D.regLabels, datasets:[{ data:D.regVals, backgroundColor:[teal,gold,blue,muted,muted], borderRadius:5 }] },
-      options: baseOpts(false)
-    });
+  }catch(e){}
+}
+
+function getMeta(p){
+  try{const raw=localStorage.getItem('mf_metas_v4');if(!raw)return Array(12).fill(null);return JSON.parse(raw)[p]||Array(12).fill(null);}catch(e){return Array(12).fill(null);}
+}
+
+function updateKPIs(){
+  const period  = document.querySelector('.period-btn.active')?.textContent?.includes('Ano') ? 'ytd' : 'mes';
+  const mesIdx  = 2; // março
+
+  // ── Valores reais ──────────────────────────────────────────
+  const fatR = period==='ytd' ? D.fat_ytd  : D.fat_mar;   // em R$ milhões
+  const mbR  = period==='ytd' ? D.mb_ytd   : D.mb_mar;    // em %
+  const mnR  = period==='ytd' ? D.mn_ytd   : D.mn_mar;    // em R$
+
+  // ── Metas reais da planilha ────────────────────────────────
+  // Faturamento: vem da planilha metas_departamento (total mês)
+  const fatMetaR = +(D.fatMetaTotais[mesIdx] / 1e6).toFixed(2); // R$ milhões
+
+  // Margem bruta: meta geral = 18,61% (Total Geral da planilha margens)
+  const mbMetaR  = 18.61;
+
+  // Margem nominal = meta fat * meta MB%
+  const mnMetaR  = D.fatMetaTotais[mesIdx] * (mbMetaR / 100); // em R$
+
+  // ── Formatação ─────────────────────────────────────────────
+  const fmtM  = v => `R$ ${v.toFixed(2)}M`;
+  const fmtMN = v => v >= 1e6 ? `R$ ${(v/1e6).toFixed(2)}M` : `R$ ${(v/1e3).toFixed(0)}K`;
+
+  // ── Atualiza valores nos cards ─────────────────────────────
+  document.querySelectorAll('[data-kpi="fat-val"]').forEach(el => el.textContent = fmtM(fatR));
+  document.querySelectorAll('[data-kpi="mb-val"]').forEach(el  => el.textContent = mbR.toFixed(1)+'%');
+  document.querySelectorAll('[data-kpi="mn-val"]').forEach(el  => el.textContent = fmtMN(mnR));
+
+  // ── Helper para setar meta + barra + delta ─────────────────
+  function setCard(metaId, barId, deltaId, metaV, realV, fmt){
+    const mEl = document.getElementById(metaId);
+    const bEl = document.getElementById(barId);
+    const dEl = document.getElementById(deltaId);
+    if(!mEl) return;
+    mEl.textContent = fmt(metaV);
+    const pct = Math.min(100, realV / metaV * 100);
+    if(bEl) bEl.style.width = pct.toFixed(0)+'%';
+    if(dEl){
+      dEl.textContent   = pct.toFixed(1)+'%';
+      dEl.className     = 'badge '+(realV >= metaV ? 'up' : 'down');
+      dEl.style.display = 'inline-flex';
+    }
   }
 
-  if (sec === 'vendas') {
-    new Chart(document.getElementById('chartHora2'), {
-      type:'bar',
-      data:{ labels:D.horas, datasets:[{ data:D.valsHora, backgroundColor: D.valsHora.map(v => v === Math.max(...D.valsHora) ? gold : teal), borderRadius:4 }] },
-      options: baseOpts(false)
-    });
+  setCard('kpi-fat-meta','kpi-fat-bar','kpi-fat-delta', fatMetaR, fatR,  v=>`R$ ${v.toFixed(2)}M`);
+  setCard('kpi-mb-meta', 'kpi-mb-bar', 'kpi-mb-delta',  mbMetaR, mbR,   v=>v.toFixed(1)+'%');
+  setCard('kpi-mn-meta', 'kpi-mn-bar', 'kpi-mn-delta',  mnMetaR, mnR,   v=>fmtMN(v));
+
+  // ── Sub-páginas (Faturamento, MB, MN) ─────────────────────
+  const el = (id) => document.getElementById(id);
+  if(el('fat2-meta')){ el('fat2-meta').textContent = `R$ ${fatMetaR}M`; if(el('fat2-bar')) el('fat2-bar').style.width = Math.min(100,fatR/fatMetaR*100).toFixed(0)+'%'; }
+  if(el('mb2-meta')) { el('mb2-meta').textContent  = mbMetaR.toFixed(1)+'%'; if(el('mb2-bar')) el('mb2-bar').style.width = Math.min(100,mbR/mbMetaR*100).toFixed(0)+'%'; }
+  if(el('mn2-meta')) { el('mn2-meta').textContent  = fmtMN(mnMetaR); if(el('mn2-bar')) el('mn2-bar').style.width = Math.min(100,mnR/mnMetaR*100).toFixed(0)+'%'; }
+
+  // ── Gauge ─────────────────────────────────────────────────
+  const pctGauge = Math.min(100, D.fat_mar / fatMetaR * 100);
+  if(el('gauge-pct')) el('gauge-pct').textContent = pctGauge.toFixed(1)+'%';
+  const arcTotal=251, arcFill=arcTotal*pctGauge/100;
+  const gaugeEl = document.getElementById('gaugeFill');
+  if(gaugeEl) gaugeEl.style.strokeDasharray=`${arcFill} ${arcTotal}`;
+  const gaugeAngle = Math.PI - pctGauge/100*Math.PI;
+  const needle = document.getElementById('gaugeNeedle');
+  if(needle){ needle.setAttribute('cx',100+80*Math.cos(gaugeAngle)); needle.setAttribute('cy',100-80*Math.sin(gaugeAngle)); }
+}
+
+// ── TABLE ─────────────────────────────────────────────────────────────────
+function buildTable(){
+  const period = document.querySelector('.period-btn.active')?.textContent?.includes('Ano') ? 'ytd' : 'mes';
+  const labels = period==='ytd' ? D.deptoLabels_ytd : D.deptoLabels;
+  const fat    = period==='ytd' ? D.deptoFat_ytd    : D.deptoFat;
+  const mb     = period==='ytd' ? D.deptoMB_ytd     : D.deptoMB;
+  const lucro  = period==='ytd' ? D.deptoLucro_ytd  : D.deptoLucro;
+  const mix    = period==='ytd' ? D.deptoMix_ytd    : D.deptoMix;
+  const proj   = period==='ytd' ? null               : D.deptoProj;
+
+  const titleEl = document.getElementById('table-title');
+  if(titleEl) titleEl.textContent = period==='ytd'
+    ? 'Faturamento por Departamento — YTD Jan–Mar 2026'
+    : 'Faturamento por Departamento — Março 2026 (parcial até 17/03)';
+
+  const fmtBRL = v => 'R$ ' + v.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+  const mesIdx = period==='ytd' ? null : 2; // março = índice 2
+
+  const tbody=document.getElementById('main-table-body');
+  tbody.innerHTML=labels.map((l,i)=>{
+    const metaMB    = D.deptoMetaMB[l] ?? null;
+    const metaFat   = (mesIdx !== null && D.deptoMetaFat[l]) ? D.deptoMetaFat[l][mesIdx] : null;
+    const ating     = (metaFat && fat[i]) ? (fat[i]/metaFat*100) : null;
+    const delta     = metaMB !== null ? (mb[i] - metaMB) : null;
+
+    const mbColor    = mb[i] >= 20 ? 'var(--green)' : mb[i] >= 15 ? 'var(--blue)' : mb[i] < 0 ? 'var(--red)' : 'var(--yellow)';
+    const deltaColor = delta === null ? 'var(--muted)' : delta >= 0 ? 'var(--green)' : 'var(--red)';
+    const atingColor = ating === null ? 'var(--muted)' : ating >= 100 ? 'var(--green)' : ating >= 80 ? 'var(--yellow)' : 'var(--red)';
+
+    const deltaText = delta === null ? '—' : (delta >= 0 ? '▲ +' : '▼ ') + delta.toFixed(1) + 'p.p.';
+    const projCol   = proj
+      ? `<td style="color:var(--purple);font-weight:500">${fmtBRL(proj[i])}</td>`
+      : `<td style="color:var(--muted)">—</td>`;
+
+    return `<tr>
+      <td style="font-weight:600;color:var(--text)">${l}</td>
+      <td style="font-weight:700;color:var(--text)">${fmtBRL(fat[i])}</td>
+      <td style="color:var(--muted)">${metaFat ? fmtBRL(metaFat) : '—'}</td>
+      <td style="color:${atingColor};font-weight:600">${ating !== null ? ating.toFixed(1)+'%' : '—'}</td>
+      <td style="color:var(--muted)">${mix[i].toFixed(1)}%</td>
+      <td style="color:${mbColor};font-weight:600">${mb[i]}%</td>
+      <td style="color:var(--muted)">${metaMB !== null ? metaMB+'%' : '—'}</td>
+      <td style="color:${deltaColor};font-weight:600">${deltaText}</td>
+      <td style="color:var(--blue)">${fmtBRL(lucro[i])}</td>
+      ${projCol}
+    </tr>`;
+  }).join('');
+}
+
+// ── CHARTS ────────────────────────────────────────────────────────────────
+const gC='#252a38',tC='#6b7280',fnt={family:'DM Sans,sans-serif',size:10};
+const C={green:'#00e5a0',blue:'#38b6ff',yellow:'#f5c518',orange:'#ff6b35',red:'#ff4d6d',purple:'#b48eff',muted:'#252a38'};
+let inst={},inited={};
+
+function ax(horiz,cb){
+  const sc=horiz
+    ?{x:{grid:{color:gC,drawBorder:false},ticks:{color:tC,font:fnt,callback:cb||undefined}},y:{grid:{color:gC,drawBorder:false},ticks:{color:tC,font:fnt}}}
+    :{x:{grid:{color:gC,drawBorder:false},ticks:{color:tC,font:fnt}},y:{grid:{color:gC,drawBorder:false},ticks:{color:tC,font:fnt,callback:cb||undefined}}};
+  return{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:sc};
+}
+
+function mk(id,type,data,opts){
+  if(inst[id]){inst[id].destroy();delete inst[id];}
+  const el=document.getElementById(id);if(!el)return;
+  inst[id]=new Chart(el,{type,data,options:opts});
+}
+
+function metaLine(vals,color){
+  return{label:'Meta',data:vals,borderColor:color,borderDash:[6,4],backgroundColor:'transparent',tension:0,pointRadius:0,borderWidth:1.5,spanGaps:true};
+}
+function realBars(vals,color){
+  return{label:'Real',data:vals,backgroundColor:vals.map(v=>v>0?color+'55':'transparent'),borderColor:vals.map(v=>v>0?color:'transparent'),borderWidth:1.5,borderRadius:4};
+}
+
+function initCharts(sec){
+  inited[sec]=true;
+
+  if(sec==='overview'){
+    buildLineChart('mar');
   }
 
-  if (sec === 'departamentos') {
-    new Chart(document.getElementById('chartDepto'), {
-      type:'bar',
-      data:{ labels:D.deptoLabels, datasets:[{ data:D.deptoVals, backgroundColor:teal, borderRadius:4 }] },
-      options:{ ...baseOpts(true), indexAxis:'y' }
-    });
-    new Chart(document.getElementById('chartProd'), {
-      type:'bar',
-      data:{ labels:D.prodLabels, datasets:[{ data:D.prodVals, backgroundColor:gold, borderRadius:4 }] },
-      options:{ ...baseOpts(true), indexAxis:'y' }
-    });
+  if(sec==='faturamento'){
+    // Usa meta real da planilha (não do localStorage)
+    const fatMetaChart = D.fat_meta_chart;
+    mk('chartFatMes','bar',{labels:MESES,datasets:[realBars(D.fat_real,C.green),metaLine(fatMetaChart,C.yellow)]},
+      {...ax(false,v=>v>0?`R$ ${v}M`:null),plugins:{legend:{display:true,labels:{color:tC,font:fnt,boxWidth:10,padding:12}}}});
+    mk('chartFatDepto','bar',{labels:D.deptoLabels,datasets:[{data:D.deptoFat,backgroundColor:C.green+'55',borderColor:C.green,borderWidth:1.5,borderRadius:4}]},
+      {...ax(true,v=>v>=1e6?(v/1e6).toFixed(1)+'M':(v/1e3).toFixed(0)+'K'),indexAxis:'y'});
+    mk('chartFatReg','bar',{labels:D.regLabels,datasets:[{data:D.regVals,backgroundColor:[C.green,C.blue,C.yellow,C.orange,C.purple].map(c=>c+'55'),borderColor:[C.green,C.blue,C.yellow,C.orange,C.purple],borderWidth:1.5,borderRadius:4}]},
+      ax(false,v=>(v/1e6).toFixed(1)+'M'));
   }
 
-  if (sec === 'clientes') {
-    const max = D.topCli[0][1];
-    const tbody = document.getElementById('tabelaClientes');
-    tbody.innerHTML = D.topCli.map(([nome, val], i) => `
-      <tr>
-        <td class="muted">${i+1}</td>
-        <td>${nome}</td>
-        <td><strong>${fmt(val)}</strong></td>
-        <td class="muted">${(val/28704815*100).toFixed(1)}%</td>
-        <td><div class="bar-mini"><div class="bar-fill" style="width:${(val/max*100).toFixed(0)}%"></div></div></td>
-      </tr>`).join('');
+  if(sec==='margem-bruta'){
+    const mbM=getMeta('mb');
+    // mb_real: Jan=16.3, Fev=16.5, Mar=14.5
+    mk('chartMBMes','bar',{labels:MESES,datasets:[realBars(D.mb_real,C.yellow),metaLine(mbM,C.green)]},
+      {...ax(false,v=>v>0?v+'%':null),plugins:{legend:{display:true,labels:{color:tC,font:fnt,boxWidth:10,padding:12}}}});
+    mk('chartMBDepto','bar',{labels:D.deptoLabels,datasets:[{data:D.deptoMB,backgroundColor:D.deptoMB.map(v=>v>=18?C.green+'55':v>=15?C.blue+'55':C.yellow+'55'),borderColor:D.deptoMB.map(v=>v>=18?C.green:v>=15?C.blue:C.yellow),borderWidth:1.5,borderRadius:4}]},
+      {...ax(true,v=>v+'%'),indexAxis:'y'});
+    mk('chartMBSeg','bar',{labels:D.segLabels,datasets:[{data:D.segMB,backgroundColor:[C.green+'55',C.blue+'55',C.yellow+'55'],borderColor:[C.green,C.blue,C.yellow],borderWidth:1.5,borderRadius:4}]},
+      ax(false,v=>v+'%'));
+  }
+
+  if(sec==='margem-nominal'){
+    const mnM=getMeta('mn');
+    // mn_real: Jan=1938733, Fev=1736906, Mar=907447
+    const mnRealM = D.mn_real.map(v=>v/1000); // em R$ mil
+    mk('chartMNMes','bar',{labels:MESES,datasets:[realBars(mnRealM,C.blue),metaLine(mnM,C.yellow)]},
+      {...ax(false,v=>v>0?(v>=1000?(v/1000).toFixed(1)+'M':v.toFixed(0)+'K'):null),plugins:{legend:{display:true,labels:{color:tC,font:fnt,boxWidth:10,padding:12}}}});
+    mk('chartMNSeg','bar',{labels:D.segLabels,datasets:[{data:D.segLucro,backgroundColor:[C.green+'55',C.blue+'55',C.yellow+'55'],borderColor:[C.green,C.blue,C.yellow],borderWidth:1.5,borderRadius:4}]},
+      ax(false,v=>(v/1e6).toFixed(2)+'M'));
+    mk('chartMNDepto','bar',{labels:D.deptoLabels,datasets:[{data:D.deptoLucro,backgroundColor:C.blue+'55',borderColor:C.blue,borderWidth:1.5,borderRadius:4}]},
+      {...ax(true,v=>(v/1e6).toFixed(2)+'M'),indexAxis:'y'});
   }
 }
 
-function showSection(id, el) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('section-' + id).classList.add('active');
-  if (el) el.classList.add('active');
-  setTimeout(() => initCharts(id), 50);
+// ── GRÁFICO DE LINHA POR MÊS ─────────────────────────────────────────────
+const mesConfig = {
+  mar: { dias: D.horas,   acum: D.valsAcum, metaIdx: 2, label: 'Mar/26', diasNoMes: 31 },
+  fev: { dias: D.fevDias, acum: D.fevAcum,  metaIdx: 1, label: 'Fev/26', diasNoMes: 28 },
+  jan: { dias: D.janDias, acum: D.janAcum,  metaIdx: 0, label: 'Jan/26', diasNoMes: 31 },
+};
+
+function buildLineChart(mes) {
+  const cfg = mesConfig[mes];
+  const fatM = getMeta('fat')[cfg.metaIdx];
+  const metaMes = fatM ? fatM * 1e6 : null;
+  const n = cfg.dias.length;
+  const ultimoValor = cfg.acum[n-1];
+  const taxaDiaria = ultimoValor / parseInt(cfg.dias[n-1]);
+
+  // Meta proporcional por dia
+  const metaProp = cfg.dias.map((_,i) => metaMes ? Math.round(metaMes * parseInt(cfg.dias[i]) / cfg.diasNoMes) : null);
+
+  // Projeção a partir do último dia até fim do mês
+  const diasRestantes = cfg.diasNoMes - parseInt(cfg.dias[n-1]);
+  const labelsProj = [...cfg.dias];
+  const realProj = [...cfg.acum.map(v=>null)];
+  const metaProj = [...metaProp];
+  // ponto de ancoragem da projeção no último dia real
+  const projData = cfg.dias.map((_,i) => i < n-1 ? null : cfg.acum[n-1]);
+  if(diasRestantes > 0) {
+    // adiciona ponto final projetado
+    labelsProj.push(String(cfg.diasNoMes).padStart(2,'0'));
+    projData.push(Math.round(taxaDiaria * cfg.diasNoMes));
+    metaProj.push(metaMes);
+  }
+
+  const ctx = document.getElementById('lineChart');
+  if(!ctx) return;
+  if(inst['lineChart']) { inst['lineChart'].destroy(); delete inst['lineChart']; }
+
+  inst['lineChart'] = new Chart(ctx, {
+    type:'line',
+    data:{
+      labels: labelsProj,
+      datasets:[
+        { label:'Acumulado Real', data:[...cfg.acum, ...(diasRestantes>0?[null]:[])],
+          borderColor:C.green,
+          backgroundColor:(c)=>{const g=c.chart.ctx.createLinearGradient(0,0,0,180);g.addColorStop(0,'rgba(0,229,160,.25)');g.addColorStop(1,'rgba(0,229,160,0)');return g;},
+          fill:true, tension:.4, borderWidth:2.5, pointRadius:0, pointHoverRadius:5, spanGaps:false },
+        { label:'Meta Proporcional', data: metaProj,
+          borderColor:C.yellow, borderDash:[6,4], fill:false, borderWidth:1.5, pointRadius:0, spanGaps:true },
+        { label:'Projeção', data: projData,
+          borderColor:C.blue, borderDash:[4,4], fill:false, tension:.3, borderWidth:1.5, pointRadius:0, spanGaps:false }
+      ]
+    },
+    options:{
+    responsive:true, maintainAspectRatio:false,
+      interaction:{mode:'index', intersect:false},
+      plugins:{
+        legend:{display:false},
+        tooltip:{backgroundColor:'#1a1e2a',borderColor:gC,borderWidth:1,titleColor:tC,bodyColor:'#e8eaf0',
+          callbacks:{
+            title: items => `Dia ${items[0].label} · ${cfg.label}`,
+            label: c => c.parsed.y!=null ? ` ${c.dataset.label}: R$ ${(c.parsed.y/1e6).toFixed(2)}M` : ''
+          }
+        }
+      },
+      scales:{
+        x:{grid:{color:gC,drawBorder:false}, ticks:{color:tC,font:fnt, maxTicksLimit:12}},
+        y:{grid:{color:gC,drawBorder:false}, ticks:{color:tC,font:fnt, callback:v=>(v/1e6).toFixed(0)+'M'}, min:0}
+      }
+    }
+  });
 }
 
-setTimeout(() => initCharts('dashboard'), 100);
+function switchMesChart(mes, btn) {
+  document.querySelectorAll('#section-overview .tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  buildLineChart(mes);
+}
+
+// ── NAVEGAÇÃO ─────────────────────────────────────────────────────────────
+function showSection(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('section-'+id).classList.add('active');
+  if(btn){btn.classList.add('active');}
+  else{
+    document.querySelectorAll('.tab-btn').forEach(t=>{
+      if(t.getAttribute('onclick')?.includes(`'${id}'`))t.classList.add('active');
+    });
+  }
+  if(!inited[id])setTimeout(()=>initCharts(id),60);
+}
+
+function setPeriod(p,btn){
+  document.querySelectorAll('.period-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  // Atualiza label dos KPI cards
+  const isYTD = p==='ytd';
+  document.querySelector('[data-kpi="fat-val"]')?.closest('.kpi-card')?.querySelector('.kpi-label') && (document.querySelector('[data-kpi="fat-val"]').closest('.kpi-card').querySelector('.kpi-label').textContent = isYTD ? 'Faturamento YTD' : 'Faturamento — Mar');
+  document.querySelector('[data-kpi="mb-val"]')?.closest('.kpi-card')?.querySelector('.kpi-label') && (document.querySelector('[data-kpi="mb-val"]').closest('.kpi-card').querySelector('.kpi-label').textContent = isYTD ? 'Margem Bruta YTD' : 'Margem Bruta — Mar');
+  document.querySelector('[data-kpi="mn-val"]')?.closest('.kpi-card')?.querySelector('.kpi-label') && (document.querySelector('[data-kpi="mn-val"]').closest('.kpi-card').querySelector('.kpi-label').textContent = isYTD ? 'Margem Nominal YTD' : 'Margem Nominal — Mar');
+  updateKPIs();
+  buildTable();
+  buildGaugeBars();
+}
+
+function buildGaugeBars(){
+  const colors=['var(--green)','var(--blue)','var(--yellow)','var(--orange)','var(--purple)','var(--pink)','var(--green)','var(--red)'];
+  const maxPct = D.deptoMix[0];
+  const el = document.getElementById('gauge-bars');
+  if(!el) return;
+  el.innerHTML = D.deptoLabels.slice(0,5).map((l,i)=>`
+    <div class="canal-bar">
+      <div class="canal-header">
+        <span style="color:var(--text);font-size:11px">${l}</span>
+        <span style="color:${colors[i]};font-weight:600;font-size:11px">${D.deptoMix[i]}%</span>
+      </div>
+      <div class="cbar"><div class="cbar-fill" style="width:${(D.deptoMix[i]/maxPct*100).toFixed(0)}%;background:${colors[i]}"></div></div>
+    </div>`).join('');
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+// Badge de última atualização — data real da planilha
+document.getElementById('update-label').textContent = 'ATUALIZADO EM 17/03/2026 17:59';
+
+buildMetaUI();
+loadMeta();
+buildTable();
+buildGaugeBars();
+updateKPIs();
+setTimeout(()=>{ initCharts('overview'); }, 300);
 </script>
 </body>
 </html>
