@@ -36,7 +36,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.4)}}
 
 /* ── LAYOUT ── */
-.layout{display:grid;grid-template-columns:1fr;height:calc(100vh - 57px);overflow:hidden}
+.layout{display:grid;grid-template-columns:1fr;min-height:calc(100vh - 57px);overflow:auto}
 
 /* ── SIDEBAR ── */
 .sidebar{background:var(--bg2);border-right:1px solid var(--border);padding:16px 14px;overflow-y:auto;display:flex;flex-direction:column;gap:20px}
@@ -66,6 +66,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .kpi-card:hover{border-color:#333a4f}
 .kpi-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px}
 .kpi-card.c-green::after{background:var(--green)} .kpi-card.c-yellow::after{background:var(--yellow)} .kpi-card.c-blue::after{background:var(--blue)} .kpi-card.c-orange::after{background:var(--orange)} .kpi-card.c-red::after{background:var(--red)}
+.kpi-card.c-purple::after{background:var(--purple)}
 .kpi-label{font-size:9px;letter-spacing:1.8px;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:6px}
 .kpi-value{font-family:'Rajdhani',sans-serif;font-size:30px;font-weight:700;line-height:1;margin-bottom:6px}
 .kpi-card.c-green .kpi-value{color:var(--green)} .kpi-card.c-yellow .kpi-value{color:var(--yellow)} .kpi-card.c-blue .kpi-value{color:var(--blue)} .kpi-card.c-orange .kpi-value{color:var(--orange)} .kpi-card.c-red .kpi-value{color:var(--red)}
@@ -102,12 +103,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .table-card{background:var(--bg2);border:1px solid var(--border);border-top:2px solid #1e3a5f;border-radius:10px;overflow:hidden}
 .table-header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--border)}
 .table-header-title{font-size:9px;letter-spacing:1.8px;text-transform:uppercase;color:var(--muted);font-weight:600}
-table{width:100%;border-collapse:collapse;font-size:13px}
-thead th{text-align:left;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);font-weight:600;padding:8px 20px;border-bottom:1px solid var(--border);background:rgba(0,0,0,.2)}
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead th{text-align:left;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);font-weight:600;padding:7px 12px;border-bottom:1px solid var(--border);background:rgba(0,0,0,.2);white-space:nowrap}
 tbody tr{border-bottom:1px solid rgba(37,42,56,.5);transition:background .15s}
 tbody tr:last-child{border-bottom:none}
 tbody tr:hover{background:rgba(255,255,255,.02)}
-tbody td{padding:13px 20px;vertical-align:middle}
+tbody td{padding:9px 12px;vertical-align:middle;white-space:nowrap}
 .loja-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px}
 .status-pill{display:inline-block;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.5px}
 .status-pill.acima{background:rgba(0,229,160,.15);color:var(--green)}
@@ -141,7 +142,93 @@ tbody td{padding:13px 20px;vertical-align:middle}
 .anim-in{animation:fadeUp .4s ease both}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
-@media(max-width:1100px){.layout{grid-template-columns:1fr}.sidebar{display:none}.kpi-row{grid-template-columns:repeat(3,1fr)}.charts-row{grid-template-columns:1fr}}
+/* ── DESKTOP MÉDIO ── */
+@media(max-width:1100px){
+  .layout{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .kpi-row{grid-template-columns:repeat(3,1fr)}
+  .charts-row{grid-template-columns:1fr}
+}
+/* ── TABLET ── */
+@media(max-width:768px){
+  .header{padding:10px 14px;flex-wrap:wrap;gap:8px;height:auto}
+  .header-left{flex-wrap:wrap;gap:8px;width:100%}
+  .header-title{font-size:14px}
+  .tabs{flex-wrap:wrap;gap:2px}
+  .tab-btn{padding:4px 10px;font-size:10px}
+  .header-right{width:100%;justify-content:space-between}
+  .period-btn{font-size:10px}
+  .live-badge{font-size:10px;padding:4px 10px}
+  .layout{height:auto;overflow:visible}
+  .main{overflow:visible}
+  .main-content{padding:12px}
+  .kpi-row{grid-template-columns:repeat(2,1fr);gap:8px}
+  .kpi-value{font-size:22px}
+  .chart-card{padding:14px}
+  .table-card{overflow-x:auto}
+  table{min-width:720px;font-size:11px}
+  thead th{padding:7px 12px}
+  tbody td{padding:10px 12px}
+  .metas-grid{grid-template-columns:1fr}
+}
+/* ── TELEVENDAS ── */
+.tele-kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+.tele-kpi{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 18px;position:relative;overflow:hidden}
+.tele-kpi::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px}
+.tele-kpi.c1::after{background:var(--orange)}.tele-kpi.c2::after{background:var(--green)}.tele-kpi.c3::after{background:var(--blue)}.tele-kpi.c4::after{background:var(--yellow)}
+.vendor-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
+.vendor-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;position:relative;overflow:hidden;transition:border-color .2s}
+.vendor-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--vc)}
+.vendor-card:hover{border-color:var(--vc)}
+.vendor-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.vendor-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;flex-shrink:0}
+.vendor-info{flex:1;margin-left:10px}
+.vendor-name{font-size:14px;font-weight:600;color:var(--text)}
+.vendor-sub{font-size:10px;color:var(--muted)}
+.vendor-rank{font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:var(--muted)}
+.r1c{color:var(--yellow)}.r2c{color:#c0c0c0}.r3c{color:#cd7f32}
+.vendor-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;text-align:center}
+.vm-label{font-size:8px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.vm-ring{position:relative;width:64px;height:64px;margin:0 auto 4px}
+.vm-ring svg{transform:rotate(-90deg)}
+.vm-ring-pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700}
+.vm-vals{font-size:10px;color:var(--muted)}
+.vendor-footer{display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--border);font-size:11px}
+.sp{display:inline-block;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.5px}
+.sp-acima{background:rgba(0,229,160,.15);color:var(--green)}
+.sp-prazo{background:rgba(56,182,255,.15);color:var(--blue)}
+.sp-risco{background:rgba(255,107,53,.15);color:var(--orange)}
+.sp-abaixo{background:rgba(255,77,109,.15);color:var(--red)}
+.sp-semeta{background:rgba(107,114,128,.15);color:var(--muted)}
+@media(max-width:900px){.vendor-grid{grid-template-columns:1fr 1fr}.tele-kpi-row{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.vendor-grid{grid-template-columns:1fr}.tele-kpi-row{grid-template-columns:1fr 1fr}}
+
+/* ── CELULAR ── */
+@media(max-width:480px){
+  .header{padding:8px 10px}
+  .header-title{font-size:11px;letter-spacing:.3px}
+  .tab-btn{padding:3px 7px;font-size:9px}
+  .kpi-row{grid-template-columns:1fr 1fr;gap:6px}
+  .kpi-value{font-size:19px}
+  .kpi-label{font-size:8px;letter-spacing:1px}
+  .kpi-card{padding:11px 12px}
+  .kpi-icon{font-size:16px}
+  .main-content{padding:8px;gap:8px}
+  .chart-card{padding:10px}
+  .chart-title{font-size:8px;letter-spacing:1px}
+  .gauge-svg{width:160px;height:96px}
+  .gauge-pct{font-size:26px}
+  .gauge-sub{font-size:9px}
+  .canal-header{font-size:10px}
+  table{min-width:560px;font-size:10px}
+  thead th{padding:6px 10px;font-size:8px}
+  tbody td{padding:8px 10px}
+  .table-header{padding:10px 12px}
+  .meta-months{grid-template-columns:repeat(2,1fr)}
+  .metas-grid{grid-template-columns:1fr}
+  .placeholder{padding:28px 16px}
+  .placeholder h3{font-size:14px}
+}
 </style>
 </head>
 <body>
@@ -157,7 +244,10 @@ tbody td{padding:13px 20px;vertical-align:middle}
       <button class="tab-btn mn"            onclick="showSection('margem-nominal',this)">Margem Nominal</button>
       <button class="tab-btn giro"          onclick="showSection('giro',this)">Giro</button>
       <button class="tab-btn rupt"          onclick="showSection('ruptura',this)">Ruptura</button>
-      <button class="tab-btn metas"         onclick="showSection('metas',this)">Metas</button>
+      <button class="tab-btn" onclick="showSection('vs2025',this)">📊 2026 vs 2025</button>
+      <button class="tab-btn" style="color:var(--orange)" onclick="showSection('tele-dia',this)">📞 Tele Dia</button>
+      <button class="tab-btn" style="color:var(--orange)" onclick="showSection('tele-mes',this)">📞 Tele Mês</button>
+      <button class="tab-btn" style="color:var(--purple)" onclick="showSection('insights',this)">✦ Insights</button>
     </div>
   </div>
   <div class="header-right">
@@ -165,6 +255,7 @@ tbody td{padding:13px 20px;vertical-align:middle}
     <div class="period-toggle">
       <button class="period-btn active" onclick="setPeriod('mes',this)">Mês Vigente</button>
       <button class="period-btn"        onclick="setPeriod('ytd',this)">Acumulado Ano</button>
+      <button class="period-btn"        onclick="setPeriod('dia',this)">Venda Dia</button>
     </div>
     <div class="live-badge" id="update-badge"><div class="live-dot"></div><span id="update-label">ÚLTIMA ATUALIZAÇÃO</span></div>
   </div>
@@ -217,36 +308,40 @@ tbody td{padding:13px 20px;vertical-align:middle}
         </div>
       </div>
 
-      <div class="charts-row" style="grid-template-columns:260px 1fr;gap:12px">
+      <div class="charts-row" style="grid-template-columns:1fr 1fr;gap:12px">
+
+        <!-- Card 1: Clientes positivados acumulado no mês -->
         <div class="chart-card">
-          <div class="chart-title">% Atingimento & Mix</div>
-          <div class="gauge-wrap">
-            <svg class="gauge-svg" viewBox="0 0 200 120">
-              <path d="M20,100 A80,80 0 0,1 180,100" fill="none" stroke="#252a38" stroke-width="14" stroke-linecap="round"/>
-              <path id="gaugeFill" d="M20,100 A80,80 0 0,1 180,100" fill="none" stroke="#38b6ff" stroke-width="14" stroke-linecap="round"
-                stroke-dasharray="0 251" style="transition:stroke-dasharray .8s ease"/>
-              <circle id="gaugeNeedle" cx="100" cy="100" r="5" fill="#38b6ff" style="transition:all .8s ease"/>
-            </svg>
-            <div class="gauge-pct" id="gauge-pct">—</div>
-            <div class="gauge-sub">atingimento faturamento</div>
+          <div class="chart-title">Clientes Positivados — Acumulado Março</div>
+          <div style="display:flex;align-items:center;justify-content:center;flex-direction:column;padding:12px 0 4px">
+            <div style="font-family:'Rajdhani',sans-serif;font-size:52px;font-weight:700;color:var(--green);line-height:1" id="clientes-total">2.714</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px">clientes únicos que compraram em março</div>
           </div>
-          <div style="margin-top:4px" id="gauge-bars"></div>
+          <div style="margin-top:16px">
+            <div class="canal-bar">
+              <div class="canal-header"><span style="color:var(--text);font-size:11px">Semana 1 (dias 02–07)</span><span style="color:var(--green);font-weight:600;font-size:11px">1.823</span></div>
+              <div class="cbar"><div class="cbar-fill" style="width:100%;background:var(--green)"></div></div>
+            </div>
+            <div class="canal-bar">
+              <div class="canal-header"><span style="color:var(--text);font-size:11px">Semana 2 (dias 09–14)</span><span style="color:var(--blue);font-weight:600;font-size:11px">1.724</span></div>
+              <div class="cbar"><div class="cbar-fill" style="width:94%;background:var(--blue)"></div></div>
+            </div>
+            <div class="canal-bar">
+              <div class="canal-header"><span style="color:var(--text);font-size:11px">Semana 3 (dias 16–17)</span><span style="color:var(--yellow);font-weight:600;font-size:11px">488</span></div>
+              <div class="cbar"><div class="cbar-fill" style="width:27%;background:var(--yellow)"></div></div>
+            </div>
+          </div>
         </div>
 
+        <!-- Card 2: Clientes positivados por semana (barras) -->
         <div class="chart-card">
-          <div class="chart-title">Faturamento Acumulado vs Meta — Evolução Diária</div>
-          <div style="display:flex;gap:4px;margin-bottom:10px">
-            <button class="tab-btn active fat" style="font-size:10px;padding:3px 10px" onclick="switchMesChart('mar',this)">Mar/26</button>
-            <button class="tab-btn" style="font-size:10px;padding:3px 10px" onclick="switchMesChart('fev',this)">Fev/26</button>
-            <button class="tab-btn" style="font-size:10px;padding:3px 10px" onclick="switchMesChart('jan',this)">Jan/26</button>
-          </div>
-          <div class="chart-wrap" style="height:140px"><canvas id="lineChart"></canvas></div>
-          <div class="chart-legend">
-            <div class="leg-item"><div class="leg-line" style="background:var(--green)"></div>Acumulado Real</div>
-            <div class="leg-item"><div class="leg-line" style="background:var(--yellow);opacity:.7"></div>Meta Proporcional</div>
-            <div class="leg-item"><div class="leg-line" style="background:var(--blue);opacity:.6"></div>Projeção</div>
+          <div class="chart-title">Clientes Positivados por Semana — Março 2026</div>
+          <div class="chart-wrap" style="height:180px"><canvas id="chartClientesSemana"></canvas></div>
+          <div class="chart-legend" style="margin-top:8px">
+            <div class="leg-item"><div class="leg-dot" style="width:8px;height:8px;border-radius:50%;background:var(--green)"></div>Clientes únicos por semana</div>
           </div>
         </div>
+
       </div>
 
       <div class="table-card">
@@ -265,12 +360,128 @@ tbody td{padding:13px 20px;vertical-align:middle}
               <th>Meta Margem</th>
               <th>Δ Margem</th>
               <th>Lucro</th>
+              <th>Cli. Mês</th>
+              <th>Qt. Acum.</th>
               <th>Projeção Fechamento</th>
             </tr>
           </thead>
           <tbody id="main-table-body"></tbody>
         </table>
       </div>
+    </div>
+
+    <!-- ── VENDA DIA ── -->
+    <div class="section anim-in" id="section-dia">
+
+      <!-- KPIs do dia -->
+      <div class="kpi-row">
+        <div class="kpi-card c-green">
+          <div class="kpi-icon">💰</div>
+          <div class="kpi-label">Faturamento do Dia</div>
+          <div class="kpi-value" id="dia-fat-val">R$ 634,9K</div>
+          <div class="kpi-sub">Meta: <strong id="dia-fat-meta" style="color:var(--text)">R$ 612,4K</strong><span class="badge up" id="dia-fat-delta">103,7%</span></div>
+          <div class="kpi-pct-bar"><div class="kpi-pct-fill" id="dia-fat-bar" style="width:100%;background:var(--green)"></div></div>
+        </div>
+        <div class="kpi-card c-yellow">
+          <div class="kpi-icon">📊</div>
+          <div class="kpi-label">Margem Bruta do Dia</div>
+          <div class="kpi-value" id="dia-mb-val">15,0%</div>
+          <div class="kpi-sub">Meta: <strong style="color:var(--text)">18,61%</strong><span class="badge down">▼ -3,6 p.p.</span></div>
+          <div class="kpi-pct-bar"><div class="kpi-pct-fill" style="width:80%;background:var(--yellow)"></div></div>
+        </div>
+        <div class="kpi-card c-blue">
+          <div class="kpi-icon">📉</div>
+          <div class="kpi-label">Lucro Bruto do Dia</div>
+          <div class="kpi-value" id="dia-lb-val">R$ 95,1K</div>
+          <div class="kpi-sub">Meta: <strong style="color:var(--text)">R$ 113,1K</strong><span class="badge down">84,1%</span></div>
+          <div class="kpi-pct-bar"><div class="kpi-pct-fill" style="width:84%;background:var(--blue)"></div></div>
+        </div>
+        <div class="kpi-card c-orange">
+          <div class="kpi-icon">🧾</div>
+          <div class="kpi-label">Notas / Ticket Médio</div>
+          <div class="kpi-value" style="font-size:22px;padding-top:4px">491</div>
+          <div class="kpi-sub">Ticket médio <strong style="color:var(--text)">R$ 1.104,28</strong></div>
+        </div>
+        <div class="kpi-card c-purple" style="--kpi-color:var(--purple)">
+          <div class="kpi-icon">👥</div>
+          <div class="kpi-label">Clientes Positivados</div>
+          <div class="kpi-value" style="color:var(--purple)">526</div>
+          <div class="kpi-sub" style="color:var(--muted)">clientes únicos no dia</div>
+          <div class="kpi-pct-bar"><div class="kpi-pct-fill" style="width:0%;background:var(--purple)"></div></div>
+        </div>
+      </div>
+
+      <!-- Gráficos: linha acumulada + projeção mês -->
+      <div class="charts-row" style="grid-template-columns:1fr 340px;gap:12px">
+        <div class="chart-card">
+          <div class="chart-title">Faturamento Acumulado no Dia vs Meta — 12/03/2026</div>
+          <div class="chart-wrap" style="height:180px"><canvas id="chartDiaHora"></canvas></div>
+          <div class="chart-legend" style="margin-top:8px">
+            <div class="leg-item"><div class="leg-line" style="background:var(--green)"></div>Realizado acumulado</div>
+            <div class="leg-item"><div class="leg-line" style="background:var(--yellow);opacity:.8"></div>Meta linear do dia</div>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Projeção de Fechamento do Mês</div>
+          <div style="text-align:center;padding:10px 0 6px">
+            <div style="font-family:'Rajdhani',sans-serif;font-size:38px;font-weight:700;color:var(--orange);line-height:1">R$ 11,31M</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:3px">projeção baseada na média diária até 12/03</div>
+          </div>
+          <div style="margin-top:10px">
+            <div class="canal-bar">
+              <div class="canal-header"><span style="font-size:11px;color:var(--text)">Meta do mês</span><span style="font-size:11px;font-weight:600;color:var(--yellow)">R$ 13,47M</span></div>
+              <div class="cbar"><div class="cbar-fill" style="width:100%;background:var(--yellow)"></div></div>
+            </div>
+            <div class="canal-bar">
+              <div class="canal-header"><span style="font-size:11px;color:var(--text)">Projeção</span><span style="font-size:11px;font-weight:600;color:var(--orange)">R$ 11,31M (84,0%)</span></div>
+              <div class="cbar"><div class="cbar-fill" style="width:84%;background:var(--orange)"></div></div>
+            </div>
+            <div class="canal-bar">
+              <div class="canal-header"><span style="font-size:11px;color:var(--text)">Realizado até 12/03</span><span style="font-size:11px;font-weight:600;color:var(--green)">R$ 5,14M (38,2%)</span></div>
+              <div class="cbar"><div class="cbar-fill" style="width:38%;background:var(--green)"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabela departamentos do dia -->
+      <div class="table-card">
+        <div class="table-header">
+          <span class="table-header-title">Faturamento por Departamento — 12/03/2026</span>
+          <span style="font-size:10px;color:var(--muted)">meta = meta mês ÷ 22 dias úteis</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Departamento</th>
+              <th>Faturamento Real</th>
+              <th>Meta Dia</th>
+              <th>% Ating.</th>
+              <th>% Total</th>
+              <th>Margem Real</th>
+              <th>Meta Margem</th>
+              <th>Δ Margem</th>
+              <th>Lucro</th>
+              <th>Meta Lucro Dia</th>
+              <th>% Ating. LB</th>
+            </tr>
+          </thead>
+          <tbody id="dia-table-body"></tbody>
+        </table>
+      </div>
+
+      <!-- Top clientes + Regiões -->
+      <div class="charts-row" style="grid-template-columns:1fr 1fr;gap:12px">
+        <div class="chart-card">
+          <div class="chart-title">Top 5 Clientes do Dia</div>
+          <div class="chart-wrap" style="height:180px"><canvas id="chartDiaTopCli"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Faturamento por Região</div>
+          <div class="chart-wrap" style="height:180px"><canvas id="chartDiaRegiao"></canvas></div>
+        </div>
+      </div>
+
     </div>
 
     <!-- ── FATURAMENTO ── -->
@@ -349,10 +560,321 @@ tbody td{padding:13px 20px;vertical-align:middle}
       </div>
     </div>
 
-    <!-- ── METAS ── -->
-    <div class="section anim-in" id="section-metas">
-      <div class="metas-grid" id="metas-container"></div>
-      <div class="meta-hint">✅ Metas salvas automaticamente no navegador · exibidas nos KPIs e gráficos como linha tracejada amarela</div>
+    <!-- ── 2026 vs 2025 ── -->
+    <div class="section anim-in" id="section-vs2025">
+
+      <!-- KPIs comparativos por mês -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px">
+
+        <!-- Janeiro -->
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 18px">
+          <div style="font-size:9px;letter-spacing:1.8px;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:12px">Janeiro</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div>
+              <div style="font-size:9px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px">Faturamento</div>
+              <div style="font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:var(--text)">R$ 11,90M</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:2px">2025: R$ 14,68M</div>
+              <div style="margin-top:4px"><span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;background:rgba(255,77,109,.15);color:var(--red)">▼ -18,9%</span></div>
+            </div>
+            <div>
+              <div style="font-size:9px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px">Lucro Bruto</div>
+              <div style="font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:var(--blue)">R$ 2,08M</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:2px">2025: R$ 2,73M</div>
+              <div style="margin-top:4px"><span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;background:rgba(255,77,109,.15);color:var(--red)">▼ -24,0%</span></div>
+            </div>
+          </div>
+          <div style="margin-top:8px;font-size:10px;color:var(--muted)">MB 2026: <strong style="color:var(--yellow)">17,4%</strong> · 2025: <strong>18,6%</strong></div>
+        </div>
+
+        <!-- Fevereiro -->
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 18px">
+          <div style="font-size:9px;letter-spacing:1.8px;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:12px">Fevereiro</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div>
+              <div style="font-size:9px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px">Faturamento</div>
+              <div style="font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:var(--text)">R$ 10,55M</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:2px">2025: R$ 12,59M</div>
+              <div style="margin-top:4px"><span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;background:rgba(255,77,109,.15);color:var(--red)">▼ -16,2%</span></div>
+            </div>
+            <div>
+              <div style="font-size:9px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px">Lucro Bruto</div>
+              <div style="font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:var(--blue)">R$ 1,88M</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:2px">2025: R$ 2,29M</div>
+              <div style="margin-top:4px"><span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;background:rgba(255,77,109,.15);color:var(--red)">▼ -18,2%</span></div>
+            </div>
+          </div>
+          <div style="margin-top:8px;font-size:10px;color:var(--muted)">MB 2026: <strong style="color:var(--yellow)">17,8%</strong> · 2025: <strong>18,2%</strong></div>
+        </div>
+
+        <!-- Março (comparativo justo: mesmos dias) -->
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 18px">
+          <div style="font-size:9px;letter-spacing:1.8px;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:12px">Março <span style="color:var(--green)">✓ mesmos dias</span></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div>
+              <div style="font-size:9px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px">Faturamento</div>
+              <div style="font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:var(--text)">R$ 6,25M</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:2px">2025: R$ 5,95M</div>
+              <div style="margin-top:4px"><span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;background:rgba(0,229,160,.15);color:var(--green)">▲ +5,1%</span></div>
+            </div>
+            <div>
+              <div style="font-size:9px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px">Lucro Bruto</div>
+              <div style="font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:var(--blue)">R$ 0,98M</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:2px">2025: R$ 1,01M</div>
+              <div style="margin-top:4px"><span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;background:rgba(255,77,109,.15);color:var(--red)">▼ -3,2%</span></div>
+            </div>
+          </div>
+          <div style="margin-top:8px;font-size:10px;color:var(--muted)">MB 2026: <strong style="color:var(--yellow)">15,7%</strong> · 2025: <strong>17,0%</strong> <span style="color:var(--muted)">(até dia 17)</span></div>
+        </div>
+
+        <!-- YTD Jan+Fev+Mar comparável -->
+        <div style="background:var(--card);border:1px solid var(--border);border-left:3px solid var(--orange);border-radius:10px;padding:16px 18px">
+          <div style="font-size:9px;letter-spacing:1.8px;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:12px">YTD Jan–Mar <span style="color:var(--green)">✓ comparável</span></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div>
+              <div style="font-size:9px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px">Faturamento</div>
+              <div style="font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:var(--orange)">R$ 28,70M</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:2px">2025: R$ 33,22M</div>
+              <div style="margin-top:4px"><span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;background:rgba(255,77,109,.15);color:var(--red)">▼ -13,6%</span></div>
+            </div>
+            <div>
+              <div style="font-size:9px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px">Lucro Bruto</div>
+              <div style="font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:var(--orange)">R$ 4,93M</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:2px">2025: R$ 6,03M</div>
+              <div style="margin-top:4px"><span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;background:rgba(255,77,109,.15);color:var(--red)">▼ -18,3%</span></div>
+            </div>
+          </div>
+          <div style="margin-top:8px;font-size:10px;color:var(--muted)">Jan+Fev completos · Mar até dia 17 nos dois anos</div>
+        </div>
+      </div>
+
+      <!-- Gráfico barras lado a lado -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+        <div class="chart-card">
+          <div class="chart-title">Faturamento Mensal — 2026 vs 2025</div>
+          <div class="chart-wrap" style="height:200px"><canvas id="chartVsFat"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Lucro Bruto Mensal — 2026 vs 2025</div>
+          <div class="chart-wrap" style="height:200px"><canvas id="chartVsLucro"></canvas></div>
+        </div>
+      </div>
+
+      <!-- Tabela por departamento -->
+      <div class="table-card">
+        <div class="table-header">
+          <span class="table-header-title">Comparativo por Departamento — YTD Jan+Fev+Mar 2026 vs 2025</span>
+          <span style="font-size:10px;color:var(--green)">✓ comparação justa — mesmos dias (até 17/03) nos dois anos</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Departamento</th>
+              <th>Fat. 2026</th>
+              <th>Fat. 2025</th>
+              <th>Δ Fat.</th>
+              <th>MB 2026</th>
+              <th>MB 2025</th>
+              <th>Δ MB</th>
+              <th>Lucro 2026</th>
+              <th>Lucro 2025</th>
+              <th>Δ Lucro</th>
+            </tr>
+          </thead>
+          <tbody id="vs2025-table-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── TELEVENDAS DIA ── -->
+    <div class="section anim-in" id="section-tele-dia">
+      <!-- KPIs dia -->
+      <div class="tele-kpi-row">
+        <div class="tele-kpi c1">
+          <div class="kpi-label">Faturamento Televendas — Dia</div>
+          <div class="kpi-value" style="color:var(--orange)" id="tdia-fat-val">R$ 55,8K</div>
+          <div class="kpi-sub">Meta dia R$ 56,6K <span class="badge up" id="tdia-fat-delta">98,6%</span></div>
+          <div class="kpi-pct-bar" style="margin-top:8px"><div class="kpi-pct-fill" style="width:98.6%;background:var(--orange)"></div></div>
+        </div>
+        <div class="tele-kpi c2">
+          <div class="kpi-label">% Atingimento</div>
+          <div class="kpi-value" style="color:var(--green)">98,6%</div>
+          <div class="kpi-sub">Falta <strong style="color:var(--text)">R$ 804</strong> para bater a meta</div>
+        </div>
+        <div class="tele-kpi c3">
+          <div class="kpi-label">Positivações do Dia</div>
+          <div class="kpi-value" style="color:var(--blue)">70</div>
+          <div class="kpi-sub">Meta dia ~29 <span class="badge up">243%</span></div>
+          <div class="kpi-pct-bar" style="margin-top:8px"><div class="kpi-pct-fill" style="width:100%;background:var(--blue)"></div></div>
+        </div>
+        <div class="tele-kpi c4">
+          <div class="kpi-label">Ref. 12/03 · Meta = Mês ÷ 22</div>
+          <div class="kpi-value" style="color:var(--yellow);font-size:18px;padding-top:6px">Meta mês ÷ 22 dias</div>
+          <div class="kpi-sub" style="color:var(--muted)">meta diária proporcional</div>
+        </div>
+      </div>
+      <!-- Cards vendedores dia (sem tabela) -->
+      <div class="vendor-grid" id="vendor-grid-dia"></div>
+    </div>
+
+    <!-- ── TELEVENDAS MÊS ── -->
+    <div class="section anim-in" id="section-tele-mes">
+      <!-- KPIs mês -->
+      <div class="tele-kpi-row">
+        <div class="tele-kpi c1">
+          <div class="kpi-label">Faturamento Televendas — Mês</div>
+          <div class="kpi-value" style="color:var(--orange)">R$ 532K</div>
+          <div class="kpi-sub">Meta R$ 1.245.000 <span class="badge down">▼ 42,8%</span></div>
+          <div class="kpi-pct-bar" style="margin-top:8px"><div class="kpi-pct-fill" style="width:42.8%;background:var(--orange)"></div></div>
+        </div>
+        <div class="tele-kpi c2">
+          <div class="kpi-label">% Atingimento</div>
+          <div class="kpi-value" style="color:var(--red)">42,8%</div>
+          <div class="kpi-sub">Faltam <strong style="color:var(--text)">R$ 712,7K</strong></div>
+        </div>
+        <div class="tele-kpi c3">
+          <div class="kpi-label">Positivações</div>
+          <div class="kpi-value" style="color:var(--blue)">324</div>
+          <div class="kpi-sub">Meta 633 <span class="badge down">▼ 51,2%</span></div>
+          <div class="kpi-pct-bar" style="margin-top:8px"><div class="kpi-pct-fill" style="width:51.2%;background:var(--blue)"></div></div>
+        </div>
+        <div class="tele-kpi c4">
+          <div class="kpi-label">Pré-Inativos (Meta Mês)</div>
+          <div class="kpi-value" style="color:var(--yellow)">93</div>
+          <div class="kpi-sub" style="color:var(--muted)">meta a recuperar no mês</div>
+        </div>
+      </div>
+      <!-- Cards vendedores mês -->
+      <div class="vendor-grid" id="vendor-grid-mes"></div>
+      <!-- Tabela ranking (só no mês) -->
+      <div class="tele-table">
+        <div style="padding:12px 18px;border-bottom:1px solid var(--border);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);font-weight:600">
+          ▪ RANKING TELEVENDAS — DETALHAMENTO · MARÇO 2026
+        </div>
+        <table style="width:100%;border-collapse:collapse;font-size:12px">
+          <thead>
+            <tr>
+              <th style="text-align:left;font-size:9px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);font-weight:600;padding:8px 16px;border-bottom:1px solid var(--border)">#</th>
+              <th style="text-align:left;font-size:9px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);font-weight:600;padding:8px 16px;border-bottom:1px solid var(--border)">Vendedor</th>
+              <th style="text-align:left;font-size:9px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);font-weight:600;padding:8px 16px;border-bottom:1px solid var(--border)">Meta Fat.</th>
+              <th style="text-align:left;font-size:9px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);font-weight:600;padding:8px 16px;border-bottom:1px solid var(--border)">Realizado</th>
+              <th style="text-align:left;font-size:9px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);font-weight:600;padding:8px 16px;border-bottom:1px solid var(--border)">% Fat.</th>
+              <th style="text-align:left;font-size:9px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);font-weight:600;padding:8px 16px;border-bottom:1px solid var(--border)">Meta Posit.</th>
+              <th style="text-align:left;font-size:9px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);font-weight:600;padding:8px 16px;border-bottom:1px solid var(--border)">Positivações</th>
+              <th style="text-align:left;font-size:9px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);font-weight:600;padding:8px 16px;border-bottom:1px solid var(--border)">% Posit.</th>
+              <th style="text-align:left;font-size:9px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);font-weight:600;padding:8px 16px;border-bottom:1px solid var(--border)">Meta Inat.</th>
+              <th style="text-align:left;font-size:9px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);font-weight:600;padding:8px 16px;border-bottom:1px solid var(--border)">Pré-Inat.</th>
+              <th style="text-align:left;font-size:9px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);font-weight:600;padding:8px 16px;border-bottom:1px solid var(--border)">Status</th>
+            </tr>
+          </thead>
+          <tbody id="tele-table-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── INSIGHTS ── -->
+    <div class="section anim-in" id="section-insights">
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+
+        <!-- ── COLUNA ESQUERDA: INSIGHTS DO DIA ── -->
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-weight:700;padding:2px 0">
+            📅 Insights do Dia — 12/03/2026
+          </div>
+
+          <!-- Status geral do dia -->
+          <div style="background:var(--card);border:1px solid var(--border);border-left:3px solid var(--green);border-radius:10px;padding:16px 18px">
+            <div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;font-weight:600">📊 Status Geral</div>
+            <div style="display:flex;flex-direction:column;gap:7px;font-size:13px">
+              <div>✅ Faturamento <strong style="color:var(--green)">acima da meta</strong> — R$ 634,9K vs meta R$ 612,4K <span style="color:var(--green);font-weight:700">(103,7%)</span></div>
+              <div>⚠️ Lucro bruto <strong style="color:var(--yellow)">84,1% da meta</strong> — R$ 95,1K vs meta R$ 113,1K</div>
+              <div>❌ Margem bruta <strong style="color:var(--red)">abaixo da meta</strong> — 15,0% vs meta 18,61% <span style="color:var(--red)">(-3,6 p.p.)</span></div>
+            </div>
+          </div>
+
+          <!-- Destaques positivos do dia -->
+          <div style="background:var(--card);border:1px solid var(--border);border-left:3px solid var(--teal,#00e5a0);border-radius:10px;padding:16px 18px">
+            <div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;font-weight:600">🏆 Destaques Positivos</div>
+            <div style="display:flex;flex-direction:column;gap:7px;font-size:13px">
+              <div>🎯 <strong>8 departamentos</strong> bateram a meta de faturamento: <span style="color:var(--green)">Frutas Cong., Vegetais, Bovinos, Laticínios, Doces, Sorvetes, Suínos, Descartáveis</span></div>
+              <div>📈 Melhor margem do dia: <strong style="color:var(--green)">Sorvetes 32,0%</strong> (meta 30%) ✅</div>
+              <div>⏰ Pico de vendas às <strong style="color:var(--blue)">17h</strong> com R$ 181,6K no horário</div>
+              <div>👥 <strong style="color:var(--green)">526 clientes</strong> positivados no dia</div>
+            </div>
+          </div>
+
+          <!-- Alertas do dia -->
+          <div style="background:var(--card);border:1px solid var(--border);border-left:3px solid var(--red);border-radius:10px;padding:16px 18px">
+            <div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;font-weight:600">🚨 Alertas do Dia</div>
+            <div style="display:flex;flex-direction:column;gap:7px;font-size:13px">
+              <div>❌ <strong style="color:var(--red)">Bebidas</strong> com margem negativa de <span style="color:var(--red)">-23,4%</span> (meta 25%) — prejuízo bruto no dia</div>
+              <div>⚠️ <strong style="color:var(--yellow)">Mercearia</strong> atingiu apenas <span style="color:var(--red)">27%</span> da meta de faturamento</div>
+              <div>⚠️ <strong style="color:var(--yellow)">Frangos</strong> atingiu apenas <span style="color:var(--red)">47%</span> da meta de faturamento</div>
+              <div>⚠️ <strong style="color:var(--yellow)">Condimentos</strong> atingiu apenas <span style="color:var(--red)">47%</span> da meta de faturamento</div>
+              <div>📉 <strong>9 departamentos</strong> com margem abaixo da meta — maior gap: Bebidas (-48,4 p.p.)</div>
+            </div>
+          </div>
+
+          <!-- Top cliente dia -->
+          <div style="background:var(--card);border:1px solid var(--border);border-left:3px solid var(--purple);border-radius:10px;padding:16px 18px">
+            <div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;font-weight:600">👑 Top Cliente do Dia</div>
+            <div style="font-size:14px;font-weight:600;color:var(--text)">L C Comercio Atacadista</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:3px">compra de <strong style="color:var(--purple)">R$ 15.313,69</strong> no dia</div>
+          </div>
+        </div>
+
+        <!-- ── COLUNA DIREITA: INSIGHTS DO MÊS ── -->
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-weight:700;padding:2px 0">
+            📆 Insights do Mês — Março 2026 (parcial até 12/03)
+          </div>
+
+          <!-- Status geral mês -->
+          <div style="background:var(--card);border:1px solid var(--border);border-left:3px solid var(--orange);border-radius:10px;padding:16px 18px">
+            <div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;font-weight:600">📊 Status Geral</div>
+            <div style="display:flex;flex-direction:column;gap:7px;font-size:13px">
+              <div>📍 Faturamento acumulado: <strong style="color:var(--yellow)">R$ 6,25M (46,4%)</strong> da meta de R$ 13,47M</div>
+              <div>📍 Lucro acumulado: <strong style="color:var(--red)">R$ 978,5K (39,3%)</strong> da meta de R$ 2,49M</div>
+              <div>📍 Margem bruta média: <strong style="color:var(--red)">15,7%</strong> vs meta 18,61% <span style="color:var(--red)">(-2,9 p.p.)</span></div>
+            </div>
+          </div>
+
+          <!-- Projeção de fechamento -->
+          <div style="background:var(--card);border:1px solid var(--border);border-left:3px solid var(--green);border-radius:10px;padding:16px 18px">
+            <div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;font-weight:600">🔮 Projeção de Fechamento</div>
+            <div style="display:flex;flex-direction:column;gap:7px;font-size:13px">
+              <div>📈 Projeção: <strong style="color:var(--green)">R$ 13,75M</strong> — <span style="color:var(--green)">+R$ 277K acima da meta</span> 🎯</div>
+              <div style="color:var(--muted);font-size:11px">Baseado na média de R$ 625K/dia × 22 dias úteis</div>
+              <div>⚠️ Porém margem projetada (<strong style="color:var(--yellow)">~15,7%</strong>) ainda ficará abaixo da meta (18,61%)</div>
+              <div>💡 Para bater a meta de lucro, precisaria elevar margem em <strong style="color:var(--yellow)">+2,9 p.p.</strong> nos dias restantes</div>
+            </div>
+          </div>
+
+          <!-- Alertas do mês -->
+          <div style="background:var(--card);border:1px solid var(--border);border-left:3px solid var(--red);border-radius:10px;padding:16px 18px">
+            <div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;font-weight:600">🚨 Departamentos em Risco</div>
+            <div style="display:flex;flex-direction:column;gap:7px;font-size:13px">
+              <div>🔴 <strong style="color:var(--red)">Frangos</strong> — apenas <span style="color:var(--red)">29,1%</span> da meta (R$ 608K vs R$ 2,09M)</div>
+              <div>🔴 <strong style="color:var(--red)">Sorvetes</strong> — apenas <span style="color:var(--red)">30,5%</span> da meta (R$ 107K vs R$ 350K)</div>
+              <div>🔴 <strong style="color:var(--red)">Condimentos</strong> — apenas <span style="color:var(--red)">9,2%</span> da meta</div>
+              <div>❌ <strong style="color:var(--red)">Bebidas</strong> — margem negativa de <span style="color:var(--red)">-10,2%</span> no mês (meta 25%)</div>
+              <div>✅ Apenas <strong style="color:var(--green)">5 deptos</strong> acima da meta de margem: Descartáveis, Laticínios, Pescados, Sorvetes, Suínos</div>
+            </div>
+          </div>
+
+          <!-- Clientes e segmentação -->
+          <div style="background:var(--card);border:1px solid var(--border);border-left:3px solid var(--blue);border-radius:10px;padding:16px 18px">
+            <div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;font-weight:600">👥 Base de Clientes</div>
+            <div style="display:flex;flex-direction:column;gap:7px;font-size:13px">
+              <div>🆕 <strong style="color:var(--blue)">257 clientes novos</strong> compraram em março (não compraram em jan/fev)</div>
+              <div>🔁 <strong style="color:var(--green)">2.457 clientes recorrentes</strong> — base consolidada</div>
+              <div>🏅 Top cliente do mês: <strong>AM Distribuidora de Congelados</strong> — <span style="color:var(--purple)">R$ 248,2K</span></div>
+              <div style="margin-top:4px;font-size:11px;color:var(--muted)">Mix de segmento: Food 43,7% · Varejo 34,8% · Açaiteria 21,4%</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
     </div>
 
   </div>
@@ -398,7 +920,11 @@ const D={
   deptoCusto: [2173756.70,885445.92,537479.59,507303.03,285800.81,246201.99,221206.16,107543.18,105130.46,72062.98,81543.58,40437.05,6207.44,1256.25],
   deptoMix:   [40.0,17.1,10.0,9.7,5.8,5.0,4.2,2.2,2.1,1.7,1.2,0.8,0.1,0.0],
   // Projeção: média dos 14 dias extrapolada para os 14 dias restantes (dia 18 ao 31)
+  deptoCliMes:  [1312,644,358,732,704,232,393,402,506,33,135,111,123,27],
+  deptoQtAcum:  [42878,99333,14645,42370,12612,10974,10408,6016,4382,4468,9079,2674,835,144],
   deptoProj:  [5001484.96,2135833.50,1248884.26,1216002.06,725740.14,625744.52,521653.20,271719.66,264910.94,213824.50,148019.66,104951.06,17846.24,3108.76],
+  deptoPositDia:  [296,98,61,90,108,24,38,51,117,5,17,16,27,6],
+  deptoPositAcum: [1312,644,358,732,704,232,393,402,506,33,135,111,123,27],
   marNDias: 14, marUltimoDia: 17, marDiasNoMes: 31,
 
   // Metas de FATURAMENTO por departamento por mês (da planilha metas_departamento.xlsx)
@@ -422,18 +948,38 @@ const D={
   // Meta total de faturamento por mês (soma de todos os departamentos)
   fatMetaTotais: [15272116,14380125,13472068,12331578,12254796,11116384,12673150,13268450,15296323,17136178,18370178,18254571],
   fat_meta_chart: [15.27,14.38,13.47,12.33,12.25,11.12,12.67,13.27,15.30,17.14,18.37,18.25],
-  // Metas de margem por departamento (fixas, todos os meses)
+  // Metas de LUCRO BRUTO por departamento por mês (da planilha meta_lucro_bruto.xlsx)
+  deptoMetaLB: {
+    'BEBIDAS':           [29921.25,27293.91,28900.30,26058.82,28543.60,29165.51,31463.47,25117.84,21440.74,40394.72,78805.74,79521.24],
+    'BOVINOS':           [218184.97,188787.29,194708.36,198678.00,235006.29,220598.49,217611.51,212488.81,239937.29,270707.13,292310.43,297500.00],
+    'CONDIMENTOS':       [2194.28,2849.48,3704.33,4815.63,6260.32,8138.41,10579.93,13753.92,17880.09,23105.74,30037.46,30800.00],
+    'CONSERVAS':         [2992.20,3889.86,5056.82,6573.86,8546.02,11101.83,14432.38,18762.09,24390.72,31519.33,40975.13,41048.00],
+    'DESCARTAVEIS':      [7480.25,6229.36,5736.44,4784.64,4314.73,2422.59,4295.98,3485.07,7638.08,12750.37,12136.48,12380.00],
+    'DOCES':             [92157.78,83891.90,67018.05,57703.95,52178.63,36529.45,49418.23,57928.02,89256.95,104992.41,95571.62,95571.62],
+    'EMBUTIDOS':         [76798.04,63785.14,71491.40,80263.87,85169.94,79299.32,97757.91,72557.30,78391.08,90041.82,64673.98,64673.98],
+    'FRANGOS':           [359009.10,405636.36,375810.55,410709.33,387646.79,402745.31,445351.07,395073.20,477364.68,470564.87,451246.72,451246.72],
+    'FRUTAS CONGELADAS': [1015572.01,926990.83,806455.26,606349.55,610929.63,416081.82,508721.99,710941.57,852100.82,1008042.54,1136852.35,1117410.00],
+    'LATICINIOS':        [149606.80,140081.31,150153.35,155268.96,168001.51,154815.34,198344.41,198774.27,196904.04,214418.13,191163.35,194163.35],
+    'MERCEARIA':         [134646.12,124006.83,139443.80,101181.95,100054.67,100290.94,141613.05,151571.48,139471.34,141526.62,158386.86,157017.60],
+    'PESCADOS':          [94750.91,90895.09,96962.62,110076.84,84549.15,72973.40,77715.82,64656.40,67369.19,81541.45,84750.98,80870.08],
+    'SORVETES':          [150000.00,135000.00,105000.00,105000.00,90000.00,84000.00,75000.00,84000.00,105000.00,180000.00,255000.00,255000.00],
+    'SUINOS':            [20944.98,17062.19,17102.10,14754.82,14866.31,16801.52,17642.80,16196.72,15636.00,25599.08,23190.14,23190.14],
+    'VEGETAIS':          [471809.90,442027.02,421335.27,412502.35,396439.57,439480.72,469803.35,426443.90,494108.64,499459.53,528316.63,523300.47]
+  },
   deptoMetaMB: {
     'BEBIDAS': 25, 'BOVINOS': 17, 'CONDIMENTOS': 22, 'CONSERVAS': 20,
     'DESCARTAVEIS': 25, 'DOCES': 22, 'EMBUTIDOS': 22, 'FRANGOS': 18,
     'FRUTAS CONGELADAS': 17, 'LATICINIOS': 20, 'MERCEARIA': 18,
     'PESCADOS': 19, 'SORVETES': 30, 'SUINOS': 21, 'VEGETAIS': 19
   },
-  deptoLabels_ytd:['FRUTAS CONGELADAS','VEGETAIS','FRANGOS','BOVINOS','LATICINIOS','PESCADOS','MERCEARIA','DOCES'],
-  deptoFat_ytd:   [11984176,4828670,2921992,2479044,1445103,1282504,1153353,803124],
-  deptoMB_ytd:    [13.7,17.2,15.0,14.2,20.9,19.5,15.7,19.5],
-  deptoLucro_ytd: [1638361,829388,438604,352059,302473,250281,181022,156863],
-  deptoMix_ytd:   [41.7,16.8,10.2,8.6,5.0,4.5,4.0,2.8],
+  deptoLabels_ytd:['FRUTAS CONGELADAS','VEGETAIS','FRANGOS','BOVINOS','LATICINIOS','PESCADOS','MERCEARIA','DOCES','EMBUTIDOS','SORVETES','BEBIDAS','SUINOS','DESCARTAVEIS','CONDIMENTOS','CONSERVAS'],
+  deptoFat_ytd:   [11984176.12,4828670.23,2921991.97,2479043.66,1445103.09,1282503.77,1153352.52,803124.18,647469.79,587288.22,266103.92,222789.50,62454.62,15865.71,4877.83],
+  deptoMB_ytd:    [14.5,18.9,16.4,14.9,22.0,20.4,17.7,20.8,22.1,35.8,19.8,25.2,32.0,18.6,-17.3],
+  deptoLucro_ytd: [1733102.45,911892.44,477935.63,370458.81,318359.77,261422.33,204575.03,167291.88,142907.85,210138.80,52736.38,56067.14,19986.74,2949.70,-841.88],
+  deptoMix_ytd:   [41.7,16.8,10.2,8.6,5.0,4.5,4.0,2.8,2.3,2.0,0.9,0.8,0.2,0.1,0.0],
+  // Metas YTD — soma Jan+Fev+Mar das planilhas de metas
+  deptoMetaFat_ytd:[16170694.73,7027222.05,6335866.72,3539297.77,2199207.32,1487413.80,2211648.63,1104853.30,963975.33,1300000.00,344461.80,262425.07,77784.18,39764.06,59694.39],
+  deptoMetaLB_ytd: [2749018.10,1335172.19,1140456.01,601680.62,439841.46,282608.62,398096.75,243067.73,212074.57,390000.00,86115.45,55109.26,19446.05,8748.09,11938.88],
   regVals:  [9014413,7475506,4490668,4161899,3523823],
 
   // Segmentação (trimestre)
@@ -447,17 +993,56 @@ const D={
   mb_mar:    14.5,
   mn_mar:    907447,
   notas_mar: 5071,
-  ticket_mar:1135.63,
+  // ── VENDA DIA — referência 12/03/2026 ────────────────────────
+  dia: {
+    data_ref:    '12/03/2026',
+    fat:         634919.66,
+    lucro:       95091.65,
+    mb:          15.0,
+    notas:       491,
+    ticket:      1104.28,
+    clientes:    526,
+    meta_fat:    612366.73,
+    meta_lb:     113130.85,
+    meta_mb:     18.61,
+    proj_mes:    11310198.88,
+    meta_fat_mes:13472068.15,
+    fat_acum_mes: 5140999.00, // acumulado real até dia 12
+    horas_labels:['07h','08h','09h','10h','11h','12h','13h','14h','15h','16h','17h','18h','19h'],
+    horas_vals:  [1433.48,9467.53,26882.14,57175.49,102782.16,121730.22,146054.39,227523.58,302261.48,436360.04,617916.58,634373.19,634919.66],
+    meta_hora:   [47105.13,94210.27,141315.40,188420.53,235525.67,282630.80,329735.93,376841.06,423946.20,471051.33,518156.46,565261.60,612366.73],
+    depto_labels:['FRUTAS CONGELADAS','VEGETAIS','BOVINOS','FRANGOS','LATICINIOS','PESCADOS','DOCES','BEBIDAS','EMBUTIDOS','SORVETES','MERCEARIA','SUINOS','DESCARTAVEIS','CONDIMENTOS'],
+    depto_fat:   [276861.08,103147.92,76614.53,44796.25,35739.71,21721.51,19133.14,15976.51,10609.26,10488.41,9502.64,8527.06,1441.36,360.28],
+    depto_mb:    [13.3,18.6,13.9,15.1,20.4,21.8,19.9,-23.4,18.0,32.0,16.6,26.0,30.3,21.2],
+    depto_lucro: [36867.43,19155.43,10663.14,6760.05,7284.76,4729.80,3800.84,-3743.21,1914.85,3353.18,1579.36,2213.48,436.32,76.22],
+    depto_mix:   [43.6,16.2,12.1,7.1,5.6,3.4,3.0,2.5,1.7,1.7,1.5,1.3,0.2,0.1],
+    depto_mf:    [215629.75,100797.91,52061.06,94901.65,34125.76,23196.80,13846.70,5254.60,14770.95,15909.09,35213.08,3701.75,1042.99,765.36],
+    depto_ml:    [36657.06,19151.60,8850.38,17082.30,6825.15,4407.39,3046.27,1313.65,3249.61,4772.73,6338.35,777.37,260.75,168.38],
+    depto_meta_mb:[17,19,17,18,20,19,22,25,22,30,18,21,25,22],
+    reg_labels:  ['SUL','GRANDE POA','SERRA','VALE SINOS','LITORAL'],
+    reg_vals:    [223283.04,176498.87,92384.26,90280.46,52105.43],
+    top_cli:     [['L C COMERCIO ATACADISTA',15313.69],['EVELYN OLINDA CAMARGO',15174.54],['L RODRIGUES DA SILVA ACAITERIA',13580.00],['AM DISTRIBUIDORA CONGELADOS',12593.52],['ATELIE DO ACAI LTDA',11173.50]]
+  },
+  // Clientes positivados — Março 2026
+  clientesDiasLabels: ['02','03','04','05','06','07','09','10','11','12','13','14','16','17'],
+  clientesDiasVals:   [445,477,403,629,217,2,466,390,415,526,220,1,487,1],
+  clientesSemLabels:  ['Sem 1\n(02–07)','Sem 2\n(09–14)','Sem 3\n(16–17)'],
+  clientesSemVals:    [1823,1724,488],
+  clientesTotalMes:   2714,
 
-  // KPIs acumulado ano (YTD)
-  fat_ytd: 28.70,
-  mb_ytd:  16.0,
-  mn_ytd:  4583086,
+  // KPIs acumulado ano (YTD real)
+  fat_ytd:  28.70,
+  mb_ytd:   17.2,
+  mn_ytd:   4928983.07,
+  // Metas YTD totais
+  fat_meta_ytd: 43.12,  // R$ milhões — soma Jan+Fev+Mar da planilha
+  lb_meta_ytd:  7973373.78, // R$ — soma Jan+Fev+Mar da planilha lucro bruto
 };
 
 // ── METAS ─────────────────────────────────────────────────────────────────
 function buildMetaUI(){
   const c=document.getElementById('metas-container');
+  if(!c) return; // aba de metas removida
   c.innerHTML='';
   PILARES.forEach(p=>{
     const card=document.createElement('div');
@@ -517,14 +1102,13 @@ function updateKPIs(){
   const mnR  = period==='ytd' ? D.mn_ytd   : D.mn_mar;    // em R$
 
   // ── Metas reais da planilha ────────────────────────────────
-  // Faturamento: vem da planilha metas_departamento (total mês)
-  const fatMetaR = +(D.fatMetaTotais[mesIdx] / 1e6).toFixed(2); // R$ milhões
-
-  // Margem bruta: meta geral = 18,61% (Total Geral da planilha margens)
+  const isYTD   = period === 'ytd';
+  // Faturamento: meta mês ou meta YTD
+  const fatMetaR = isYTD ? D.fat_meta_ytd : +(D.fatMetaTotais[mesIdx] / 1e6).toFixed(2);
+  // Margem bruta: meta geral = 18,61%
   const mbMetaR  = 18.61;
-
-  // Margem nominal = meta fat * meta MB%
-  const mnMetaR  = D.fatMetaTotais[mesIdx] * (mbMetaR / 100); // em R$
+  // Margem nominal: meta fat × meta MB% (ou meta LB YTD)
+  const mnMetaR  = isYTD ? D.lb_meta_ytd : D.fatMetaTotais[mesIdx] * (mbMetaR / 100);
 
   // ── Formatação ─────────────────────────────────────────────
   const fmtM  = v => `R$ ${v.toFixed(2)}M`;
@@ -561,15 +1145,7 @@ function updateKPIs(){
   if(el('mb2-meta')) { el('mb2-meta').textContent  = mbMetaR.toFixed(1)+'%'; if(el('mb2-bar')) el('mb2-bar').style.width = Math.min(100,mbR/mbMetaR*100).toFixed(0)+'%'; }
   if(el('mn2-meta')) { el('mn2-meta').textContent  = fmtMN(mnMetaR); if(el('mn2-bar')) el('mn2-bar').style.width = Math.min(100,mnR/mnMetaR*100).toFixed(0)+'%'; }
 
-  // ── Gauge ─────────────────────────────────────────────────
-  const pctGauge = Math.min(100, D.fat_mar / fatMetaR * 100);
-  if(el('gauge-pct')) el('gauge-pct').textContent = pctGauge.toFixed(1)+'%';
-  const arcTotal=251, arcFill=arcTotal*pctGauge/100;
-  const gaugeEl = document.getElementById('gaugeFill');
-  if(gaugeEl) gaugeEl.style.strokeDasharray=`${arcFill} ${arcTotal}`;
-  const gaugeAngle = Math.PI - pctGauge/100*Math.PI;
-  const needle = document.getElementById('gaugeNeedle');
-  if(needle){ needle.setAttribute('cx',100+80*Math.cos(gaugeAngle)); needle.setAttribute('cy',100-80*Math.sin(gaugeAngle)); }
+  // ── Gauge removido — substituído por clientes positivados ──
 }
 
 // ── TABLE ─────────────────────────────────────────────────────────────────
@@ -588,12 +1164,15 @@ function buildTable(){
     : 'Faturamento por Departamento — Março 2026 (parcial até 17/03)';
 
   const fmtBRL = v => 'R$ ' + v.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
-  const mesIdx = period==='ytd' ? null : 2; // março = índice 2
+  const mesIdx  = period==='ytd' ? null  : 2; // março = índice 2
+  const metaFatArr = period==='ytd' ? D.deptoMetaFat_ytd : null;
+  const metaLBArr  = period==='ytd' ? D.deptoMetaLB_ytd  : null;
 
   const tbody=document.getElementById('main-table-body');
   tbody.innerHTML=labels.map((l,i)=>{
     const metaMB    = D.deptoMetaMB[l] ?? null;
-    const metaFat   = (mesIdx !== null && D.deptoMetaFat[l]) ? D.deptoMetaFat[l][mesIdx] : null;
+    const metaFat   = metaFatArr ? metaFatArr[i] : (mesIdx !== null && D.deptoMetaFat[l]) ? D.deptoMetaFat[l][mesIdx] : null;
+    const metaLB    = metaLBArr  ? metaLBArr[i]  : (mesIdx !== null && D.deptoMetaLB[l])  ? D.deptoMetaLB[l][mesIdx]  : null;
     const ating     = (metaFat && fat[i]) ? (fat[i]/metaFat*100) : null;
     const delta     = metaMB !== null ? (mb[i] - metaMB) : null;
 
@@ -602,8 +1181,19 @@ function buildTable(){
     const atingColor = ating === null ? 'var(--muted)' : ating >= 100 ? 'var(--green)' : ating >= 80 ? 'var(--yellow)' : 'var(--red)';
 
     const deltaText = delta === null ? '—' : (delta >= 0 ? '▲ +' : '▼ ') + delta.toFixed(1) + 'p.p.';
-    const projCol   = proj
-      ? `<td style="color:var(--purple);font-weight:500">${fmtBRL(proj[i])}</td>`
+
+    // Clientes positivados no mês + quantidade acumulada
+    const cliMes = D.deptoCliMes[i] ?? 0;
+    const qtAcum = D.deptoQtAcum[i] ?? 0;
+
+    const projCol = proj
+      ? (() => {
+          const metaFatVal = (mesIdx !== null && D.deptoMetaFat[l]) ? D.deptoMetaFat[l][mesIdx] : null;
+          const projPct = metaFatVal ? (proj[i] / metaFatVal * 100) : null;
+          const projColor = projPct === null ? 'var(--purple)' : projPct >= 100 ? 'var(--green)' : projPct >= 80 ? 'var(--yellow)' : 'var(--red)';
+          const projPctTxt = projPct !== null ? `<span style="font-size:10px;color:${projColor};font-weight:600;margin-left:6px">${projPct.toFixed(1)}%</span>` : '';
+          return `<td style="color:var(--purple);font-weight:500">${fmtBRL(proj[i])}${projPctTxt}</td>`;
+        })()
       : `<td style="color:var(--muted)">—</td>`;
 
     return `<tr>
@@ -615,7 +1205,14 @@ function buildTable(){
       <td style="color:${mbColor};font-weight:600">${mb[i]}%</td>
       <td style="color:var(--muted)">${metaMB !== null ? metaMB+'%' : '—'}</td>
       <td style="color:${deltaColor};font-weight:600">${deltaText}</td>
-      <td style="color:var(--blue)">${fmtBRL(lucro[i])}</td>
+      <td style="color:var(--blue)">${fmtBRL(lucro[i])}${(() => {
+        if(!metaLB) return '';
+        const pct = lucro[i] / metaLB * 100;
+        const c = pct >= 100 ? 'var(--green)' : pct >= 80 ? 'var(--yellow)' : 'var(--red)';
+        return `<span style="font-size:10px;color:${c};font-weight:600;margin-left:6px">${pct.toFixed(1)}%</span>`;
+      })()}</td>
+      <td style="color:var(--green);font-weight:600;text-align:center">${cliMes.toLocaleString('pt-BR')}</td>
+      <td style="color:var(--muted);text-align:center">${qtAcum.toLocaleString('pt-BR')}</td>
       ${projCol}
     </tr>`;
   }).join('');
@@ -649,8 +1246,34 @@ function realBars(vals,color){
 function initCharts(sec){
   inited[sec]=true;
 
+  if(sec==='vs2025'){ initVs2025Charts(); return; }
+  if(sec==='dia'){ initDiaCharts(); return; }
   if(sec==='overview'){
     buildLineChart('mar');
+    // Gráfico clientes positivados por semana
+    mk('chartClientesSemana','bar',{
+      labels: D.clientesSemLabels,
+      datasets:[{
+        data: D.clientesSemVals,
+        backgroundColor:[C.green+'99', C.blue+'99', C.yellow+'99'],
+        borderColor:[C.green, C.blue, C.yellow],
+        borderWidth:1.5, borderRadius:6
+      }]
+    },{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          backgroundColor:'#1a1e2a', borderColor:gC, borderWidth:1,
+          titleColor:tC, bodyColor:'#e8eaf0',
+          callbacks:{ label: c=>' '+c.parsed.y.toLocaleString('pt-BR')+' clientes' }
+        }
+      },
+      scales:{
+        x:{grid:{color:gC,drawBorder:false}, ticks:{color:tC,font:fnt}},
+        y:{grid:{color:gC,drawBorder:false}, ticks:{color:tC,font:fnt, callback:v=>v.toLocaleString('pt-BR')}}
+      }
+    });
   }
 
   if(sec==='faturamento'){
@@ -782,39 +1405,328 @@ function showSection(id,btn){
 function setPeriod(p,btn){
   document.querySelectorAll('.period-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  // Atualiza label dos KPI cards
   const isYTD = p==='ytd';
+  if(p==='dia'){ showSection('dia',null); setTimeout(()=>initCharts('dia'),60); return; }
+  showSection('overview',null);
   document.querySelector('[data-kpi="fat-val"]')?.closest('.kpi-card')?.querySelector('.kpi-label') && (document.querySelector('[data-kpi="fat-val"]').closest('.kpi-card').querySelector('.kpi-label').textContent = isYTD ? 'Faturamento YTD' : 'Faturamento — Mar');
   document.querySelector('[data-kpi="mb-val"]')?.closest('.kpi-card')?.querySelector('.kpi-label') && (document.querySelector('[data-kpi="mb-val"]').closest('.kpi-card').querySelector('.kpi-label').textContent = isYTD ? 'Margem Bruta YTD' : 'Margem Bruta — Mar');
   document.querySelector('[data-kpi="mn-val"]')?.closest('.kpi-card')?.querySelector('.kpi-label') && (document.querySelector('[data-kpi="mn-val"]').closest('.kpi-card').querySelector('.kpi-label').textContent = isYTD ? 'Margem Nominal YTD' : 'Margem Nominal — Mar');
   updateKPIs();
   buildTable();
-  buildGaugeBars();
 }
 
-function buildGaugeBars(){
-  const colors=['var(--green)','var(--blue)','var(--yellow)','var(--orange)','var(--purple)','var(--pink)','var(--green)','var(--red)'];
-  const maxPct = D.deptoMix[0];
-  const el = document.getElementById('gauge-bars');
-  if(!el) return;
-  el.innerHTML = D.deptoLabels.slice(0,5).map((l,i)=>`
-    <div class="canal-bar">
-      <div class="canal-header">
-        <span style="color:var(--text);font-size:11px">${l}</span>
-        <span style="color:${colors[i]};font-weight:600;font-size:11px">${D.deptoMix[i]}%</span>
+// ── 2026 vs 2025 DATA ──────────────────────────────────────────────────────
+const VS = {
+  meses:   ['Janeiro','Fevereiro','Março'],
+  fat26:   [11900282.60, 10554670.80, 6249861.73],
+  fat25:   [14681381.88, 12592495.90, 5947324.39],   // mar/25 até dia 17 (mesmos dias)
+  lucro26: [2075070.42,  1875426.08,  978486.57],
+  lucro25: [2730667.83,  2292177.83,  1011163.14],   // mar/25 até dia 17 (mesmos dias)
+  mb26:    [17.4, 17.8, 15.7],
+  mb25:    [18.6, 18.2, 17.0],
+  // YTD comparável: jan+fev completo + mar até dia 17
+  ytd: {
+    fat26:   28704815.13, fat25:   33221202.17,
+    lucro26:  4928983.07, lucro25:  6034008.80
+  },
+  depto: {
+    labels:  ['FRUTAS CONGELADAS','VEGETAIS','BOVINOS','FRANGOS','LATICINIOS','PESCADOS','MERCEARIA','EMBUTIDOS','DOCES','SORVETES','BEBIDAS','SUINOS','DESCARTAVEIS','CONDIMENTOS'],
+    // YTD jan+fev+mar(até 17) 2026
+    fat26:   [13529906.34,5823432.92,2549264.11,3711692.43,1586990.25,1503437.00,1465376.35,829470.62,963871.54,587288.22,266103.92,257175.97,79420.18,15865.71],
+    // YTD jan+fev+mar(até 17) 2025 — mar/25 com mesmos dias
+    fat25:   [14910295.94,6748712.08,1966434.43,3635629.35,1695930.01,1900423.06,1732711.11,1087547.02,1230439.05,0,119907.31,344620.55,103816.62,0],
+    lucro26: [2191241.50,1105963.45,336772.07,581040.31,336471.03,289173.35,227407.47,180937.33,187131.88,210138.80,67050.81,56701.55,26037.28,2949.70],
+    lucro25: [3730906.12,1399777.11,288358.04,726397.96,347889.47,315018.26,229113.17,227162.55,212742.35,0,24372.99,55499.87,34734.16,0],
+    mb26:    [16.2,19.0,13.2,15.7,21.2,19.2,15.5,21.8,19.4,35.8,25.2,22.0,32.8,18.5],
+    mb25:    [25.0,20.7,14.7,20.0,20.5,16.6,13.2,20.9,17.3,0,20.3,16.1,33.4,0]
+  }
+};
+
+function buildVs2025Table(){
+  const fmtM = v => v>0 ? 'R$ '+(v/1e6).toFixed(2)+'M' : '—';
+  const fmtDelta = v => {
+    if(v===null||v===undefined||isNaN(v)) return '<span style="color:var(--muted)">—</span>';
+    const c = v>=0?'var(--green)':'var(--red)';
+    return `<span style="color:${c};font-weight:700">${v>=0?'▲ +':'▼ '}${v.toFixed(1)}%</span>`;
+  };
+  const fmtDeltaMB = (a,b) => {
+    if(!b) return '<span style="color:var(--muted)">—</span>';
+    const d = +(a-b).toFixed(1);
+    const c = d>=0?'var(--green)':'var(--red)';
+    return `<span style="color:${c};font-weight:700">${d>=0?'▲ +':'▼ '}${d}p.p.</span>`;
+  };
+  const tbody = document.getElementById('vs2025-table-body');
+  if(!tbody) return;
+  const d = VS.depto;
+  tbody.innerHTML = d.labels.map((l,i) => {
+    const dFat   = d.fat25[i]>0   ? +((d.fat26[i]/d.fat25[i]-1)*100).toFixed(1)   : null;
+    const dLucro = d.lucro25[i]>0 ? +((d.lucro26[i]/d.lucro25[i]-1)*100).toFixed(1) : null;
+    const cMB26  = d.mb26[i]>=20?'var(--green)':d.mb26[i]>=15?'var(--blue)':'var(--yellow)';
+    return `<tr style="border-bottom:1px solid rgba(37,42,56,.5)">
+      <td style="font-weight:600;color:var(--text)">${l}</td>
+      <td style="font-weight:700;color:var(--text)">${fmtM(d.fat26[i])}</td>
+      <td style="color:var(--muted)">${fmtM(d.fat25[i])}</td>
+      <td>${fmtDelta(dFat)}</td>
+      <td style="color:${cMB26};font-weight:600">${d.mb26[i]>0?d.mb26[i]+'%':'—'}</td>
+      <td style="color:var(--muted)">${d.mb25[i]>0?d.mb25[i]+'%':'—'}</td>
+      <td>${fmtDeltaMB(d.mb26[i],d.mb25[i])}</td>
+      <td style="color:var(--blue)">${fmtM(d.lucro26[i])}</td>
+      <td style="color:var(--muted)">${fmtM(d.lucro25[i])}</td>
+      <td>${fmtDelta(dLucro)}</td>
+    </tr>`;
+  }).join('');
+}
+
+function initVs2025Charts(){
+  const labels = ['Jan','Fev','Mar'];
+  const fat26  = VS.fat26.map(v=>+(v/1e6).toFixed(2));
+  const fat25  = VS.fat25.map(v=>+(v/1e6).toFixed(2));
+  const lb26   = VS.lucro26.map(v=>+(v/1e6).toFixed(2));
+  const lb25   = VS.lucro25.map(v=>+(v/1e6).toFixed(2));
+  const opts = () => ({
+    responsive:true, maintainAspectRatio:false,
+    interaction:{mode:'index',intersect:false},
+    plugins:{
+      legend:{display:true,labels:{color:tC,font:fnt,boxWidth:10,padding:10}},
+      tooltip:{backgroundColor:'#1a1e2a',borderColor:gC,borderWidth:1,titleColor:tC,bodyColor:'#e8eaf0',
+        callbacks:{label:c=>` ${c.dataset.label}: R$ ${c.parsed.y.toFixed(2)}M`}}
+    },
+    scales:{
+      x:{grid:{color:gC,drawBorder:false},ticks:{color:tC,font:fnt}},
+      y:{grid:{color:gC,drawBorder:false},ticks:{color:tC,font:fnt,callback:v=>'R$ '+v+'M'}}
+    }
+  });
+  mk('chartVsFat','bar',{labels,datasets:[
+    {label:'2026',data:fat26,backgroundColor:C.green+'99',borderColor:C.green,borderWidth:1.5,borderRadius:5},
+    {label:'2025',data:fat25,backgroundColor:'#6b728055',borderColor:'#6b7280',borderWidth:1.5,borderRadius:5}
+  ]},opts());
+  mk('chartVsLucro','bar',{labels,datasets:[
+    {label:'2026',data:lb26,backgroundColor:C.blue+'99',borderColor:C.blue,borderWidth:1.5,borderRadius:5},
+    {label:'2025',data:lb25,backgroundColor:'#6b728055',borderColor:'#6b7280',borderWidth:1.5,borderRadius:5}
+  ]},opts());
+}
+const TELE_MES = {
+  vendedores: [
+    {rank:1,nome:'Anna',    fat:168019.59,meta_fat:395000,  ating_fat:42.5,posit:93, meta_posit:198,ating_posit:47.0,inat:150,meta_inat:26,falta:226980.41,mb:20.2,status:'Abaixo'},
+    {rank:2,nome:'Natália', fat:146717.59,meta_fat:350000,  ating_fat:41.9,posit:95, meta_posit:142,ating_posit:66.9,inat:105,meta_inat:27,falta:203282.41,mb:13.6,status:'Abaixo'},
+    {rank:3,nome:'Ariane',  fat:79792.98, meta_fat:150000,  ating_fat:53.2,posit:41, meta_posit:85, ating_posit:48.2,inat:79, meta_inat:16,falta:70207.02, mb:16.8,status:'Em Risco'},
+    {rank:4,nome:'Tatiana', fat:79508.90, meta_fat:200000,  ating_fat:39.8,posit:52, meta_posit:118,ating_posit:44.1,inat:65, meta_inat:8, falta:120491.10,mb:15.4,status:'Abaixo'},
+    {rank:5,nome:'Camila',  fat:58254.57, meta_fat:150000,  ating_fat:38.8,posit:43, meta_posit:90, ating_posit:47.8,inat:82, meta_inat:16,falta:91745.43, mb:14.7,status:'Abaixo'},
+  ]
+};
+
+// Dia 12/03 — meta = meta mês ÷ 22 dias úteis
+const TELE_DIA = {
+  vendedores: [
+    {rank:1,nome:'Natália', fat:15487.29,meta_fat:15909.09,ating_fat:97.3, posit:19,meta_posit:6.5, ating_posit:292.3,inat:177,meta_inat:1.2,falta:421.80,  mb:12.1,status:'No Prazo'},
+    {rank:2,nome:'Anna',    fat:14731.81,meta_fat:17954.55,ating_fat:82.1, posit:22,meta_posit:9.0, ating_posit:244.4,inat:211,meta_inat:1.2,falta:3222.74, mb:15.9,status:'No Prazo'},
+    {rank:3,nome:'Tatiana', fat:11413.51,meta_fat:9090.91, ating_fat:125.5,posit:10,meta_posit:5.4, ating_posit:186.6,inat:104,meta_inat:0.4,falta:0,       mb:13.7,status:'Acima'},
+    {rank:4,nome:'Camila',  fat:9878.05, meta_fat:6818.18, ating_fat:144.9,posit:13,meta_posit:4.1, ating_posit:317.8,inat:109,meta_inat:0.7,falta:0,       mb:13.8,status:'Acima'},
+    {rank:5,nome:'Ariane',  fat:4276.18, meta_fat:6818.18, ating_fat:62.7, posit:6, meta_posit:3.9, ating_posit:155.4,inat:105,meta_inat:0.7,falta:2542.00, mb:12.6,status:'Em Risco'},
+  ]
+};
+
+// Cores por vendedor
+const TELE_COLORS = {
+  'Anna':'#00e5a0','Natália':'#f5c518','Ariane':'#38b6ff',
+  'Tatiana':'#ff6b35','Camila':'#b48eff','Lauren':'#ff6eb4'
+};
+
+// Iniciais
+function initials(nome){ return nome.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase(); }
+
+// Ring SVG
+function ring(pct, color, size=64){
+  const r = (size/2)-6, circ = 2*Math.PI*r;
+  const dash = Math.min(pct/100,1)*circ;
+  const cap = pct===0?'transparent':color;
+  return `<div class="vm-ring" style="width:${size}px;height:${size}px">
+    <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+      <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="#252a38" stroke-width="7"/>
+      <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${cap}" stroke-width="7"
+        stroke-dasharray="${dash.toFixed(1)} ${circ.toFixed(1)}" stroke-linecap="round"/>
+    </svg>
+    <div class="vm-ring-pct" style="color:${pct===0?'var(--muted)':color};font-size:${size<50?'11px':'13px'}">${pct===0?'—':pct.toFixed(1)+'%'}</div>
+  </div>`;
+}
+
+// Status pill
+function statusPill(s){
+  const map = {
+    'Acima':'sp-acima','No Prazo':'sp-prazo','Em Risco':'sp-risco',
+    'Abaixo':'sp-abaixo','S/ Meta':'sp-semeta'
+  };
+  return `<span class="sp ${map[s]||'sp-semeta'}">${s}</span>`;
+}
+
+// Status color
+function statusColor(s){
+  return s==='Acima'?'var(--green)':s==='No Prazo'?'var(--blue)':s==='Em Risco'?'var(--orange)':'var(--red)';
+}
+
+function buildVendorCards(vendedores, gridId){
+  const grid = document.getElementById(gridId);
+  if(!grid) return;
+  const fmtBRL = v => 'R$ '+v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+  const fmtK   = v => v>=1000?'R$ '+(v/1000).toFixed(0)+'K':'R$ '+v.toFixed(0);
+  const rankColors = ['r1c','r2c','r3c','','',''];
+  grid.innerHTML = vendedores.map((v,i) => {
+    const cor = TELE_COLORS[v.nome]||'var(--muted)';
+    const rc  = rankColors[i]||'';
+    const isLider = i===0;
+    return `
+    <div class="vendor-card" style="--vc:${cor}">
+      <div class="vendor-header">
+        <div style="display:flex;align-items:center">
+          <div class="vendor-avatar" style="background:${cor}22;color:${cor}">${initials(v.nome)}</div>
+          <div class="vendor-info">
+            <div class="vendor-name">${v.nome}${isLider?` <span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:4px;background:rgba(245,197,24,.2);color:var(--yellow)">LÍDER</span>`:''}</div>
+            <div class="vendor-sub">Televendas</div>
+          </div>
+        </div>
+        <div class="vendor-rank ${rc}">#${v.rank}</div>
       </div>
-      <div class="cbar"><div class="cbar-fill" style="width:${(D.deptoMix[i]/maxPct*100).toFixed(0)}%;background:${colors[i]}"></div></div>
-    </div>`).join('');
+      <div class="vendor-metrics">
+        <div>
+          <div class="vm-label">Fatur.</div>
+          ${ring(v.ating_fat,cor)}
+          <div class="vm-vals">${fmtK(v.fat)}<br><span style="color:var(--muted)">${fmtK(v.meta_fat)}</span></div>
+        </div>
+        <div>
+          <div class="vm-label">Posit.</div>
+          ${ring(Math.min(v.ating_posit,100),cor)}
+          <div class="vm-vals">${v.posit}<br><span style="color:var(--muted)">${v.meta_posit}</span></div>
+        </div>
+        <div>
+          <div class="vm-label">Inat.</div>
+          ${ring(v.meta_inat>0?Math.min(v.inat/v.meta_inat*100,100):0,cor)}
+          <div class="vm-vals">${v.inat}<br><span style="color:var(--muted)">${v.meta_inat||'—'}</span></div>
+        </div>
+      </div>
+      <div style="height:2px;background:var(--border);border-radius:99px;margin-bottom:10px;overflow:hidden">
+        <div style="height:100%;width:${Math.min(v.ating_fat,100).toFixed(0)}%;background:${cor};border-radius:99px;transition:width .8s"></div>
+      </div>
+      <div class="vendor-footer">
+        <span style="color:var(--muted)">Falta: <strong style="color:${v.falta>0?'var(--red)':'var(--green)'}">${v.falta>0?fmtBRL(v.falta):'R$ 0'}</strong></span>
+        ${statusPill(v.status)}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function buildTelevendas(){
+  // Dia
+  buildVendorCards(TELE_DIA.vendedores, 'vendor-grid-dia');
+  // Mês — cards + tabela
+  buildVendorCards(TELE_MES.vendedores, 'vendor-grid-mes');
+  // Tabela mês
+  const fmtBRL = v => 'R$ '+v.toLocaleString('pt-BR',{minimumFractionDigits:0,maximumFractionDigits:0});
+  const tbody = document.getElementById('tele-table-body');
+  if(!tbody) return;
+  const rankIcons = ['👑','','','','',''];
+  tbody.innerHTML = TELE_MES.vendedores.map((v,i) => {
+    const cor  = TELE_COLORS[v.nome]||'var(--muted)';
+    const fatC = v.ating_fat>=100?'var(--green)':v.ating_fat>=80?'var(--blue)':'var(--orange)';
+    const posC = v.ating_posit>=100?'var(--green)':v.ating_posit>=80?'var(--blue)':'var(--orange)';
+    return `<tr style="border-bottom:1px solid rgba(37,42,56,.5);transition:background .15s" onmouseover="this.style.background='rgba(255,255,255,.02)'" onmouseout="this.style.background=''">
+      <td style="padding:10px 16px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:${cor}">${v.rank}${rankIcons[i]}</td>
+      <td style="padding:10px 16px;font-weight:600;color:var(--text)">
+        <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${cor};margin-right:7px"></span>${v.nome}
+      </td>
+      <td style="padding:10px 16px;color:var(--muted)">${v.meta_fat>0?fmtBRL(v.meta_fat):'—'}</td>
+      <td style="padding:10px 16px;font-weight:700;color:var(--text)">${fmtBRL(v.fat)}</td>
+      <td style="padding:10px 16px;color:${fatC};font-weight:700">${v.ating_fat>0?v.ating_fat+'%':'—'}</td>
+      <td style="padding:10px 16px;color:var(--muted)">${v.meta_posit||'—'}</td>
+      <td style="padding:10px 16px;font-weight:600;color:var(--text)">${v.posit}</td>
+      <td style="padding:10px 16px;color:${posC};font-weight:700">${v.ating_posit>0?v.ating_posit+'%':'—'}</td>
+      <td style="padding:10px 16px;color:var(--muted)">${v.meta_inat||'—'}</td>
+      <td style="padding:10px 16px;font-weight:600;color:var(--text)">${v.inat}</td>
+      <td style="padding:10px 16px">${statusPill(v.status)}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ── TABELA DIA ─────────────────────────────────────────────────────────────
+function buildDiaTable(){
+  const d = D.dia;
+  const fmtBRL = v => 'R$ '+v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+  const tbody = document.getElementById('dia-table-body');
+  if(!tbody) return;
+  tbody.innerHTML = d.depto_labels.map((l,i)=>{
+    const atFat  = d.depto_mf[i] ? (d.depto_fat[i]/d.depto_mf[i]*100) : null;
+    const atLB   = d.depto_ml[i] ? (d.depto_lucro[i]/d.depto_ml[i]*100) : null;
+    const delta  = d.depto_meta_mb[i] ? (d.depto_mb[i]-d.depto_meta_mb[i]) : null;
+    const cFat   = atFat===null?'var(--muted)':atFat>=100?'var(--green)':atFat>=80?'var(--yellow)':'var(--red)';
+    const cLB    = atLB===null?'var(--muted)':atLB>=100?'var(--green)':atLB>=80?'var(--yellow)':'var(--red)';
+    const cMB    = d.depto_mb[i]>=20?'var(--green)':d.depto_mb[i]>=15?'var(--blue)':d.depto_mb[i]<0?'var(--red)':'var(--yellow)';
+    const cDelta = delta===null?'var(--muted)':delta>=0?'var(--green)':'var(--red)';
+    const dTxt   = delta===null?'—':(delta>=0?'▲ +':'▼ ')+delta.toFixed(1)+'p.p.';
+    return `<tr>
+      <td style="font-weight:600;color:var(--text)">${l}</td>
+      <td style="font-weight:700;color:var(--text)">${fmtBRL(d.depto_fat[i])}</td>
+      <td style="color:var(--muted)">${d.depto_mf[i]?fmtBRL(d.depto_mf[i]):'—'}</td>
+      <td style="color:${cFat};font-weight:600">${atFat!==null?atFat.toFixed(1)+'%':'—'}</td>
+      <td style="color:var(--muted)">${d.depto_mix[i]}%</td>
+      <td style="color:${cMB};font-weight:600">${d.depto_mb[i]}%</td>
+      <td style="color:var(--muted)">${d.depto_meta_mb[i]?d.depto_meta_mb[i]+'%':'—'}</td>
+      <td style="color:${cDelta};font-weight:600">${dTxt}</td>
+      <td style="color:var(--blue)">${fmtBRL(d.depto_lucro[i])}</td>
+      <td style="color:var(--muted)">${d.depto_ml[i]?fmtBRL(d.depto_ml[i]):'—'}</td>
+      <td style="color:${cLB};font-weight:600">${atLB!==null?atLB.toFixed(1)+'%':'—'}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ── CHARTS DIA ─────────────────────────────────────────────────────────────
+function initDiaCharts(){
+  const d = D.dia;
+  // Faturamento acumulado no dia vs meta
+  mk('chartDiaHora','line',{
+    labels: d.horas_labels,
+    datasets:[
+      { label:'Realizado', data:d.horas_vals,
+        borderColor:C.green,
+        backgroundColor:(c)=>{const g=c.chart.ctx.createLinearGradient(0,0,0,180);g.addColorStop(0,'rgba(0,229,160,.2)');g.addColorStop(1,'rgba(0,229,160,0)');return g;},
+        fill:true, tension:.4, borderWidth:2.5, pointRadius:0, pointHoverRadius:5 },
+      { label:'Meta', data:d.meta_hora,
+        borderColor:C.yellow, borderDash:[6,4], fill:false, borderWidth:1.5, pointRadius:0 }
+    ]
+  },{
+    responsive:true, maintainAspectRatio:false,
+    interaction:{mode:'index',intersect:false},
+    plugins:{
+      legend:{display:false},
+      tooltip:{backgroundColor:'#1a1e2a',borderColor:gC,borderWidth:1,titleColor:tC,bodyColor:'#e8eaf0',
+        callbacks:{label:c=>` ${c.dataset.label}: R$ ${c.parsed.y?.toLocaleString('pt-BR',{minimumFractionDigits:2})??'-'}`}}
+    },
+    scales:{
+      x:{grid:{color:gC,drawBorder:false},ticks:{color:tC,font:fnt}},
+      y:{grid:{color:gC,drawBorder:false},ticks:{color:tC,font:fnt,callback:v=>v>=1e3?(v/1e3).toFixed(0)+'K':v}}
+    }
+  });
+
+  // Top clientes
+  mk('chartDiaTopCli','bar',{
+    labels: d.top_cli.map(c=>c[0]),
+    datasets:[{data:d.top_cli.map(c=>c[1]),backgroundColor:[C.green,C.blue,C.yellow,C.orange,C.purple].map(c=>c+'99'),borderColor:[C.green,C.blue,C.yellow,C.orange,C.purple],borderWidth:1.5,borderRadius:5}]
+  },{...ax(true,v=>'R$ '+(v/1e3).toFixed(0)+'K'),indexAxis:'y',plugins:{legend:{display:false}}});
+
+  // Regiões
+  mk('chartDiaRegiao','bar',{
+    labels:d.reg_labels,
+    datasets:[{data:d.reg_vals,backgroundColor:[C.green,C.blue,C.yellow,C.orange,C.purple].map(c=>c+'99'),borderColor:[C.green,C.blue,C.yellow,C.orange,C.purple],borderWidth:1.5,borderRadius:5}]
+  },ax(false,v=>'R$ '+(v/1e3).toFixed(0)+'K'));
 }
 
 // ── INIT ──────────────────────────────────────────────────────────────────
-// Badge de última atualização — data real da planilha
 document.getElementById('update-label').textContent = 'ATUALIZADO EM 17/03/2026 17:59';
 
 buildMetaUI();
 loadMeta();
 buildTable();
-buildGaugeBars();
+buildDiaTable();
+buildTelevendas();
+buildVs2025Table();
 updateKPIs();
 setTimeout(()=>{ initCharts('overview'); }, 300);
 </script>
