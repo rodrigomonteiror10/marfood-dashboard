@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulador de Propostas — Mar Food</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+  :root {
+    --bg:#0d0f14; --bg2:#13161e; --bg3:#1a1e2a; --border:#252a38;
+    --green:#00e5a0; --blue:#38b6ff; --orange:#ff6b35; --yellow:#f5c518;
+    --red:#ff4d6d; --purple:#b48eff; --text:#e8eaf0; --muted:#6b7280; --card:#161922;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
+
+  .header { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 14px 28px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 100; }
+  .header-logo { font-family: 'Rajdhani', sans-serif; font-size: 20px; font-weight: 700; color: var(--green); letter-spacing: 1px; }
+  .header-logo span { color: var(--text); }
+  .header-tag { background: #38b6ff15; border: 1px solid #38b6ff30; color: var(--blue); font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; padding: 3px 10px; border-radius: 4px; }
+  .header-nav { margin-left: auto; display: flex; gap: 8px; }
+  .header-nav a { color: var(--muted); text-decoration: none; font-size: 13px; padding: 6px 12px; border-radius: 6px; border: 1px solid transparent; transition: all .2s; }
+  .header-nav a:hover { color: var(--text); border-color: var(--border); }
+  .base-status { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--muted); }
+  .base-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border); flex-shrink: 0; }
+  .base-dot.ok { background: var(--green); box-shadow: 0 0 6px #00e5a060; }
+
+  .page { max-width: 1300px; margin: 0 auto; padding: 28px 28px 60px; }
+
+  /* UPLOAD */
+  .upload-zone { border: 2px dashed var(--border); border-radius: 16px; padding: 52px; text-align: center; cursor: pointer; transition: all .2s; margin-bottom: 28px; background: var(--card); }
+  .upload-zone:hover, .upload-zone.drag { border-color: var(--blue); background: #38b6ff08; }
+  .upload-icon { font-size: 42px; margin-bottom: 14px; opacity: .5; }
+  .upload-title { font-family: 'Rajdhani', sans-serif; font-size: 22px; font-weight: 600; margin-bottom: 6px; }
+  .upload-sub { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+  .upload-btn { padding: 11px 28px; background: linear-gradient(135deg, var(--blue), #2a8fd4); color: #fff; border-radius: 8px; font-family: 'Rajdhani', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; border: none; transition: all .2s; }
+  .upload-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px #38b6ff40; }
+  #fileInput { display: none; }
+
+  /* BASE INFO */
+  .base-info { display: none; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; margin-bottom: 24px; flex-wrap: wrap; gap: 24px; align-items: center; }
+  .base-info.show { display: flex; }
+  .bi-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px; }
+  .bi-val { font-family: 'Rajdhani', sans-serif; font-size: 20px; font-weight: 700; color: var(--blue); }
+  .btn-trocar { margin-left: auto; padding: 7px 16px; border-radius: 7px; background: transparent; border: 1px solid var(--border); color: var(--muted); font-size: 13px; cursor: pointer; transition: all .2s; }
+  .btn-trocar:hover { color: var(--text); border-color: var(--muted); }
+
+  /* FILA */
+  .section-title { font-family: 'Rajdhani', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+  .badge-count { background: var(--blue); color: #fff; font-size: 12px; font-weight: 700; padding: 2px 9px; border-radius: 20px; font-family: 'DM Sans', sans-serif; }
+
+  .proposta-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 14px; overflow: hidden; transition: border-color .2s; }
+  .proposta-card:hover { border-color: #38b6ff25; }
+  .proposta-header { padding: 16px 20px; display: flex; align-items: center; gap: 14px; cursor: pointer; }
+  .ph-rca { font-weight: 600; font-size: 14px; min-width: 150px; }
+  .ph-cliente { color: var(--muted); font-size: 13px; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ph-produto { font-size: 13px; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ph-valor { font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 700; color: var(--yellow); min-width: 120px; text-align: right; }
+  .ph-status { padding: 4px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; min-width: 90px; text-align: center; flex-shrink: 0; }
+  .ph-status.pendente   { background: #6b728018; color: var(--muted);   border: 1px solid var(--border); }
+  .ph-status.analisando { background: #f5c51818; color: var(--yellow);  border: 1px solid #f5c51840; animation: blink 1.4s ease-in-out infinite; }
+  .ph-status.aprovado   { background: #00e5a018; color: var(--green);   border: 1px solid #00e5a040; }
+  .ph-status.reprovado  { background: #ff4d6d18; color: var(--red);     border: 1px solid #ff4d6d40; }
+  .ph-status.atencao    { background: #f5c51818; color: var(--yellow);  border: 1px solid #f5c51840; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.4} }
+  .ph-chevron { color: var(--muted); font-size: 18px; transition: transform .2s; margin-left: 4px; flex-shrink: 0; }
+  .proposta-card.open .ph-chevron { transform: rotate(180deg); }
+
+  .analise-panel { display: none; padding: 0 20px 20px; border-top: 1px solid var(--border); }
+  .proposta-card.open .analise-panel { display: block; animation: fadeUp .25s ease; }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:translateY(0)} }
+
+  /* MÉTRICAS */
+  .metricas-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 10px; margin: 16px 0; }
+  .metrica-box { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 14px; text-align: center; }
+  .mb-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .mb-val { font-family: 'Rajdhani', sans-serif; font-size: 20px; font-weight: 700; }
+  .mb-sub { font-size: 11px; color: var(--muted); margin-top: 3px; }
+  .cg{color:var(--green)} .cr{color:var(--red)} .cy{color:var(--yellow)} .cb{color:var(--blue)} .co{color:var(--orange)} .cm{color:var(--muted)}
+
+  /* HISTÓRICO */
+  .hist-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .hist-box { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+  .hist-title { font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .hist-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .hist-row:last-child { border-bottom: none; }
+  .hist-label { color: var(--muted); }
+  .hist-val { font-family: 'Rajdhani', sans-serif; font-size: 14px; font-weight: 600; text-align: right; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* VEREDITO */
+  .veredito-box { border-radius: 10px; padding: 16px 20px; margin: 12px 0; display: flex; align-items: center; gap: 16px; }
+  .veredito-box.aprovado  { background: #00e5a010; border: 2px solid #00e5a040; }
+  .veredito-box.reprovado { background: #ff4d6d10; border: 2px solid #ff4d6d40; }
+  .veredito-box.atencao   { background: #f5c51810; border: 2px solid #f5c51840; }
+  .veredito-box.aguardando{ background: var(--bg3); border: 1px solid var(--border); }
+  .v-icon  { font-size: 32px; flex-shrink: 0; }
+  .v-label { font-family: 'Rajdhani', sans-serif; font-size: 26px; font-weight: 700; line-height: 1; }
+  .aprovado  .v-label { color: var(--green); }
+  .reprovado .v-label { color: var(--red); }
+  .atencao   .v-label { color: var(--yellow); }
+  .aguardando .v-label { color: var(--muted); font-size: 18px; }
+  .v-sub { font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+  /* IA BOX */
+  .ia-box { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 18px; margin: 12px 0; }
+  .ia-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+  .ia-title { font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--purple); }
+  .ia-text { font-size: 14px; color: var(--text); line-height: 1.75; white-space: pre-wrap; }
+  .ia-text.loading { color: var(--muted); font-style: italic; }
+
+  /* BOTÕES */
+  .decisao-row { display: flex; gap: 10px; margin-top: 16px; }
+  .btn-dec { flex: 1; padding: 13px; border: none; border-radius: 8px; font-family: 'Rajdhani', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all .2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .btn-aprovar  { background: linear-gradient(135deg, var(--green), #00c487); color: #000; }
+  .btn-aprovar:hover  { transform: translateY(-1px); box-shadow: 0 4px 16px #00e5a040; }
+  .btn-reprovar { background: linear-gradient(135deg, var(--red), #d93d58); color: #fff; }
+  .btn-reprovar:hover { transform: translateY(-1px); box-shadow: 0 4px 16px #ff4d6d40; }
+  .btn-ia { background: linear-gradient(135deg, var(--purple), #9a7ee0); color: #fff; flex: 0 0 auto; padding: 13px 22px; }
+  .btn-ia:hover { transform: translateY(-1px); box-shadow: 0 4px 16px #b48eff40; }
+  .btn-ia:disabled { opacity: .45; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  .decisao-msg { display: none; margin-top: 12px; padding: 13px 16px; border-radius: 8px; font-size: 14px; font-weight: 600; text-align: center; }
+  .decisao-msg.show { display: block; }
+  .decisao-msg.aprovado  { background: #00e5a015; border: 1px solid #00e5a050; color: var(--green); }
+  .decisao-msg.reprovado { background: #ff4d6d15; border: 1px solid #ff4d6d50; color: var(--red); }
+
+  /* EMPTY */
+  .empty-state { text-align: center; padding: 64px 20px; color: var(--muted); }
+  .empty-icon  { font-size: 48px; opacity: .3; margin-bottom: 14px; }
+  .empty-title { font-family: 'Rajdhani', sans-serif; font-size: 22px; color: var(--text); opacity: .4; margin-bottom: 6px; }
+  .empty-sub   { font-size: 13px; margin-bottom: 20px; }
+  .btn-demo { padding: 10px 24px; border: 1px solid var(--border); border-radius: 8px; color: var(--muted); font-size: 13px; cursor: pointer; background: transparent; transition: all .2s; }
+  .btn-demo:hover { color: var(--text); border-color: var(--blue); }
+
+  @media (max-width: 960px) { .metricas-grid{grid-template-columns:repeat(3,1fr)} .hist-grid{grid-template-columns:1fr} }
+  @media (max-width: 600px) { .page{padding:14px} .metricas-grid{grid-template-columns:repeat(2,1fr)} .decisao-row{flex-direction:column} .btn-ia{flex:1} }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-logo">MAR <span>FOOD</span></div>
+  <div class="header-tag">Simulador de Propostas</div>
+  <div class="base-status">
+    <div class="base-dot" id="baseDot"></div>
+    <span id="baseStatusText">Sem base carregada</span>
+  </div>
+  <nav class="header-nav">
+    <a href="menu.html">← Menu</a>
+    <a href="index.html">Dashboard</a>
+  </nav>
+</div>
+
+<div class="page">
+  <div class="upload-zone" id="uploadZone">
+    <div class="upload-icon">📂</div>
+    <div class="upload-title">Carregar Base de Vendas</div>
+    <div class="upload-sub">Faça upload do Excel com o histórico de vendas para ativar a análise inteligente com IA</div>
+    <button class="upload-btn" onclick="document.getElementById('fileInput').click()">Selecionar arquivo .xlsx</button>
+    <input type="file" id="fileInput" accept=".xlsx,.xls" onchange="carregarBase(this)">
+  </div>
+
+  <div class="base-info" id="baseInfo">
+    <div><div class="bi-label">Período</div><div class="bi-val" id="biPeriodo">—</div></div>
+    <div><div class="bi-label">Registros</div><div class="bi-val" id="biRegistros">—</div></div>
+    <div><div class="bi-label">Clientes</div><div class="bi-val" id="biClientes">—</div></div>
+    <div><div class="bi-label">Produtos</div><div class="bi-val" id="biProdutos">—</div></div>
+    <div><div class="bi-label">Margem Mediana</div><div class="bi-val" id="biMargem">—</div></div>
+    <button class="btn-trocar" onclick="trocarBase()">↺ Trocar base</button>
+  </div>
+
+  <div class="section-title">
+    Fila de Propostas
+    <span class="badge-count" id="badgeCount">0</span>
+  </div>
+  <div id="filaContainer"></div>
+</div>
+
+<script>
+let BASE = [];
+let PROPOSTAS = [];
+
+const fmtBRL = v => (v===null||v===undefined||isNaN(v)) ? '—' : 'R$ '+Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmtPct = v => (v===null||v===undefined||isNaN(v)) ? '—' : Number(v).toFixed(1)+'%';
+const fmtNum = v => v ? Number(v).toLocaleString('pt-BR') : '—';
+
+// ── CARREGAR BASE ─────────────────────────────────────────────
+function carregarBase(input) {
+  const file = input.files[0]; if (!file) return;
+  document.getElementById('baseStatusText').textContent = 'Carregando...';
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const wb  = XLSX.read(e.target.result, {type:'array', cellDates:true});
+      const raw = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {defval:null});
+      BASE = raw.map(r => ({
+        data:         r['DATA'] instanceof Date ? r['DATA'] : new Date(r['DATA']),
+        numnota:      r['NUMNOTA'],
+        codprod:      String(r['CODPROD']||'').trim(),
+        descricao:    r['DESCRICAO'],
+        qt:           parseFloat(r['QT'])||0,
+        punit:        parseFloat(r['PUNIT'])||0,
+        total:        parseFloat(r['TOTAL'])||0,
+        tot_custo:    parseFloat(r['TOT_CUSTO'])||0,
+        lucro:        parseFloat(r['VALOR_LUCRO'])||0,
+        codcli:       String(r['CODCLI']||'').trim(),
+        cliente:      r['CLIENTE'],
+        departamento: r['DEPARTAMENTO'],
+        codusur:      String(r['CODUSUR']||'').trim(),
+        rca:          r['RCA'],
+        mes:          r['MES'],
+      })).filter(r => r.total > 0);
+      atualizarBaseInfo();
+      document.getElementById('uploadZone').style.display = 'none';
+    } catch(err) {
+      alert('Erro ao ler o arquivo.\n'+err.message);
+      document.getElementById('baseStatusText').textContent = 'Erro';
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function atualizarBaseInfo() {
+  const datas   = BASE.map(r=>r.data).filter(d=>d instanceof Date && !isNaN(d));
+  const minD    = new Date(Math.min(...datas));
+  const maxD    = new Date(Math.max(...datas));
+  const fmt     = d => d.toLocaleDateString('pt-BR',{month:'short',year:'2-digit'});
+  const margens = BASE.map(r=>r.total>0?r.lucro/r.total*100:null).filter(v=>v!==null&&v>0).sort((a,b)=>a-b);
+  const med     = margens[Math.floor(margens.length/2)];
+
+  document.getElementById('biPeriodo').textContent   = fmt(minD)+' – '+fmt(maxD);
+  document.getElementById('biRegistros').textContent = fmtNum(BASE.length);
+  document.getElementById('biClientes').textContent  = fmtNum(new Set(BASE.map(r=>r.codcli)).size);
+  document.getElementById('biProdutos').textContent  = fmtNum(new Set(BASE.map(r=>r.codprod)).size);
+  document.getElementById('biMargem').textContent    = fmtPct(med);
+  document.getElementById('baseInfo').classList.add('show');
+  document.getElementById('baseDot').classList.add('ok');
+  document.getElementById('baseStatusText').textContent = 'Base carregada';
+  renderFila();
+}
+
+function trocarBase() {
+  BASE = [];
+  document.getElementById('uploadZone').style.display = 'block';
+  document.getElementById('baseInfo').classList.remove('show');
+  document.getElementById('baseDot').classList.remove('ok');
+  document.getElementById('baseStatusText').textContent = 'Sem base carregada';
+  document.getElementById('fileInput').value = '';
+  renderFila();
+}
+
+// ── EXTRAIR CONTEXTO ──────────────────────────────────────────
+function extrairContexto(p) {
+  const codCli  = String(p.codCliente).trim();
+  const codProd = String(p.codProduto).trim();
+
+  const vCli     = BASE.filter(r=>r.codcli===codCli);
+  const vProd    = BASE.filter(r=>r.codprod===codProd);
+  const vProdCli = BASE.filter(r=>r.codprod===codProd && r.codcli===codCli);
+
+  const notas    = new Set(vCli.map(r=>r.numnota)).size;
+  const fatCli   = vCli.reduce((s,r)=>s+r.total,0);
+  const mesesCli = new Set(vCli.map(r=>r.mes)).size;
+  const ticketCli= notas>0 ? fatCli/notas : 0;
+  const ultimaCompra = vCli.length>0
+    ? new Date(Math.max(...vCli.map(r=>r.data instanceof Date?r.data:new Date(r.data)))).toLocaleDateString('pt-BR')
+    : 'Sem histórico';
+  const vMes   = vCli.filter(r=>{const d=r.data instanceof Date?r.data:new Date(r.data); return d.getFullYear()===2026&&d.getMonth()===2;});
+  const fatMes = vMes.reduce((s,r)=>s+r.total,0);
+
+  const precoMedProd = vProd.length>0 ? vProd.reduce((s,r)=>s+r.punit,0)/vProd.length : 0;
+  const custoMedProd = vProd.length>0 ? vProd.reduce((s,r)=>s+(r.tot_custo/(r.qt||1)),0)/vProd.length : 0;
+  const margemMedProd= precoMedProd>0 ? (precoMedProd-custoMedProd)/precoMedProd*100 : 0;
+  const descProd     = vProd.length>0 ? vProd[0].descricao : 'Produto não encontrado';
+  const deptoProd    = vProd.length>0 ? vProd[0].departamento : '—';
+
+  const vDepto    = BASE.filter(r=>r.departamento===deptoProd&&r.total>0);
+  const mDepto    = vDepto.map(r=>r.lucro/r.total*100).filter(v=>v>0).sort((a,b)=>a-b);
+  const margemDepto = mDepto.length>0 ? mDepto[Math.floor(mDepto.length/2)] : 0;
+
+  const precoHistCli = vProdCli.length>0 ? vProdCli.reduce((s,r)=>s+r.punit,0)/vProdCli.length : null;
+  const nomeCliente  = vCli.length>0 ? vCli[0].cliente : 'Cliente #'+codCli;
+  const nomeRca      = BASE.find(r=>r.codusur===String(p.codRca))?.rca || 'RCA #'+p.codRca;
+
+  const margemProposta = p.valorProposto>0 ? (p.valorProposto-custoMedProd)/p.valorProposto*100 : 0;
+  const totalProposto  = p.valorProposto * p.quantidade;
+  const totalTabela    = p.valorTabela   * p.quantidade;
+  const descontoPct    = totalTabela>0 ? (totalTabela-totalProposto)/totalTabela*100 : 0;
+  const lucroBruto     = (p.valorProposto-custoMedProd) * p.quantidade;
+
+  return { nomeCliente, nomeRca, descProd, deptoProd,
+    totalProposto, totalTabela, descontoPct, lucroBruto, margemProposta, custoMedProd,
+    fatCli, notas, ticketCli, mesesCli, ultimaCompra, fatMes, jaPositivou: vMes.length>0,
+    precoMedProd, margemMedProd, margemDepto, precoHistCli,
+    vendasCli: vCli.length, vendasProd: vProd.length };
+}
+
+// ── ANÁLISE IA via Anthropic API (Artifact) ───────────────────
+async function analisarComIA(id) {
+  const p = PROPOSTAS.find(x=>x.id===id);
+  if (!p || !p._ctx) return;
+  const ctx = p._ctx;
+
+  const btnIA    = document.getElementById('btnIA_'+id);
+  const iaText   = document.getElementById('iaText_'+id);
+  const vBox     = document.getElementById('veredito_'+id);
+  const statusEl = document.getElementById('status_'+id);
+
+  btnIA.disabled = true;
+  btnIA.textContent = '⏳ Analisando...';
+  statusEl.textContent = 'analisando';
+  statusEl.className = 'ph-status analisando';
+  iaText.className = 'ia-text loading';
+  iaText.textContent = 'A IA está processando o contexto completo da base de vendas...';
+
+  const prompt = `Você é analista comercial sênior da Mar Food, distribuidora de alimentos do RS. Analise esta proposta com condição diferenciada e emita um veredito claro.
+
+PROPOSTA:
+- RCA: ${ctx.nomeRca} (cód. ${p.codRca})
+- Cliente: ${ctx.nomeCliente} (cód. ${p.codCliente})
+- Produto: ${ctx.descProd} (cód. ${p.codProduto}) — Depto: ${ctx.deptoProd}
+- Quantidade: ${p.quantidade} unidades
+- Valor tabela (un.): ${fmtBRL(p.valorTabela)} | Valor proposto (un.): ${fmtBRL(p.valorProposto)}
+- Total tabela: ${fmtBRL(ctx.totalTabela)} | Total proposto: ${fmtBRL(ctx.totalProposto)}
+- Desconto solicitado: ${fmtPct(ctx.descontoPct)}
+- Motivo alegado: ${p.motivo}${p.concorrente?' — Concorrente: '+p.concorrente:''}
+${p.obs?'- Obs. do RCA: '+p.obs:''}
+
+DADOS DO PRODUTO (base Jan–Mar/26):
+- Custo médio unitário: ${fmtBRL(ctx.custoMedProd)}
+- Preço médio histórico: ${fmtBRL(ctx.precoMedProd)}
+- Margem histórica média: ${fmtPct(ctx.margemMedProd)}
+- Margem mediana do depto ${ctx.deptoProd}: ${fmtPct(ctx.margemDepto)}
+- Margem da proposta: ${fmtPct(ctx.margemProposta)}
+- Lucro bruto do pedido: ${fmtBRL(ctx.lucroBruto)}
+- Preço histórico com ESTE cliente: ${ctx.precoHistCli!==null?fmtBRL(ctx.precoHistCli):'Nunca vendido para este cliente'}
+
+DADOS DO CLIENTE (base Jan–Mar/26):
+- Total faturado: ${fmtBRL(ctx.fatCli)}
+- Notas: ${ctx.notas} | Ticket médio: ${fmtBRL(ctx.ticketCli)}
+- Meses ativos: ${ctx.mesesCli}/3 | Última compra: ${ctx.ultimaCompra}
+- Faturamento março/26: ${fmtBRL(ctx.fatMes)}
+- Positivado em março/26: ${ctx.jaPositivou?'Sim':'Não — nova positivação'}
+${ctx.vendasCli===0?'- ATENÇÃO: cliente sem histórico na base':''}
+
+Responda em português, direto e profissional, SEM bullet points e SEM markdown, em parágrafos corridos. Estrutura:
+1. Comece com o veredito: APROVAR, REPROVAR ou ANALISAR COM ATENÇÃO
+2. Justifique citando os números (3 a 5 frases)
+3. Se REPROVAR: indique o valor mínimo unitário aceitável
+4. Se ANALISAR: indique exatamente o que verificar antes de decidir`;
+
+  try {
+    const PROXY_URL = 'https://script.google.com/macros/s/AKfycbyXnapZN9nhX_2g5hmf36tJafFysfLo_mEYLO9JdXB2gRGga79IZ8KYzjilFFqx3K1W4A/exec';
+    const res = await fetch(PROXY_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        messages: [{ role:'user', content: prompt }]
+      })
+    });
+
+    if (!res.ok) throw new Error('HTTP '+res.status);
+    const data  = await res.json();
+    const texto = data.content?.[0]?.text || 'Não foi possível obter análise.';
+    const up    = texto.toUpperCase();
+
+    let vc='atencao', vi='⚡', vl='ANALISAR COM ATENÇÃO', vs='Verifique os pontos levantados';
+    if (up.includes('REPROVAR')||up.includes('REPROVAD'))   { vc='reprovado'; vi='✗'; vl='REPROVAR'; vs='IA recomenda reprovar esta proposta'; }
+    else if (up.match(/\bAPROVAR\b|\bAPROVAD/))             { vc='aprovado';  vi='✓'; vl='APROVAR';  vs='IA recomenda aprovação desta proposta'; }
+
+    iaText.className = 'ia-text';
+    iaText.textContent = texto;
+    vBox.className = 'veredito-box '+vc;
+    vBox.innerHTML = `<div class="v-icon">${vi}</div><div><div class="v-label">${vl}</div><div class="v-sub">${vs}</div></div>`;
+    statusEl.textContent = vl.toLowerCase().replace(' com atenção','');
+    statusEl.className   = 'ph-status '+vc;
+    btnIA.style.display  = 'none';
+
+    const idx = PROPOSTAS.findIndex(x=>x.id===id);
+    if (idx>=0) { PROPOSTAS[idx].veredito=vc; PROPOSTAS[idx].analise=texto; }
+
+  } catch(err) {
+    iaText.className   = 'ia-text';
+    iaText.textContent = 'Erro ao conectar com a IA: '+err.message+'\n\nVerifique se está acessando via claude.ai e tente novamente.';
+    statusEl.textContent = 'pendente';
+    statusEl.className   = 'ph-status pendente';
+    btnIA.disabled = false;
+    btnIA.textContent = '🤖 Tentar novamente';
+  }
+}
+
+// ── DECISÃO FINAL ─────────────────────────────────────────────
+function decisaoFinal(id, tipo) {
+  const p   = PROPOSTAS.find(x=>x.id===id);
+  const rca = p?._ctx?.nomeRca || 'RCA';
+  const val = fmtBRL(p?._ctx?.totalProposto||0);
+  const msg = document.getElementById('decisaoMsg_'+id);
+  msg.className   = 'decisao-msg show '+(tipo==='aprovar'?'aprovado':'reprovado');
+  msg.textContent = tipo==='aprovar'
+    ? `✅ Proposta APROVADA — ${rca} pode prosseguir com o pedido de ${val}`
+    : '✗ Proposta REPROVADA — Comunique ao vendedor para renegociar os termos.';
+  document.getElementById('status_'+id).textContent = tipo==='aprovar'?'aprovado':'reprovado';
+  document.getElementById('status_'+id).className   = 'ph-status '+(tipo==='aprovar'?'aprovado':'reprovado');
+  document.getElementById('decisaoRow_'+id).style.display = 'none';
+}
+
+// ── RENDER ────────────────────────────────────────────────────
+function renderFila() {
+  const c = document.getElementById('filaContainer');
+  document.getElementById('badgeCount').textContent = PROPOSTAS.length;
+
+  if (PROPOSTAS.length===0) {
+    c.innerHTML = `<div class="empty-state">
+      <div class="empty-icon">📋</div>
+      <div class="empty-title">Nenhuma proposta na fila</div>
+      <div class="empty-sub">As propostas enviadas pelos RCAs aparecerão aqui automaticamente.</div>
+      <button class="btn-demo" onclick="carregarDemo()">▶ Carregar propostas de demonstração</button>
+    </div>`; return;
+  }
+
+  c.innerHTML = PROPOSTAS.map(p => {
+    const ctx = BASE.length>0 ? extrairContexto(p) : null;
+    if (ctx) p._ctx = ctx;
+    const nomeCli  = ctx ? ctx.nomeCliente : 'Cliente #'+p.codCliente;
+    const nomeProd = ctx ? ctx.descProd    : 'Produto #'+p.codProduto;
+    const nomeRca  = ctx ? ctx.nomeRca     : 'RCA #'+p.codRca;
+    const total    = ctx ? ctx.totalProposto : p.valorProposto*p.quantidade;
+
+    return `<div class="proposta-card" id="card_${p.id}">
+      <div class="proposta-header" onclick="toggleCard('${p.id}')">
+        <div class="ph-rca">👤 ${nomeRca}</div>
+        <div class="ph-cliente">🏢 ${nomeCli}</div>
+        <div class="ph-produto">📦 ${nomeProd}</div>
+        <div class="ph-valor">${fmtBRL(total)}</div>
+        <div class="ph-status pendente" id="status_${p.id}">pendente</div>
+        <div class="ph-chevron">⌄</div>
+      </div>
+      <div class="analise-panel" id="panel_${p.id}">
+        ${ctx ? htmlAnalise(p,ctx) : '<div style="padding:16px;color:var(--muted);font-size:13px;text-align:center;">⚠ Carregue a base de vendas para ver a análise completa.</div>'}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function htmlAnalise(p, ctx) {
+  const mClass = ctx.margemProposta>=ctx.margemDepto?'cg':ctx.margemProposta>=ctx.margemDepto*0.75?'cy':'cr';
+  const dClass = ctx.descontoPct<=10?'cg':ctx.descontoPct<=20?'cy':'cr';
+
+  return `
+  <div class="metricas-grid">
+    <div class="metrica-box"><div class="mb-label">Margem Proposta</div><div class="mb-val ${mClass}">${fmtPct(ctx.margemProposta)}</div><div class="mb-sub">Mediana depto: ${fmtPct(ctx.margemDepto)}</div></div>
+    <div class="metrica-box"><div class="mb-label">Lucro Bruto</div><div class="mb-val ${ctx.lucroBruto>0?'cg':'cr'}">${fmtBRL(ctx.lucroBruto)}</div><div class="mb-sub">Total do pedido</div></div>
+    <div class="metrica-box"><div class="mb-label">Desconto</div><div class="mb-val ${dClass}">${fmtPct(ctx.descontoPct)}</div><div class="mb-sub">${fmtBRL(ctx.totalTabela-ctx.totalProposto)} abatidos</div></div>
+    <div class="metrica-box"><div class="mb-label">Preço Histórico</div><div class="mb-val cb">${fmtBRL(ctx.precoMedProd)}</div><div class="mb-sub">Média base geral</div></div>
+    <div class="metrica-box"><div class="mb-label">Custo Unitário</div><div class="mb-val co">${fmtBRL(ctx.custoMedProd)}</div><div class="mb-sub">Média histórica</div></div>
+  </div>
+  <div class="hist-grid">
+    <div class="hist-box">
+      <div class="hist-title">📊 Histórico do Cliente</div>
+      <div class="hist-row"><span class="hist-label">Nome</span><span class="hist-val">${ctx.nomeCliente}</span></div>
+      <div class="hist-row"><span class="hist-label">Faturamento total</span><span class="hist-val cg">${fmtBRL(ctx.fatCli)}</span></div>
+      <div class="hist-row"><span class="hist-label">Notas emitidas</span><span class="hist-val">${ctx.notas}</span></div>
+      <div class="hist-row"><span class="hist-label">Ticket médio</span><span class="hist-val">${fmtBRL(ctx.ticketCli)}</span></div>
+      <div class="hist-row"><span class="hist-label">Meses ativos</span><span class="hist-val">${ctx.mesesCli}/3</span></div>
+      <div class="hist-row"><span class="hist-label">Última compra</span><span class="hist-val">${ctx.ultimaCompra}</span></div>
+      <div class="hist-row"><span class="hist-label">Fat. março/26</span><span class="hist-val">${fmtBRL(ctx.fatMes)}</span></div>
+      <div class="hist-row"><span class="hist-label">Positivado março?</span><span class="hist-val" style="color:${ctx.jaPositivou?'var(--blue)':'var(--green)'}">${ctx.jaPositivou?'Sim':'Não — nova positivação'}</span></div>
+    </div>
+    <div class="hist-box">
+      <div class="hist-title">📦 Histórico do Produto</div>
+      <div class="hist-row"><span class="hist-label">Descrição</span><span class="hist-val" style="font-size:12px">${ctx.descProd}</span></div>
+      <div class="hist-row"><span class="hist-label">Departamento</span><span class="hist-val" style="font-size:12px">${ctx.deptoProd}</span></div>
+      <div class="hist-row"><span class="hist-label">Vendas na base</span><span class="hist-val">${ctx.vendasProd}</span></div>
+      <div class="hist-row"><span class="hist-label">Preço médio praticado</span><span class="hist-val">${fmtBRL(ctx.precoMedProd)}</span></div>
+      <div class="hist-row"><span class="hist-label">Margem histórica</span><span class="hist-val ${mClass}">${fmtPct(ctx.margemMedProd)}</span></div>
+      <div class="hist-row"><span class="hist-label">Margem mediana depto</span><span class="hist-val">${fmtPct(ctx.margemDepto)}</span></div>
+      <div class="hist-row"><span class="hist-label">Histórico c/ este cliente</span><span class="hist-val">${ctx.precoHistCli!==null?fmtBRL(ctx.precoHistCli):'Primeira vez'}</span></div>
+      <div class="hist-row"><span class="hist-label">Motivo alegado</span><span class="hist-val" style="font-size:12px">${p.motivo}${p.concorrente?' — '+p.concorrente:''}</span></div>
+    </div>
+  </div>
+  <div class="veredito-box aguardando" id="veredito_${p.id}">
+    <div class="v-icon">🤖</div>
+    <div><div class="v-label">Aguardando análise da IA</div><div class="v-sub">Clique em "Analisar com IA" para obter o parecer inteligente baseado na sua base de vendas</div></div>
+  </div>
+  <div class="ia-box">
+    <div class="ia-header"><span style="font-size:16px">🤖</span><span class="ia-title">Parecer da IA</span></div>
+    <div class="ia-text loading" id="iaText_${p.id}">Clique em "Analisar com IA" para gerar o parecer com base no histórico completo de vendas.</div>
+  </div>
+  <div class="decisao-row" id="decisaoRow_${p.id}">
+    <button class="btn-dec btn-aprovar"  onclick="decisaoFinal('${p.id}','aprovar')">✅ Aprovar</button>
+    <button class="btn-dec btn-ia" id="btnIA_${p.id}" onclick="analisarComIA('${p.id}')">🤖 Analisar com IA</button>
+    <button class="btn-dec btn-reprovar" onclick="decisaoFinal('${p.id}','reprovar')">✗ Reprovar</button>
+  </div>
+  <div class="decisao-msg" id="decisaoMsg_${p.id}"></div>`;
+}
+
+function toggleCard(id) { document.getElementById('card_'+id).classList.toggle('open'); }
+
+// ── DEMO ──────────────────────────────────────────────────────
+function carregarDemo() {
+  PROPOSTAS = [
+    { id:'P001', codRca:'1517', codCliente:'40332', codProduto:'12074', quantidade:50,  valorTabela:11.8,  valorProposto:9.5,   motivo:'Concorrência', concorrente:'Distribuidora Sul Frios', obs:'Concorrente ofereceu R$ 9,20. Cliente ameaçou trocar.' },
+    { id:'P002', codRca:'1237', codCliente:'23794', codProduto:'11998', quantidade:20,  valorTabela:175.9, valorProposto:155.0, motivo:'Volume alto',   concorrente:'', obs:'Cliente topou dobrar pedido por esse preço.' },
+    { id:'P003', codRca:'1517', codCliente:'14431', codProduto:'12755', quantidade:30,  valorTabela:18.9,  valorProposto:17.0,  motivo:'Fidelidade',   concorrente:'', obs:'' },
+  ];
+  renderFila();
+}
+
+// ── DRAG & DROP ───────────────────────────────────────────────
+const zone = document.getElementById('uploadZone');
+zone.addEventListener('dragover',  e=>{e.preventDefault();zone.classList.add('drag');});
+zone.addEventListener('dragleave', ()=>zone.classList.remove('drag'));
+zone.addEventListener('drop', e=>{
+  e.preventDefault(); zone.classList.remove('drag');
+  const f=e.dataTransfer.files[0]; if(!f) return;
+  const dt=new DataTransfer(); dt.items.add(f);
+  document.getElementById('fileInput').files=dt.files;
+  carregarBase(document.getElementById('fileInput'));
+});
+
+renderFila();
+</script>
+</body>
+</html>
