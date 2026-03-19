@@ -314,54 +314,33 @@ async function analisarComIA(id) {
   iaText.className = 'ia-text loading';
   iaText.textContent = 'A IA está processando o contexto completo da base de vendas...';
 
-  const prompt = `Você é analista comercial sênior da Mar Food, distribuidora de alimentos do RS. Analise esta proposta com condição diferenciada e emita um veredito claro.
+  const prompt = `Analista comercial Mar Food. Avalie esta proposta de venda com desconto.
 
-PROPOSTA:
-- RCA: ${ctx.nomeRca} (cód. ${p.codRca})
-- Cliente: ${ctx.nomeCliente} (cód. ${p.codCliente})
-- Produto: ${ctx.descProd} (cód. ${p.codProduto}) — Depto: ${ctx.deptoProd}
-- Quantidade: ${p.quantidade} unidades
-- Valor tabela (un.): ${fmtBRL(p.valorTabela)} | Valor proposto (un.): ${fmtBRL(p.valorProposto)}
-- Total tabela: ${fmtBRL(ctx.totalTabela)} | Total proposto: ${fmtBRL(ctx.totalProposto)}
-- Desconto solicitado: ${fmtPct(ctx.descontoPct)}
-- Motivo alegado: ${p.motivo}${p.concorrente?' — Concorrente: '+p.concorrente:''}
-${p.obs?'- Obs. do RCA: '+p.obs:''}
+PROPOSTA: RCA ${ctx.nomeRca} | Cliente ${ctx.nomeCliente} | Produto ${ctx.descProd} (${ctx.deptoProd})
+Qtd: ${p.quantidade}un | Tabela: ${fmtBRL(p.valorTabela)}/un | Proposto: ${fmtBRL(p.valorProposto)}/un
+Total tabela: ${fmtBRL(ctx.totalTabela)} | Total proposto: ${fmtBRL(ctx.totalProposto)} | Desconto: ${fmtPct(ctx.descontoPct)}
+Motivo: ${p.motivo}${p.concorrente?' ('+p.concorrente+')':''}${p.obs?' | Obs: '+p.obs:''}
 
-DADOS DO PRODUTO (base Jan–Mar/26):
-- Custo médio unitário: ${fmtBRL(ctx.custoMedProd)}
-- Preço médio histórico: ${fmtBRL(ctx.precoMedProd)}
-- Margem histórica média: ${fmtPct(ctx.margemMedProd)}
-- Margem mediana do depto ${ctx.deptoProd}: ${fmtPct(ctx.margemDepto)}
-- Margem da proposta: ${fmtPct(ctx.margemProposta)}
-- Lucro bruto do pedido: ${fmtBRL(ctx.lucroBruto)}
-- Preço histórico com ESTE cliente: ${ctx.precoHistCli!==null?fmtBRL(ctx.precoHistCli):'Nunca vendido para este cliente'}
+PRODUTO: Custo médio: ${fmtBRL(ctx.custoMedProd)} | Preço médio histórico: ${fmtBRL(ctx.precoMedProd)} | Margem histórica: ${fmtPct(ctx.margemMedProd)} | Margem mediana depto: ${fmtPct(ctx.margemDepto)} | Margem proposta: ${fmtPct(ctx.margemProposta)} | Lucro bruto: ${fmtBRL(ctx.lucroBruto)} | Preço c/ este cliente: ${ctx.precoHistCli!==null?fmtBRL(ctx.precoHistCli):'nunca vendido'}
 
-DADOS DO CLIENTE (base Jan–Mar/26):
-- Total faturado: ${fmtBRL(ctx.fatCli)}
-- Notas: ${ctx.notas} | Ticket médio: ${fmtBRL(ctx.ticketCli)}
-- Meses ativos: ${ctx.mesesCli}/3 | Última compra: ${ctx.ultimaCompra}
-- Faturamento março/26: ${fmtBRL(ctx.fatMes)}
-- Positivado em março/26: ${ctx.jaPositivou?'Sim':'Não — nova positivação'}
-${ctx.vendasCli===0?'- ATENÇÃO: cliente sem histórico na base':''}
+CLIENTE: Fat. total: ${fmtBRL(ctx.fatCli)} | Notas: ${ctx.notas} | Ticket médio: ${fmtBRL(ctx.ticketCli)} | Meses ativos: ${ctx.mesesCli}/3 | Última compra: ${ctx.ultimaCompra} | Fat. março/26: ${fmtBRL(ctx.fatMes)} | Positivado março: ${ctx.jaPositivou?'sim':'não — nova positivação'}
 
-Responda em português, direto e profissional, SEM bullet points e SEM markdown, em parágrafos corridos. Estrutura:
-1. Comece com o veredito: APROVAR, REPROVAR ou ANALISAR COM ATENÇÃO
-2. Justifique citando os números (3 a 5 frases)
-3. Se REPROVAR: indique o valor mínimo unitário aceitável
-4. Se ANALISAR: indique exatamente o que verificar antes de decidir`;
+Responda em português, sem bullet points, em parágrafos. Comece com APROVAR, REPROVAR ou ANALISAR COM ATENÇÃO. Justifique com os números. Se REPROVAR, indique valor mínimo aceitável.`;
 
   try {
     const PROXY_URL = 'https://script.google.com/macros/s/AKfycbyXnapZN9nhX_2g5hmf36tJafFysfLo_mEYLO9JdXB2gRGga79IZ8KYzjilFFqx3K1W4A/exec';
-    const params = new URLSearchParams();
-    params.append('prompt', prompt);
-    const res = await fetch(PROXY_URL, {
-      method: 'POST',
-      body: params
+    // Apps Script redireciona POST para GET — usamos GET direto
+    const promptEncoded = encodeURIComponent(prompt);
+    const res = await fetch(PROXY_URL + '?prompt=' + promptEncoded, {
+      method: 'GET',
+      redirect: 'follow'
     });
 
     if (!res.ok) throw new Error('HTTP '+res.status);
     const data  = await res.json();
-    const texto = data.content?.[0]?.text || 'Não foi possível obter análise.';
+    // Apps Script pode retornar a resposta aninhada
+    const inner = data.content ? data : (data.response ? JSON.parse(data.response) : data);
+    const texto = inner.content?.[0]?.text || inner.error || JSON.stringify(inner);
     const up    = texto.toUpperCase();
 
     let vc='atencao', vi='⚡', vl='ANALISAR COM ATENÇÃO', vs='Verifique os pontos levantados';
