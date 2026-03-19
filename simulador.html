@@ -352,8 +352,11 @@ Responda em português, direto e profissional, SEM bullet points e SEM markdown,
 
   try {
     const PROXY_URL = 'https://script.google.com/macros/s/AKfycbyXnapZN9nhX_2g5hmf36tJafFysfLo_mEYLO9JdXB2gRGga79IZ8KYzjilFFqx3K1W4A/exec';
-    const res = await fetch(PROXY_URL + '?prompt=' + encodeURIComponent(prompt), {
-      method: 'GET'
+    const params = new URLSearchParams();
+    params.append('prompt', prompt);
+    const res = await fetch(PROXY_URL, {
+      method: 'POST',
+      body: params
     });
 
     if (!res.ok) throw new Error('HTTP '+res.status);
