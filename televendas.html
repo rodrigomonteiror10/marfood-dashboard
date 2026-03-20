@@ -112,13 +112,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);hei
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px">
         <div>
           <div style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Dia</div>
-          <div style="font-family:'Rajdhani',sans-serif;font-size:24px;font-weight:700;color:var(--orange);line-height:1">R$ 31,8K</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:4px">Meta <strong style="color:var(--text)">R$ 56,7K</strong> <span style="padding:1px 6px;border-radius:4px;background:rgba(245,197,24,.15);color:var(--yellow);font-weight:700;font-size:10px">56,2%</span></div>
+          <div style="font-family:'Rajdhani',sans-serif;font-size:24px;font-weight:700;color:var(--orange);line-height:1">R$ 33,6K</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">Meta <strong style="color:var(--text)">R$ 56,7K</strong> <span style="padding:1px 6px;border-radius:4px;background:rgba(245,197,24,.15);color:var(--yellow);font-weight:700;font-size:10px">59,3%</span></div>
         </div>
         <div style="border-left:1px solid var(--border);padding-left:12px">
           <div style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Mês Acum.</div>
-          <div style="font-family:'Rajdhani',sans-serif;font-size:24px;font-weight:700;color:var(--yellow);line-height:1">R$ 803K</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:4px">Meta <strong style="color:var(--text)">R$ 1,245M</strong> <span style="padding:1px 6px;border-radius:4px;background:rgba(255,77,109,.15);color:var(--red);font-weight:700;font-size:10px">64,5%</span></div>
+          <div style="font-family:'Rajdhani',sans-serif;font-size:24px;font-weight:700;color:var(--yellow);line-height:1">R$ 804K</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">Meta <strong style="color:var(--text)">R$ 1,245M</strong> <span style="padding:1px 6px;border-radius:4px;background:rgba(255,77,109,.15);color:var(--red);font-weight:700;font-size:10px">64,6%</span></div>
         </div>
       </div>
     </div>
@@ -144,7 +144,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);hei
     </div>
     <div class="kpi-card c-purple" style="--kpi-color:var(--purple)">
       <div class="kpi-label">Ticket Médio — Time</div>
-      <div class="kpi-value" style="color:var(--purple)">R$ 1,7K</div>
+      <div class="kpi-value" style="color:var(--purple)">R$ 1,6K</div>
       <div class="kpi-sub" style="color:var(--muted)">por pedido · dia 19/03</div>
     </div>
   </div>
@@ -168,11 +168,11 @@ const FOTOS = {
 
 const TELE_DIA = {
   vendedores: [
-    {rank:1,nome:'Tatiana', fat:10426.20,meta_fat:9090.91, ating_fat:114.7,posit:1, meta_posit:5.4,falta:0,       ticket:2606.55,notas:4, gap_mes:-27475.48,status:'Acima'},
+    {rank:1,nome:'Tatiana', fat:11298.40,meta_fat:9090.91, ating_fat:124.3,posit:1, meta_posit:5.4,falta:0,       ticket:2259.68,notas:5, gap_mes:-26603.28,status:'Acima'},
     {rank:2,nome:'Natália', fat:13268.59,meta_fat:15909.09,ating_fat:83.4, posit:2, meta_posit:6.5,falta:2640.50, ticket:3317.15,notas:4, gap_mes:-5031.76, status:'Em Risco'},
     {rank:3,nome:'Ariane',  fat:2648.50, meta_fat:6818.18, ating_fat:38.8, posit:0, meta_posit:3.9,falta:4169.68, ticket:882.83, notas:3, gap_mes:20111.66, status:'Abaixo'},
     {rank:4,nome:'Anna',    fat:4931.31, meta_fat:17954.55,ating_fat:27.5, posit:2, meta_posit:9.0,falta:13023.24,ticket:821.89, notas:6, gap_mes:-13249.41,status:'Abaixo'},
-    {rank:5,nome:'Camila',  fat:540.19,  meta_fat:6818.18, ating_fat:7.9,  posit:1, meta_posit:4.1,falta:6277.99, ticket:270.10, notas:2, gap_mes:-20641.88,status:'Abaixo'},
+    {rank:5,nome:'Camila',  fat:1419.19, meta_fat:6818.18, ating_fat:20.8, posit:1, meta_posit:4.1,falta:5398.99, ticket:473.06, notas:3, gap_mes:-19762.88,status:'Abaixo'},
   ]
 };
 
@@ -345,7 +345,7 @@ function buildChart(){
 buildCards();
 setTimeout(buildChart, 200);
 // Hora fixa da última venda na base
-document.getElementById('ultima-hora').textContent = '12:02';
+document.getElementById('ultima-hora').textContent = '13:50';
 </script>
 </body>
 </html>
