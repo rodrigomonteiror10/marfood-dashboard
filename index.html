@@ -245,8 +245,6 @@ tbody td{padding:9px 12px;vertical-align:middle;white-space:nowrap}
       <button class="tab-btn giro"          onclick="showSection('giro',this)">Giro</button>
       <button class="tab-btn rupt"          onclick="showSection('ruptura',this)">Ruptura</button>
       <button class="tab-btn" onclick="showSection('vs2025',this)">📊 2026 vs 2025</button>
-      <button class="tab-btn" style="color:var(--orange)" onclick="showSection('tele-dia',this)">📞 Tele Dia</button>
-      <button class="tab-btn" style="color:var(--orange)" onclick="showSection('tele-mes',this)">📞 Tele Mês</button>
       <button class="tab-btn" style="color:var(--purple)" onclick="showSection('insights',this)">✦ Insights</button>
     </div>
   </div>
@@ -274,7 +272,7 @@ tbody td{padding:9px 12px;vertical-align:middle;white-space:nowrap}
         <div class="kpi-card c-green" onclick="showSection('faturamento',null)">
           <div class="kpi-icon">💰</div>
           <div class="kpi-label">Faturamento</div>
-          <div class="kpi-value" data-kpi="fat-val">R$ 6,25M</div>
+          <div class="kpi-value" data-kpi="fat-val">R$ 8,43M</div>
           <div class="kpi-sub">Meta: <strong id="kpi-fat-meta" style="color:var(--text)">—</strong><span class="badge neutral" id="kpi-fat-delta" style="display:none"></span></div>
           <div class="kpi-pct-bar"><div class="kpi-pct-fill" id="kpi-fat-bar" style="width:0%;background:var(--green)"></div></div>
         </div>
@@ -310,25 +308,40 @@ tbody td{padding:9px 12px;vertical-align:middle;white-space:nowrap}
 
       <div class="charts-row" style="grid-template-columns:1fr 1fr;gap:12px">
 
-        <!-- Card 1: Clientes positivados acumulado no mês -->
+        <!-- Card 1: Clientes positivados — Dia + Acumulado -->
         <div class="chart-card">
-          <div class="chart-title">Clientes Positivados — Acumulado Março</div>
-          <div style="display:flex;align-items:center;justify-content:center;flex-direction:column;padding:12px 0 4px">
-            <div style="font-family:'Rajdhani',sans-serif;font-size:52px;font-weight:700;color:var(--green);line-height:1" id="clientes-total">2.714</div>
-            <div style="font-size:11px;color:var(--muted);margin-top:4px">clientes únicos que compraram em março</div>
-          </div>
-          <div style="margin-top:16px">
-            <div class="canal-bar">
-              <div class="canal-header"><span style="color:var(--text);font-size:11px">Semana 1 (dias 02–07)</span><span style="color:var(--green);font-weight:600;font-size:11px">1.823</span></div>
-              <div class="cbar"><div class="cbar-fill" style="width:100%;background:var(--green)"></div></div>
+          <div class="chart-title">Clientes Positivados — Março 2026</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:8px">
+            <!-- Acumulado mês -->
+            <div style="text-align:center;padding:10px 12px;border-right:1px solid var(--border)">
+              <div style="font-size:9px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:8px">Acumulado Mês</div>
+              <div style="font-family:'Rajdhani',sans-serif;font-size:44px;font-weight:700;color:var(--green);line-height:1">2.823</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:4px">clientes únicos em março</div>
+              <div style="margin-top:12px;display:flex;flex-direction:column;gap:6px">
+                <div class="canal-bar">
+                  <div class="canal-header"><span style="font-size:10px;color:var(--text)">Sem 1 (02–07)</span><span style="color:var(--green);font-weight:600;font-size:10px">1.823</span></div>
+                  <div class="cbar"><div class="cbar-fill" style="width:100%;background:var(--green)"></div></div>
+                </div>
+                <div class="canal-bar">
+                  <div class="canal-header"><span style="font-size:10px;color:var(--text)">Sem 2 (09–14)</span><span style="color:var(--blue);font-weight:600;font-size:10px">777</span></div>
+                  <div class="cbar"><div class="cbar-fill" style="width:43%;background:var(--blue)"></div></div>
+                </div>
+                <div class="canal-bar">
+                  <div class="canal-header"><span style="font-size:10px;color:var(--text)">Sem 3 (16–19)</span><span style="color:var(--yellow);font-weight:600;font-size:10px">114</span></div>
+                  <div class="cbar"><div class="cbar-fill" style="width:6%;background:var(--yellow)"></div></div>
+                </div>
+              </div>
             </div>
-            <div class="canal-bar">
-              <div class="canal-header"><span style="color:var(--text);font-size:11px">Semana 2 (dias 09–14)</span><span style="color:var(--blue);font-weight:600;font-size:11px">1.724</span></div>
-              <div class="cbar"><div class="cbar-fill" style="width:94%;background:var(--blue)"></div></div>
-            </div>
-            <div class="canal-bar">
-              <div class="canal-header"><span style="color:var(--text);font-size:11px">Semana 3 (dias 16–17)</span><span style="color:var(--yellow);font-weight:600;font-size:11px">488</span></div>
-              <div class="cbar"><div class="cbar-fill" style="width:27%;background:var(--yellow)"></div></div>
+            <!-- Dia -->
+            <div style="text-align:center;padding:10px 12px">
+              <div style="font-size:9px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:8px">Dia — 17/03</div>
+              <div style="font-family:'Rajdhani',sans-serif;font-size:44px;font-weight:700;color:var(--blue);line-height:1">109</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:4px">novos no mês hoje</div>
+              <div style="margin-top:12px;background:var(--bg3);border-radius:8px;padding:10px">
+                <div style="font-size:10px;color:var(--muted);margin-bottom:4px">Total atendidos no dia</div>
+                <div style="font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;color:var(--text)">391</div>
+                <div style="font-size:10px;color:var(--muted);margin-top:4px">clientes únicos atendidos</div>
+              </div>
             </div>
           </div>
         </div>
@@ -360,6 +373,7 @@ tbody td{padding:9px 12px;vertical-align:middle;white-space:nowrap}
               <th>Meta Margem</th>
               <th>Δ Margem</th>
               <th>Lucro</th>
+              <th>Meta Lucro</th>
               <th>Cli. Mês</th>
               <th>Qt. Acum.</th>
               <th>Projeção Fechamento</th>
@@ -400,13 +414,13 @@ tbody td{padding:9px 12px;vertical-align:middle;white-space:nowrap}
           <div class="kpi-icon">🧾</div>
           <div class="kpi-label">Notas / Ticket Médio</div>
           <div class="kpi-value" style="font-size:22px;padding-top:4px">275</div>
-          <div class="kpi-sub">Ticket médio <strong style="color:var(--text)">R$ 1.095,89</strong></div>
+          <div class="kpi-sub">Ticket médio <strong style="color:var(--text)">R$ 1.437,52</strong></div>
         </div>
         <div class="kpi-card c-purple" style="--kpi-color:var(--purple)">
           <div class="kpi-icon">👥</div>
           <div class="kpi-label">Clientes Positivados</div>
-          <div class="kpi-value" style="color:var(--purple)">391</div>
-          <div class="kpi-sub" style="color:var(--muted)">clientes únicos no dia</div>
+          <div class="kpi-value" style="color:var(--purple)">109</div>
+          <div class="kpi-sub" style="color:var(--muted)">novos no mês hoje · 391 atendidos</div>
           <div class="kpi-pct-bar"><div class="kpi-pct-fill" style="width:0%;background:var(--purple)"></div></div>
         </div>
       </div>
@@ -414,7 +428,7 @@ tbody td{padding:9px 12px;vertical-align:middle;white-space:nowrap}
       <!-- Gráficos: linha acumulada + projeção mês -->
       <div class="charts-row" style="grid-template-columns:1fr 340px;gap:12px">
         <div class="chart-card">
-          <div class="chart-title">Faturamento Acumulado no Dia vs Meta — 17/03/2026</div>
+          <div class="chart-title">Faturamento Acumulado no Dia vs Meta — 18/03/2026</div>
           <div class="chart-wrap" style="height:180px"><canvas id="chartDiaHora"></canvas></div>
           <div class="chart-legend" style="margin-top:8px">
             <div class="leg-item"><div class="leg-line" style="background:var(--green)"></div>Realizado acumulado</div>
@@ -423,22 +437,50 @@ tbody td{padding:9px 12px;vertical-align:middle;white-space:nowrap}
         </div>
         <div class="chart-card">
           <div class="chart-title">Projeção de Fechamento do Mês</div>
-          <div style="text-align:center;padding:10px 0 6px">
-            <div style="font-family:'Rajdhani',sans-serif;font-size:38px;font-weight:700;color:var(--red);line-height:1">R$ 9,82M</div>
-            <div style="font-size:11px;color:var(--muted);margin-top:3px">projeção baseada na média diária até 17/03</div>
+
+          <!-- Duas projeções lado a lado -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;margin:8px 0 12px">
+            <div style="text-align:center;padding:10px 12px;border-right:1px solid var(--border)">
+              <div style="font-size:8px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;font-weight:600">📈 Tendência Março/25</div>
+              <div style="font-family:'Rajdhani',sans-serif;font-size:30px;font-weight:700;color:var(--orange);line-height:1">R$ 12,61M</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:3px">curva histórica março/25</div>
+              <div style="margin-top:5px"><span style="padding:2px 8px;border-radius:4px;background:rgba(255,107,53,.12);color:var(--orange);font-size:10px;font-weight:700">93,6% da meta</span></div>
+            </div>
+            <div style="text-align:center;padding:10px 12px">
+              <div style="font-size:8px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;font-weight:600">📊 Média 12 Meses/2025</div>
+              <div style="font-family:'Rajdhani',sans-serif;font-size:30px;font-weight:700;color:var(--green);line-height:1">R$ 14,19M</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:3px">pesos médios anuais 2025</div>
+              <div style="margin-top:5px"><span style="padding:2px 8px;border-radius:4px;background:rgba(0,229,160,.12);color:var(--green);font-size:10px;font-weight:700">105,3% da meta</span></div>
+            </div>
           </div>
-          <div style="margin-top:10px">
+
+          <!-- Como funciona a projeção por tendência -->
+          <div style="background:rgba(0,229,160,.06);border:1px solid rgba(0,229,160,.15);border-radius:7px;padding:9px 12px;margin-bottom:10px;font-size:11px">
+            <div style="color:var(--muted);margin-bottom:4px;font-size:9px;letter-spacing:1px;text-transform:uppercase;font-weight:600">Como funciona · base 2025 completa (12 meses)</div>
+            <div style="color:var(--text);line-height:1.6">
+              Cada dia tem um <strong style="color:var(--green)">peso histórico</strong> calculado sobre os 12 meses de 2025.
+              Os 16 dias realizados representam <strong style="color:var(--green)">56,5%</strong> do mês pela média anual.
+              Os <strong style="color:var(--text)">8 dias restantes</strong> devem gerar <strong style="color:var(--green)">≈ R$ 4,85M</strong> adicionais.
+            </div>
+          </div>
+
+          <!-- Barras comparativas -->
+          <div>
             <div class="canal-bar">
               <div class="canal-header"><span style="font-size:11px;color:var(--text)">Meta do mês</span><span style="font-size:11px;font-weight:600;color:var(--yellow)">R$ 13,47M</span></div>
               <div class="cbar"><div class="cbar-fill" style="width:100%;background:var(--yellow)"></div></div>
             </div>
             <div class="canal-bar">
-              <div class="canal-header"><span style="font-size:11px;color:var(--text)">Projeção</span><span style="font-size:11px;font-weight:600;color:var(--red)">R$ 9,82M (72,9%)</span></div>
-              <div class="cbar"><div class="cbar-fill" style="width:72.9%;background:var(--red)"></div></div>
+              <div class="canal-header"><span style="font-size:11px;color:var(--text)">Proj. Média Anual 2025</span><span style="font-size:11px;font-weight:600;color:var(--green)">R$ 14,19M (105,3%)</span></div>
+              <div class="cbar"><div class="cbar-fill" style="width:100%;background:var(--green)"></div></div>
             </div>
             <div class="canal-bar">
-              <div class="canal-header"><span style="font-size:11px;color:var(--text)">Realizado até 17/03</span><span style="font-size:11px;font-weight:600;color:var(--green)">R$ 6,70M (49,7%)</span></div>
-              <div class="cbar"><div class="cbar-fill" style="width:49.7%;background:var(--green)"></div></div>
+              <div class="canal-header"><span style="font-size:11px;color:var(--text)">Proj. Tendência Março/25</span><span style="font-size:11px;font-weight:600;color:var(--orange)">R$ 12,61M (90,2%)</span></div>
+              <div class="cbar"><div class="cbar-fill" style="width:93.6%;background:var(--orange)"></div></div>
+            </div>
+            <div class="canal-bar">
+              <div class="canal-header"><span style="font-size:11px;color:var(--text)">Realizado até 19/03</span><span style="font-size:11px;font-weight:600;color:var(--blue)">R$ 8,43M (55,9%)</span></div>
+              <div class="cbar"><div class="cbar-fill" style="width:55.9%;background:var(--blue)"></div></div>
             </div>
           </div>
         </div>
@@ -487,7 +529,7 @@ tbody td{padding:9px 12px;vertical-align:middle;white-space:nowrap}
     <!-- ── FATURAMENTO ── -->
     <div class="section anim-in" id="section-faturamento">
       <div class="kpi-row" style="grid-template-columns:repeat(4,1fr)">
-        <div class="kpi-card c-green"><div class="kpi-label">Total Mar (parcial até dia 17)</div><div class="kpi-value">R$ 6,25M</div><div class="kpi-sub">Meta: <strong id="fat2-meta" style="color:var(--text)">—</strong></div><div class="kpi-pct-bar"><div class="kpi-pct-fill" id="fat2-bar" style="width:0%;background:var(--green)"></div></div></div>
+        <div class="kpi-card c-green"><div class="kpi-label">Total Mar (parcial até dia 20)</div><div class="kpi-value">R$ 6,25M</div><div class="kpi-sub">Meta: <strong id="fat2-meta" style="color:var(--text)">—</strong></div><div class="kpi-pct-bar"><div class="kpi-pct-fill" id="fat2-bar" style="width:0%;background:var(--green)"></div></div></div>
         <div class="kpi-card c-blue"><div class="kpi-label">Jan + Fev + Mar Acumulado</div><div class="kpi-value">R$ 28,7M</div><div class="kpi-sub">Jan R$11,9M · Fev R$10,6M · Mar R$6,2M</div></div>
         <div class="kpi-card c-yellow"><div class="kpi-label">Melhor Mês</div><div class="kpi-value" style="font-size:16px;padding-top:6px">Janeiro</div><div class="kpi-sub">R$11,9M · maior do trimestre</div></div>
         <div class="kpi-card c-orange"><div class="kpi-label">Top Região</div><div class="kpi-value" style="font-size:22px;padding-top:4px">SUL</div><div class="kpi-sub">31,4% do faturamento</div></div>
@@ -553,11 +595,104 @@ tbody td{padding:9px 12px;vertical-align:middle;white-space:nowrap}
 
     <!-- ── RUPTURA ── -->
     <div class="section anim-in" id="section-ruptura">
-      <div class="placeholder">
-        <div class="icon">⚠️</div>
-        <h3>DADOS DE INVENTÁRIO NECESSÁRIOS</h3>
-        <p>Para calcular a Ruptura, carregue a planilha de inventário.<br>Fórmula: <strong style="color:var(--text)">SKUs em zero ÷ Total SKUs ativos × 100</strong></p>
+
+      <!-- KPIs ruptura -->
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px">
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;position:relative;overflow:hidden">
+          <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--blue)"></div>
+          <div style="font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:5px">Total de SKUs</div>
+          <div style="font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;color:var(--blue)">548</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:3px">produtos no cadastro</div>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;position:relative;overflow:hidden">
+          <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--green)"></div>
+          <div style="font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:5px">Com Estoque</div>
+          <div style="font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;color:var(--green)">400</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:3px">73,0% dos SKUs</div>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;position:relative;overflow:hidden">
+          <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--yellow)"></div>
+          <div style="font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:5px">Zerados</div>
+          <div style="font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;color:var(--yellow)">145</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:3px">estoque = 0</div>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;position:relative;overflow:hidden">
+          <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--red)"></div>
+          <div style="font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:5px">Negativos</div>
+          <div style="font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;color:var(--red)">3</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:3px">estoque abaixo de zero</div>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;position:relative;overflow:hidden">
+          <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--orange)"></div>
+          <div style="font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:5px">Ruptura Geral</div>
+          <div style="font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;color:var(--orange)">27,0%</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:3px">148 SKUs sem estoque</div>
+        </div>
       </div>
+
+      <!-- Ruptura por departamento -->
+      <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:14px">
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden">
+          <div style="padding:12px 16px;border-bottom:1px solid var(--border);background:rgba(0,0,0,.12);display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);font-weight:600">Ruptura por Departamento — 17/03/2026</span>
+            <a href="estoque.html" style="font-size:10px;color:var(--yellow);text-decoration:none">ver painel completo →</a>
+          </div>
+          <table style="width:100%;border-collapse:collapse;font-size:12px">
+            <thead>
+              <tr>
+                <th style="text-align:left;font-size:8px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);font-weight:600;padding:8px 14px;border-bottom:1px solid var(--border)">Departamento</th>
+                <th style="text-align:center;font-size:8px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);font-weight:600;padding:8px 14px;border-bottom:1px solid var(--border)">SKUs</th>
+                <th style="text-align:center;font-size:8px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);font-weight:600;padding:8px 14px;border-bottom:1px solid var(--border)">Zerados</th>
+                <th style="text-align:left;font-size:8px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);font-weight:600;padding:8px 14px;border-bottom:1px solid var(--border)">Ruptura %</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${[
+                {d:'FRUTAS CONGELADAS',qtd:63, z:2,  r:3.2},
+                {d:'VEGETAIS',         qtd:35, z:8,  r:22.9},
+                {d:'BOVINOS',          qtd:77, z:35, r:45.5},
+                {d:'FRANGOS',          qtd:70, z:27, r:38.6},
+                {d:'LATICINIOS',       qtd:61, z:13, r:21.3},
+                {d:'PESCADOS',         qtd:13, z:5,  r:38.5},
+                {d:'MERCEARIA',        qtd:13, z:2,  r:15.4},
+                {d:'EMBUTIDOS',        qtd:44, z:19, r:43.2},
+                {d:'DOCES',            qtd:43, z:1,  r:2.3},
+                {d:'SORVETES',         qtd:36, z:4,  r:11.1},
+                {d:'BEBIDAS',          qtd:35, z:10, r:28.6},
+                {d:'SUINOS',           qtd:13, z:5,  r:38.5},
+                {d:'DESCARTAVEIS',     qtd:20, z:9,  r:45.0},
+                {d:'CONDIMENTOS',      qtd:25, z:8,  r:32.0},
+              ].map(row => {
+                const cor = row.r>=40?'var(--red)':row.r>=25?'var(--orange)':row.r>=10?'var(--yellow)':'var(--green)';
+                return `<tr>
+                  <td style="padding:9px 14px;border-bottom:1px solid rgba(37,42,56,.4);font-weight:500">${row.d}</td>
+                  <td style="padding:9px 14px;border-bottom:1px solid rgba(37,42,56,.4);text-align:center;color:var(--muted)">${row.qtd}</td>
+                  <td style="padding:9px 14px;border-bottom:1px solid rgba(37,42,56,.4);text-align:center;color:${row.z>0?'var(--red)':'var(--muted)'};font-weight:${row.z>0?'700':'400'}">${row.z}</td>
+                  <td style="padding:9px 14px;border-bottom:1px solid rgba(37,42,56,.4)">
+                    <div style="display:flex;align-items:center;gap:8px">
+                      <div style="width:70px;height:5px;background:var(--border);border-radius:99px;overflow:hidden">
+                        <div style="width:${row.r*2}%;height:100%;background:${cor};border-radius:99px"></div>
+                      </div>
+                      <span style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:13px;color:${cor}">${row.r}%</span>
+                    </div>
+                  </td>
+                </tr>`;
+              }).join('')}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Gráfico -->
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden">
+          <div style="padding:12px 16px;border-bottom:1px solid var(--border);background:rgba(0,0,0,.12)">
+            <span style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);font-weight:600">% Ruptura — Ranking</span>
+          </div>
+          <div style="padding:14px 16px">
+            <div style="position:relative;overflow:hidden;height:380px"><canvas id="chartRuptDepto"></canvas></div>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <!-- ── 2026 vs 2025 ── -->
@@ -612,18 +747,18 @@ tbody td{padding:9px 12px;vertical-align:middle;white-space:nowrap}
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
             <div>
               <div style="font-size:9px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px">Faturamento</div>
-              <div style="font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:var(--text)">R$ 6,25M</div>
-              <div style="font-size:10px;color:var(--muted);margin-top:2px">2025: R$ 5,95M</div>
-              <div style="margin-top:4px"><span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;background:rgba(0,229,160,.15);color:var(--green)">▲ +5,1%</span></div>
+              <div style="font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:var(--text)">R$ 8,43M</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:2px">2025: R$ 7,40M</div>
+              <div style="margin-top:4px"><span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;background:rgba(0,229,160,.15);color:var(--green)">▲ +13,9%</span></div>
             </div>
             <div>
               <div style="font-size:9px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px">Lucro Bruto</div>
-              <div style="font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:var(--blue)">R$ 0,98M</div>
-              <div style="font-size:10px;color:var(--muted);margin-top:2px">2025: R$ 1,01M</div>
-              <div style="margin-top:4px"><span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;background:rgba(255,77,109,.15);color:var(--red)">▼ -3,2%</span></div>
+              <div style="font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:var(--blue)">R$ 1,31M</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:2px">2025: R$ 1,26M</div>
+              <div style="margin-top:4px"><span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;background:rgba(0,229,160,.15);color:var(--green)">▲ +4,0%</span></div>
             </div>
           </div>
-          <div style="margin-top:8px;font-size:10px;color:var(--muted)">MB 2026: <strong style="color:var(--yellow)">15,7%</strong> · 2025: <strong>17,0%</strong> <span style="color:var(--muted)">(até dia 17)</span></div>
+          <div style="margin-top:8px;font-size:10px;color:var(--muted)">MB 2026: <strong style="color:var(--yellow)">15,7%</strong> · 2025: <strong>16,9%</strong> <span style="color:var(--muted)">(até dia 20)</span></div>
         </div>
 
         <!-- YTD Jan+Fev+Mar comparável -->
@@ -632,18 +767,18 @@ tbody td{padding:9px 12px;vertical-align:middle;white-space:nowrap}
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
             <div>
               <div style="font-size:9px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px">Faturamento</div>
-              <div style="font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:var(--orange)">R$ 28,70M</div>
-              <div style="font-size:10px;color:var(--muted);margin-top:2px">2025: R$ 33,22M</div>
-              <div style="margin-top:4px"><span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;background:rgba(255,77,109,.15);color:var(--red)">▼ -13,6%</span></div>
+              <div style="font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:var(--orange)">R$ 30,89M</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:2px">2025: R$ 34,67M</div>
+              <div style="margin-top:4px"><span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;background:rgba(255,77,109,.15);color:var(--red)">▼ -10,9%</span></div>
             </div>
             <div>
               <div style="font-size:9px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px">Lucro Bruto</div>
-              <div style="font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:var(--orange)">R$ 4,93M</div>
-              <div style="font-size:10px;color:var(--muted);margin-top:2px">2025: R$ 6,03M</div>
-              <div style="margin-top:4px"><span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;background:rgba(255,77,109,.15);color:var(--red)">▼ -18,3%</span></div>
+              <div style="font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:var(--orange)">R$ 5,26M</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:2px">2025: R$ 6,28M</div>
+              <div style="margin-top:4px"><span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;background:rgba(255,77,109,.15);color:var(--red)">▼ -16,3%</span></div>
             </div>
           </div>
-          <div style="margin-top:8px;font-size:10px;color:var(--muted)">Jan+Fev completos · Mar até dia 17 nos dois anos</div>
+          <div style="margin-top:8px;font-size:10px;color:var(--muted)">Jan+Fev completos · Mar até dia 20 nos dois anos · base 2025 completa (12 meses)</div>
         </div>
       </div>
 
@@ -739,7 +874,7 @@ tbody td{padding:9px 12px;vertical-align:middle;white-space:nowrap}
         </div>
         <div class="tele-kpi c4">
           <div class="kpi-label">Pré-Inativos (Meta Mês)</div>
-          <div class="kpi-value" style="color:var(--yellow)">93</div>
+          <div class="kpi-value" style="color:var(--yellow)">80</div>
           <div class="kpi-sub" style="color:var(--muted)">meta a recuperar no mês</div>
         </div>
       </div>
@@ -914,15 +1049,15 @@ const D={
 
   // Departamentos — MARÇO (valores exatos da planilha, somente VENDA, 14 dias até 17/03)
   deptoLabels:['FRUTAS CONGELADAS','VEGETAIS','BOVINOS','FRANGOS','LATICINIOS','PESCADOS','MERCEARIA','EMBUTIDOS','DOCES','SORVETES','BEBIDAS','SUINOS','DESCARTAVEIS','CONDIMENTOS'],
-  deptoFat:   [2500742.48,1067916.75,624442.13,608001.03,362870.07,312872.26,260826.60,135859.83,132455.47,106912.25,74009.83,52475.53,8923.12,1554.38],
-  deptoMB:    [13.1,17.1,13.9,16.6,21.2,21.3,15.2,20.8,20.6,32.6,-10.2,22.9,30.4,19.2],
-  deptoLucro: [326985.78,182470.83,86962.54,100698.00,77069.26,66670.27,39620.44,28316.65,27325.01,34849.27,-7533.75,12038.48,2715.68,298.13],
+  deptoFat:[3528414.27,1351863.79,803516.09,791006.6,496734.47,434583.28,354275.23,178394.53,179762.09,126765.33,87275.77,82365.37,12220.05,3221.76],
+  deptoMB:[12.9,17.0,13.8,16.7,22.2,21.3,14.7,20.7,20.6,32.4,-10.3,21.6,30.2,19.6],
+  deptoLucro:[454482.73,229659.01,110484.79,132314.94,110358.09,92372.56,51978.1,36841.09,37029.19,41112.85,-8976.08,17827.77,3684.45,629.91],
   deptoCusto: [2173756.70,885445.92,537479.59,507303.03,285800.81,246201.99,221206.16,107543.18,105130.46,72062.98,81543.58,40437.05,6207.44,1256.25],
   deptoMix:   [40.0,17.1,10.0,9.7,5.8,5.0,4.2,2.2,2.1,1.7,1.2,0.8,0.1,0.0],
   // Projeção: média dos 14 dias extrapolada para os 14 dias restantes (dia 18 ao 31)
-  deptoCliMes:  [1312,644,358,732,704,232,393,402,506,33,135,111,123,27],
+  deptoCliMes:[1430,731,408,824,804,273,463,456,572,41,155,130,147,42],
   deptoQtAcum:  [42878,99333,14645,42370,12612,10974,10408,6016,4382,4468,9079,2674,835,144],
-  deptoProj:  [5001484.96,2135833.50,1248884.26,1216002.06,725740.14,625744.52,521653.20,271719.66,264910.94,213824.50,148019.66,104951.06,17846.24,3108.76],
+  deptoProj:[5276070.37,2021454.38,1201505.01,1182799.46,742771.63,649836.38,529751.02,266754.98,268799.91,189553.37,130504.26,123161.7,18272.75,4817.53],
   deptoPositDia:  [296,98,61,90,108,24,38,51,117,5,17,16,27,6],
   deptoPositAcum: [1312,644,358,732,704,232,393,402,506,33,135,111,123,27],
   marNDias: 14, marUltimoDia: 17, marDiasNoMes: 31,
@@ -988,30 +1123,30 @@ const D={
   segMB:    [18.0,14.4,14.5],
   segLucro: [2225521,1323606,1033959],
 
-  // KPIs mês vigente (Março acumulado até 17/03)
-  fat_mar:   6.70,
-  mb_mar:    15.8,
-  mn_mar:    1055570.45,
-  notas_mar: 4870,
-  ticket_mar:1095.89,
-  // ── VENDA DIA — referência 17/03/2026 ────────────────────────
+  // KPIs mês vigente (Março acumulado até 19/03)
+  fat_mar:   8.43,
+  mb_mar:    15.7,
+  mn_mar:    1309799.41,
+  notas_mar: 6122,
+  ticket_mar:1269.26,
+  // ── VENDA DIA — referência 19/03/2026 ────────────────────────
   dia: {
-    data_ref:    '17/03/2026',
-    fat:         447358.97,
-    lucro:       77083.88,
-    mb:          17.2,
-    notas:       275,
-    ticket:      1095.89,
-    clientes:    391,
+    data_ref:    '20/03/2026',
+    fat:         513001.96,
+    lucro:       81558.41,
+    mb:          15.90,
+    notas:       502,
+    ticket:      1538.32,
+    clientes:    259,
     meta_fat:    612366.73,
     meta_lb:     113130.85,
     meta_mb:     18.61,
-    proj_mes:    9822590.36,
+    proj_mes:    12606052.76,
     meta_fat_mes:13472068.15,
-    fat_acum_mes: 6697220.70,
-    horas_labels:['07h','08h','09h','10h','11h','12h','13h','14h','15h','16h','17h','18h','19h','22h'],
-    horas_vals:  [3764.08,9277.81,25510.02,78075.24,95962.32,111963.70,140276.89,173331.10,226019.15,302696.34,425076.25,444350.29,445273.97,447358.97],
-    meta_hora:   [43740.48,87480.96,131221.44,174961.92,218702.41,262442.89,306183.37,349923.85,393664.33,437404.81,481145.29,524885.77,568626.25,612366.73],
+    fat_acum_mes: 8430398.63,
+    horas_labels:['07h','08h','09h','10h','11h','12h','13h','14h','15h'],
+    horas_vals:  [3200,8100,22000,60000,110000,150000,195000,235000,263478.84],
+    meta_hora:   [43740.48,87480.96,131221.44,174961.92,218702.41,262442.89,306183.37,349923.85,393664.33],
     depto_labels:['FRUTAS CONGELADAS','VEGETAIS','FRANGOS','BOVINOS','PESCADOS','LATICINIOS','MERCEARIA','DOCES','SORVETES','EMBUTIDOS','BEBIDAS','SUINOS','DESCARTAVEIS','CONDIMENTOS'],
     depto_fat:   [125879.14,82141.55,76204.74,40618.24,37986.38,22034.31,20604.39,12684.21,11770.20,8219.80,4674.72,3237.78,883.32,420.19],
     depto_mb:    [14.8,18.6,15.7,17.3,19.0,20.3,15.2,21.1,32.4,23.5,-3.5,21.7,28.5,20.9],
@@ -1024,17 +1159,17 @@ const D={
     reg_vals:    [147610.00,97312.79,71292.22,69078.71,62065.25],
     top_cli:     [['BRUCK E MARQUES LTDA',23850.00],['EXCELENCIA COMERCIO ATACADISTA',17012.00],['JULIO CESAR RIBEIRO CARNEIRO',11172.00],['MARGONI COMERCIO ATACADISTA',7425.00],['MAHMOUD NASHARTI & CIA LTDA',7354.22]]
   },
-  // Clientes positivados — Março 2026 (atualizado até 17/03)
-  clientesDiasLabels: ['02','03','04','05','06','07','09','10','11','12','13','14','16','17'],
-  clientesDiasVals:   [445,477,403,629,217,2,466,390,415,526,220,1,487,391],
-  clientesSemLabels:  ['Sem 1\n(02–07)','Sem 2\n(09–14)','Sem 3\n(16–17)'],
-  clientesSemVals:    [1823,1724,488],
-  clientesTotalMes:   2823,
+  // Clientes positivados — Março 2026 (cliente único no mês = positivação)
+  clientesDiasLabels: ['02','03','04','05','06','07','09','10','11','12','13','14','16','17','18','19','20'],
+  clientesDiasVals:   [445,477,403,629,217,2,466,390,415,526,220,1,487,391,424,139,259],
+  clientesSemLabels:  ['Sem 1\n(02–07)','Sem 2\n(09–14)','Sem 3\n(16–19)'],
+  clientesSemVals:    [1823,777,512],   // novos por semana: sem2 e sem3 = clientes que compraram pela 1ª vez no mês
+  clientesTotalMes:   3112,
 
   // KPIs acumulado ano (YTD real — incluindo dia 17/03)
-  fat_ytd:  29.15,
-  mb_ytd:   15.8,
-  mn_ytd:   1055570.45,
+  fat_ytd:  30.89,
+  mb_ytd:   17.1,
+  mn_ytd:   5260295.91,
   // Metas YTD totais
   fat_meta_ytd: 43.12,
   lb_meta_ytd:  7973373.78,
@@ -1162,7 +1297,7 @@ function buildTable(){
   const titleEl = document.getElementById('table-title');
   if(titleEl) titleEl.textContent = period==='ytd'
     ? 'Faturamento por Departamento — YTD Jan–Mar 2026'
-    : 'Faturamento por Departamento — Março 2026 (parcial até 17/03)';
+    : 'Faturamento por Departamento — Março 2026 (parcial até 19/03)';
 
   const fmtBRL = v => 'R$ ' + v.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
   const mesIdx  = period==='ytd' ? null  : 2; // março = índice 2
@@ -1212,6 +1347,7 @@ function buildTable(){
         const c = pct >= 100 ? 'var(--green)' : pct >= 80 ? 'var(--yellow)' : 'var(--red)';
         return `<span style="font-size:10px;color:${c};font-weight:600;margin-left:6px">${pct.toFixed(1)}%</span>`;
       })()}</td>
+      <td style="color:var(--muted)">${metaLB ? fmtBRL(metaLB) : '—'}</td>
       <td style="color:var(--green);font-weight:600;text-align:center">${cliMes.toLocaleString('pt-BR')}</td>
       <td style="color:var(--muted);text-align:center">${qtAcum.toLocaleString('pt-BR')}</td>
       ${projCol}
@@ -1249,6 +1385,37 @@ function initCharts(sec){
 
   if(sec==='vs2025'){ initVs2025Charts(); return; }
   if(sec==='dia'){ initDiaCharts(); return; }
+  if(sec==='ruptura'){
+    const ruptData = [
+      {d:'BOVINOS',r:45.5},{d:'DESCARTAVEIS',r:45.0},{d:'EMBUTIDOS',r:43.2},
+      {d:'FRANGOS',r:38.6},{d:'PESCADOS',r:38.5},{d:'SUINOS',r:38.5},
+      {d:'CONDIMENTOS',r:32.0},{d:'BEBIDAS',r:28.6},{d:'VEGETAIS',r:22.9},
+      {d:'LATICINIOS',r:21.3},{d:'MERCEARIA',r:15.4},{d:'SORVETES',r:11.1},
+      {d:'VEGETAIS',r:22.9},{d:'FRUTAS CONGELADAS',r:3.2},{d:'DOCES',r:2.3},
+    ].filter((v,i,a)=>a.findIndex(x=>x.d===v.d)===i).sort((a,b)=>b.r-a.r);
+    mk('chartRuptDepto','bar',{
+      labels: ruptData.map(d=>d.d),
+      datasets:[{
+        label:'Ruptura %',
+        data: ruptData.map(d=>d.r),
+        backgroundColor: ruptData.map(d=>d.r>=40?C.red+'88':d.r>=25?C.orange+'88':d.r>=10?C.yellow+'88':C.green+'88'),
+        borderColor:     ruptData.map(d=>d.r>=40?C.red:d.r>=25?C.orange:d.r>=10?C.yellow:C.green),
+        borderWidth:1.5, borderRadius:4
+      }]
+    },{
+      responsive:true, maintainAspectRatio:false, indexAxis:'y',
+      plugins:{
+        legend:{display:false},
+        tooltip:{backgroundColor:'#1a1e2a',borderColor:gC,borderWidth:1,titleColor:'#e8eaf0',bodyColor:'#e8eaf0',
+          callbacks:{label:c=>` Ruptura: ${c.parsed.x}%`}}
+      },
+      scales:{
+        x:{grid:{color:gC},ticks:{color:tC,font:fnt,callback:v=>v+'%'},min:0,max:50},
+        y:{grid:{color:gC},ticks:{color:tC,font:{...fnt,size:9}}}
+      }
+    });
+    return;
+  }
   if(sec==='overview'){
     buildLineChart('mar');
     // Gráfico clientes positivados por semana
@@ -1419,27 +1586,27 @@ function setPeriod(p,btn){
 // ── 2026 vs 2025 DATA ──────────────────────────────────────────────────────
 const VS = {
   meses:   ['Janeiro','Fevereiro','Março'],
-  fat26:   [11900282.60, 10554670.80, 6249861.73],
-  fat25:   [14681381.88, 12592495.90, 5947324.39],   // mar/25 até dia 17 (mesmos dias)
-  lucro26: [2075070.42,  1875426.08,  978486.57],
-  lucro25: [2730667.83,  2292177.83,  1011163.14],   // mar/25 até dia 17 (mesmos dias)
-  mb26:    [17.4, 17.8, 15.7],
+  fat26:   [11900282.60, 10554670.80, 8430398.63],
+  fat25:   [14681381.88, 12592495.90, 7400609.97],   // mar/25 até dia 20 (mesmos dias) — base completa 12 meses
+  lucro26: [2075070.42,  1875426.08,  1309799.41],
+  lucro25: [2730667.83,  2292177.83,  1258949.91],   // mar/25 até dia 20
+  mb26:    [17.4, 17.8, 15.5],
   mb25:    [18.6, 18.2, 17.0],
-  // YTD comparável: jan+fev completo + mar até dia 17
+  // YTD comparável: jan+fev completo + mar até dia 20
   ytd: {
-    fat26:   28704815.13, fat25:   33221202.17,
-    lucro26:  4928983.07, lucro25:  6034008.80
+    fat26:   30885352.03, fat25:   34674487.75,
+    lucro26:  5260295.91, lucro25:  6281795.57
   },
   depto: {
     labels:  ['FRUTAS CONGELADAS','VEGETAIS','BOVINOS','FRANGOS','LATICINIOS','PESCADOS','MERCEARIA','EMBUTIDOS','DOCES','SORVETES','BEBIDAS','SUINOS','DESCARTAVEIS','CONDIMENTOS'],
-    // YTD jan+fev+mar(até 17) 2026
-    fat26:   [13529906.34,5823432.92,2549264.11,3711692.43,1586990.25,1503437.00,1465376.35,829470.62,963871.54,587288.22,266103.92,257175.97,79420.18,15865.71],
-    // YTD jan+fev+mar(até 17) 2025 — mar/25 com mesmos dias
-    fat25:   [14910295.94,6748712.08,1966434.43,3635629.35,1695930.01,1900423.06,1732711.11,1087547.02,1230439.05,0,119907.31,344620.55,103816.62,0],
-    lucro26: [2191241.50,1105963.45,336772.07,581040.31,336471.03,289173.35,227407.47,180937.33,187131.88,210138.80,67050.81,56701.55,26037.28,2949.70],
-    lucro25: [3730906.12,1399777.11,288358.04,726397.96,347889.47,315018.26,229113.17,227162.55,212742.35,0,24372.99,55499.87,34734.16,0],
-    mb26:    [16.2,19.0,13.2,15.7,21.2,19.2,15.5,21.8,19.4,35.8,25.2,22.0,32.8,18.5],
-    mb25:    [25.0,20.7,14.7,20.0,20.5,16.6,13.2,20.9,17.3,0,20.3,16.1,33.4,0]
+    // YTD jan+fev+mar(até 20/03) 2026
+    fat26:   [9096194.61,3611519.67,1828331.35,2159993.04,1114706.47,997896.29,868954.35,464431.72,547615.89,390085.11,203849.88,179747.95,44485.13,10985.07],
+    // YTD jan+fev+mar(até 20/03) 2025 — base completa 12 meses
+    fat25:   [15366635.26,5975405.59,2070046.99,3818689.30,1268567.20,1424522.25,1243291.34,816249.92,983015.64,0,93646.67,276062.18,82234.04,0],
+    lucro26: [1298912.59,643924.06,259229.69,349128.23,249091.27,204624.92,140591.22,101110.73,113108.04,137227.00,34197.64,43539.45,13838.25,2079.03],
+    lucro25: [3043093.36,1079098.72,239072.93,546156.51,267484.92,230557.15,169779.80,171398.27,172971.26,0,18959.76,45121.40,27484.69,0],
+    mb26:    [14.3,17.8,14.2,16.2,22.3,20.5,16.2,21.8,20.7,35.2,16.8,24.2,31.1,18.9],
+    mb25:    [19.8,18.1,11.5,14.3,21.1,16.2,13.7,21.0,17.6,0,20.2,16.3,33.4,0]
   }
 };
 
