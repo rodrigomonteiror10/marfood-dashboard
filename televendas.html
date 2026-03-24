@@ -6,9 +6,6 @@
 <title>Mar Food — Televendas Dia</title>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js">
-// ── HORA DE ATUALIZAÇÃO ────────────────────────────────────────────────────
-document.getElementById('ultima-hora').textContent = TELE_DIA.ultima_hora;
-
 </script>
 <style>
 :root{
@@ -99,7 +96,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);hei
     <div class="header-title">MAR FOOD — <span>Televendas Dia</span></div>
   </div>
   <div class="header-right">
-    <div class="ref-badge" id="ref-badge">📅 23/03/2026</div>
+    <div class="ref-badge" id="ref-badge">📅 24/03/2026</div>
     <div class="live-badge">
       <div class="live-dot"></div>
       <span>Última atualização: <strong id="ultima-hora" style="color:var(--text)">--:--</strong></span>
@@ -116,27 +113,27 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);hei
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px">
         <div>
           <div style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Dia</div>
-          <div style="font-family:'Rajdhani',sans-serif;font-size:24px;font-weight:700;color:var(--orange);line-height:1">R$ 78,1K</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:4px">Meta <strong style="color:var(--text)">R$ 56,7K</strong> <span style="padding:1px 6px;border-radius:4px;background:rgba(255,77,109,.15);color:var(--red);font-weight:700;font-size:10px">138,0%</span></div>
+          <div style="font-family:'Rajdhani',sans-serif;font-size:24px;font-weight:700;color:var(--orange);line-height:1">R$ 11,2K</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">Meta <strong style="color:var(--text)">R$ 56,7K</strong> <span style="padding:1px 6px;border-radius:4px;background:rgba(255,77,109,.15);color:var(--red);font-weight:700;font-size:10px">19,7%</span></div>
         </div>
         <div style="border-left:1px solid var(--border);padding-left:12px">
           <div style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Mês Acum.</div>
-          <div style="font-family:'Rajdhani',sans-serif;font-size:24px;font-weight:700;color:var(--yellow);line-height:1">R$ 819,2K</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:4px">Meta <strong style="color:var(--text)">R$ 1,245M</strong> <span style="padding:1px 6px;border-radius:4px;background:rgba(255,77,109,.15);color:var(--red);font-weight:700;font-size:10px">65,8%</span></div>
+          <div style="font-family:'Rajdhani',sans-serif;font-size:24px;font-weight:700;color:var(--yellow);line-height:1">R$ 779,7K</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">Meta <strong style="color:var(--text)">R$ 1,245M</strong> <span style="padding:1px 6px;border-radius:4px;background:rgba(255,77,109,.15);color:var(--red);font-weight:700;font-size:10px">62,6%</span></div>
         </div>
       </div>
     </div>
     <div class="kpi-card c-green">
       <div class="kpi-label">Atingimento</div>
       <div class="kpi-value" style="color:var(--yellow)">138,0%</div>
-      <div class="kpi-sub">Meta superada! <strong style="color:var(--green)">✓</strong></div>
+      <div class="kpi-sub">Falta <strong style="color:var(--text)">R$ 45.438,70</strong> para bater a meta</div>
     </div>
     <div class="kpi-card c-blue" style="grid-column:span 1">
       <div class="kpi-label">Positivações</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:4px">
         <div style="padding-right:10px;border-right:1px solid var(--border)">
           <div style="font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:3px">Dia</div>
-          <div style="font-family:'Rajdhani',sans-serif;font-size:24px;font-weight:700;color:var(--blue);line-height:1">44</div>
+          <div style="font-family:'Rajdhani',sans-serif;font-size:24px;font-weight:700;color:var(--blue);line-height:1">1</div>
           <div style="font-size:10px;color:var(--muted);margin-top:2px">novos no mês hoje</div>
         </div>
         <div style="padding-left:10px">
@@ -148,7 +145,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);hei
     </div>
     <div class="kpi-card c-purple" style="--kpi-color:var(--purple)">
       <div class="kpi-label">Ticket Médio — Time</div>
-      <div class="kpi-value" style="color:var(--purple)">R$ 1,8K</div>
+      <div class="kpi-value" style="color:var(--purple)">R$ 11,2K</div>
       <div class="kpi-sub" style="color:var(--muted)">por pedido · dia 19/03</div>
     </div>
   </div>
@@ -171,13 +168,13 @@ const FOTOS = {
 };
 
 const TELE_DIA = {
-  ultima_hora: '18:06',
+  ultima_hora: '08:46',
   vendedores: [
-    {rank:1,nome:'Anna',    fat:17206.72,meta_fat:17954.55,ating_fat:95.8, posit:7, meta_posit:9.0,falta:747.83,  ticket:2458.10,notas:7, gap_mes:-29130.50,status:'Em Risco'},
-    {rank:2,nome:'Tatiana', fat:9317.44, meta_fat:9090.91, ating_fat:102.5,posit:13,meta_posit:5.4,falta:0,       ticket:716.73, notas:13,gap_mes:-34859.20,status:'Acima'},
-    {rank:3,nome:'Natália', fat:33832.26,meta_fat:15909.09,ating_fat:212.7,posit:10,meta_posit:6.5,falta:0,       ticket:3383.23,notas:10,gap_mes:-18284.46,status:'Acima'},
-    {rank:4,nome:'Ariane',  fat:10553.76,meta_fat:6818.18, ating_fat:154.8,posit:8, meta_posit:3.9,falta:0,       ticket:1319.22,notas:8, gap_mes:22721.61, status:'Acima'},
-    {rank:5,nome:'Camila',  fat:7157.51, meta_fat:6818.18, ating_fat:105.0,posit:6, meta_posit:4.1,falta:0,       ticket:1192.92,notas:6, gap_mes:-26681.97,status:'Acima'},
+    {rank:1,nome:'Anna',    fat:11152.21,meta_fat:17954.55,ating_fat:62.1,posit:1, meta_posit:9.0,falta:6802.34, ticket:11152.21,notas:1, gap_mes:-49693.31,status:'No Prazo'},
+    {rank:2,nome:'Tatiana', fat:0,       meta_fat:9090.91, ating_fat:0,   posit:0, meta_posit:5.4,falta:9090.91, ticket:0,        notas:0, gap_mes:-62319.40,status:'Abaixo'},
+    {rank:3,nome:'Natália', fat:0,       meta_fat:15909.09,ating_fat:0,   posit:0, meta_posit:6.5,falta:15909.09,ticket:0,        notas:0, gap_mes:-48489.14,status:'Abaixo'},
+    {rank:4,nome:'Ariane',  fat:0,       meta_fat:6818.18, ating_fat:0,   posit:0, meta_posit:3.9,falta:6818.18, ticket:0,        notas:0, gap_mes:13117.25, status:'Abaixo'},
+    {rank:5,nome:'Camila',  fat:0,       meta_fat:6818.18, ating_fat:0,   posit:0, meta_posit:4.1,falta:6818.18, ticket:0,        notas:0, gap_mes:-34919.34,status:'Abaixo'},
   ]
 };
 
@@ -350,7 +347,7 @@ function buildChart(){
 buildCards();
 setTimeout(buildChart, 200);
 // Hora fixa da última venda na base
-document.getElementById('ultima-hora').textContent = '12:06';
+document.getElementById('ultima-hora').textContent = TELE_DIA.ultima_hora;
 </script>
 </body>
 </html>
