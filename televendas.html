@@ -113,27 +113,27 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);hei
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px">
         <div>
           <div style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Dia</div>
-          <div style="font-family:'Rajdhani',sans-serif;font-size:24px;font-weight:700;color:var(--orange);line-height:1">R$ 19,7K</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:4px">Meta <strong style="color:var(--text)">R$ 56,7K</strong> <span style="padding:1px 6px;border-radius:4px;background:rgba(255,77,109,.15);color:var(--red);font-weight:700;font-size:10px">77,8%</span></div>
+          <div style="font-family:'Rajdhani',sans-serif;font-size:24px;font-weight:700;color:var(--orange);line-height:1">R$ 56,6K</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">Meta <strong style="color:var(--text)">R$ 56,7K</strong> <span style="padding:1px 6px;border-radius:4px;background:rgba(255,77,109,.15);color:var(--red);font-weight:700;font-size:10px">80,8%</span></div>
         </div>
         <div style="border-left:1px solid var(--border);padding-left:12px">
           <div style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Mês Acum.</div>
-          <div style="font-family:'Rajdhani',sans-serif;font-size:24px;font-weight:700;color:var(--yellow);line-height:1">R$ 969,1K</div>
+          <div style="font-family:'Rajdhani',sans-serif;font-size:24px;font-weight:700;color:var(--yellow);line-height:1">R$ 1006,0K</div>
           <div style="font-size:11px;color:var(--muted);margin-top:4px">Meta <strong style="color:var(--text)">R$ 1,245M</strong> <span style="padding:1px 6px;border-radius:4px;background:rgba(255,77,109,.15);color:var(--red);font-weight:700;font-size:10px">63,6%</span></div>
         </div>
       </div>
     </div>
     <div class="kpi-card c-green">
       <div class="kpi-label">Atingimento</div>
-      <div class="kpi-value" style="color:var(--yellow)">34,8%</div>
-      <div class="kpi-sub">Falta <strong style="color:var(--text)">R$ 36.922,03</strong> para bater a meta</div>
+      <div class="kpi-value" style="color:var(--yellow)">100,0%</div>
+      <div class="kpi-sub">Meta superada! <strong style="color:var(--green)">✓</strong></div>
     </div>
     <div class="kpi-card c-blue" style="grid-column:span 1">
       <div class="kpi-label">Positivações</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:4px">
         <div style="padding-right:10px;border-right:1px solid var(--border)">
           <div style="font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:3px">Dia</div>
-          <div style="font-family:'Rajdhani',sans-serif;font-size:24px;font-weight:700;color:var(--blue);line-height:1">2</div>
+          <div style="font-family:'Rajdhani',sans-serif;font-size:24px;font-weight:700;color:var(--blue);line-height:1">4</div>
           <div style="font-size:10px;color:var(--muted);margin-top:2px">novos no mês hoje</div>
         </div>
         <div style="padding-left:10px">
@@ -168,13 +168,13 @@ const FOTOS = {
 };
 
 const TELE_DIA = {
-  ultima_hora: '11:50',
+  ultima_hora: '17:09',
   vendedores: [
-    {rank:1,nome:'Anna',    fat:13975.69,meta_fat:17954.55,ating_fat:77.8,posit:0,meta_posit:9.0,falta:3978.86,ticket:1746.96,notas:30,gap_mes:-54596.31,status:'Em Risco'},
-    {rank:2,nome:'Tatiana', fat:3090.79,meta_fat:9090.91,ating_fat:34.0,posit:1,meta_posit:5.4,falta:6000.12,ticket:441.54,notas:17,gap_mes:-82769.1,status:'Abaixo'},
-    {rank:3,nome:'Natália', fat:2348.63,meta_fat:15909.09,ating_fat:14.8,posit:0,meta_posit:6.5,falta:13560.46,ticket:587.16,notas:14,gap_mes:-51402.06,status:'Abaixo'},
-    {rank:4,nome:'Ariane',  fat:0.0,meta_fat:6818.18,ating_fat:0.0,posit:0,meta_posit:3.9,falta:6818.18,ticket:0,notas:0,gap_mes:2758.56,status:'Abaixo'},
-    {rank:5,nome:'Camila',  fat:253.77,meta_fat:6818.18,ating_fat:3.7,posit:1,meta_posit:4.1,falta:6564.41,ticket:126.88,notas:8,gap_mes:-33324.71,status:'Abaixo'},
+    {rank:1,nome:'Anna',    fat:16222.22,meta_fat:17954.55,ating_fat:90.4,posit:0,meta_posit:9.0,falta:1732.33,ticket:1351.85,notas:37,gap_mes:-52349.78,status:'Em Risco'},
+    {rank:2,nome:'Tatiana', fat:5230.68,meta_fat:9090.91,ating_fat:57.5,posit:2,meta_posit:5.4,falta:3860.23,ticket:475.52,notas:33,gap_mes:-80629.21,status:'No Prazo'},
+    {rank:3,nome:'Natália', fat:22839.74,meta_fat:15909.09,ating_fat:143.6,posit:1,meta_posit:6.5,falta:0,ticket:2076.34,notas:32,gap_mes:-30910.95,status:'Acima'},
+    {rank:4,nome:'Ariane',  fat:3114.43,meta_fat:6818.18,ating_fat:45.7,posit:0,meta_posit:3.9,falta:3703.75,ticket:519.07,notas:14,gap_mes:5872.99,status:'No Prazo'},
+    {rank:5,nome:'Camila',  fat:9209.28,meta_fat:6818.18,ating_fat:135.1,posit:1,meta_posit:4.1,falta:0,ticket:920.93,notas:32,gap_mes:-24369.2,status:'Acima'},
   ]
 };
 
